@@ -5,6 +5,8 @@ import {
   CHANGE_STEP,
   CHANGE_PERIOD,
   CHANGE_CALENDAR_TYPE,
+  CHANGE_LEFT_DATE,
+  CHANGE_RIGHT_DATE
 } from '../utils/consts'
 
 const PickerStateContext = createContext()
@@ -22,6 +24,10 @@ function pickerReducer(state, action) {
       return { ...state, period: action.period }
     case CHANGE_CALENDAR_TYPE:
       return { ...state, calendarType: action.calendarType }
+    case CHANGE_LEFT_DATE:
+      return { ...state, leftDate: action.leftDate}
+      case CHANGE_RIGHT_DATE:
+      return { ...state, rightDate: action.rightDate}
     default: {
       throw new Error(`Unhandled action type: ${action.type}`)
     }

@@ -11,6 +11,16 @@ export default function App() {
   const fakePeriod = 'month'
   const fakeCalendarType = 'month'
 
+
+
+  const leftDate = dateFormater(new Date())
+  const rightDate = dateFormater(new Date())
+
+  function dateFormater(date){
+    return date.getUTCDate() + 
+    '.' + ((date.getUTCMonth()+1) > 9 ? (date.getUTCMonth()+1): '0' + (date.getUTCMonth()+1)) + 
+    '.' + date.getUTCFullYear();
+  }
   return (
     <DatesPicker
       year={fakeYear}
@@ -18,6 +28,8 @@ export default function App() {
       step={fakeStep}
       period={fakePeriod}
       calendarType={fakeCalendarType}
+      leftDate={leftDate}
+      rightDate={rightDate}
     />
   )
 }

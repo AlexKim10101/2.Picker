@@ -9,6 +9,9 @@ import './dates-picker.css'
 
 export default function DatesPicker(props) {
   const [focused, setFocused] = useState(undefined)
+
+  
+
   console.log(focused)
 
   const onBlur = e => {
@@ -23,17 +26,30 @@ export default function DatesPicker(props) {
     }
 
     !focusInCurrentTarget(e) && setFocused(undefined)
+
   }
 
+
+  
   return (
     <PickerProvider initialData={props}>
       <div className="dates-picker-wrapper" onBlur={onBlur}>
         <Select />
         
         <div>
-          <Input id="startDate" placeholder="Начало" onFocus={() => setFocused("startDate")} focused={focused} />
+          <Input 
+            id="startDate" 
+            placeholder="Начало" 
+            onFocus={() => setFocused("startDate")} 
+            focused={focused}             
+          />
           <ArrowIcon />
-          <Input id="endDate" placeholder="Конец" onFocus={() => setFocused("endDate")} focused={focused} />
+          <Input 
+            id="endDate" 
+            placeholder="Конец" 
+            onFocus={() => setFocused("endDate")} 
+            focused={focused}             
+          />
 
           {focused !== undefined && (
             <div aria-roledescription="datepicker">
