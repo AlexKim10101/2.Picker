@@ -1,0 +1,40 @@
+.dates-picker-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+div[aria-roledescription="datepicker"] {
+  position: absolute;
+  top: 56px;
+  outline: 0;
+  background: #fff;
+  display: block;
+  box-shadow: 0 2px 4px rgba(0,0,0,.2);
+  width: 462px;
+  display: flex;
+}
+
+.calendar {
+  border-radius: 3px;
+  background: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.calendar__table {
+  margin: 0 auto;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.calendar__table_td {
+  user-select: none;
+  background: inherit;
+  text-align: center;
+  cursor: pointer;
+  padding: 0px;
+}
+
+.calendar__table_td:hover {
+  background-color: rgb(228, 231, 231); 
+}

@@ -1,0 +1,36 @@
+.input-wrapper {
+  margin: 0;
+  padding: 0;
+  background: #fff;
+  position: relative;
+  display: inline-block;
+  width: 143px;
+  vertical-align: middle;
+}
+
+.input-field {
+  font-weight: 200;
+  font-size: 19px;
+  line-height: 24px;
+  width: 80%;
+  padding: 9px 9px 7px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  outline: none;
+}
+
+.input-field.active {
+  border-bottom: 2px solid #484848;
+}
+
+.arrow-icon {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.arrow-icon svg {
+  vertical-align: middle;
+  fill: #484848;
+  height: 24px;
+  width: 24px;
+}

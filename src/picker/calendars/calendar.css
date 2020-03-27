@@ -1,0 +1,51 @@
+.calendar__days-a-week {
+  left: 0px;
+  padding-left: 9px;
+  color: #757575;
+  position: absolute;
+  top: 50px;
+  z-index: 2;
+  text-align: left;
+}
+
+.calendar__days-a-week ul {
+  list-style: none;
+  margin: 1px 0;
+  padding-left: 0;
+  padding-right: 0;
+  font-size: 14px;
+}
+
+.calendar__days-a-week ul li {
+  width: 42px;
+  display: inline-block;
+  text-align: center;
+}
+
+.tr-weeks:hover {
+  background-color: rgb(228, 231, 231);
+}
+
+.td-out {
+  color: rgba(125,125,125,.87);
+}
+
+.td-30 {
+  width: 42px;
+  height: 37px;
+}
+
+.td-12 {
+  width: 72px;
+  height: 67px;
+}
+
+.td-4 {
+  width: 144px;
+  height: 69px;
+}
+
+.td-2 {
+  width: 292px;
+  height: 69px;
+}

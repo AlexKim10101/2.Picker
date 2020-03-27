@@ -1,0 +1,23 @@
+.period-side-bar {
+  width: 108px;
+  margin: 14px auto 0;
+  color: #484848;
+}
+
+.period-side-bar__title {
+  padding: 0 0 14px 10px;
+}
+
+.period-Btn {
+  padding: 3px 10px;
+  margin: 3px 10px 3px 0px;
+  border: none;
+  width: 100%;
+  text-align: left;
+  background: #fff;
+  cursor: pointer;
+}
+
+.active-period {
+  border: 1px solid rgb(228, 231, 231);
+}

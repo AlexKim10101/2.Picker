@@ -1,0 +1,53 @@
+.interval {
+  padding-top: 14px;
+  padding-bottom: 14px;
+  color: #484848;
+  text-align: center;
+}
+
+.interval button {
+  text-decoration: none;
+  display: inline-block;
+  border: none;
+  background-color: inherit;
+}
+
+.with-days-a-week {
+  padding-bottom: 42px;;
+}
+
+.prev-Btn {
+  cursor: pointer;
+  user-select: none;
+  background-color: rgb(255, 255, 255);
+  color: rgb(117, 117, 117);
+  position: absolute;
+  top: 12px;
+  line-height: 0.78;
+  left: 22px;
+  margin: 0px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(228, 231, 231);
+  border-image: initial;
+  border-radius: 3px;
+  padding: 6px 9px;
+}
+
+.next-Btn {
+  cursor: pointer;
+  user-select: none;
+  background-color: rgb(255, 255, 255);
+  color: rgb(117, 117, 117);
+  position: absolute;
+  top: 12px;
+  line-height: 0.78;
+  right: 22px;
+  margin: 0px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(228, 231, 231);
+  border-image: initial;
+  border-radius: 3px;
+  padding: 6px 9px; 
+}
