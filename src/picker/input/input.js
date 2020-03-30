@@ -7,8 +7,11 @@ import {
   CHANGE_STEP,
   CHANGE_PERIOD,
   CHANGE_CALENDAR_TYPE,
-  CHANGE_LEFT_DATE,
-  CHANGE_RIGHT_DATE
+  CHANGE_START_DATE,
+  CHANGE_END_DATE,
+  VALID_START_DATE,
+  VALID_END_DATE,
+  VALID_FORM
 } from '../../utils/consts'
 import './input.css'
 
@@ -30,22 +33,7 @@ function dateValidation(value){
   }
 }
 
-function validateDates(firstData, secondData){
-	if(!dateValidation(firstData)){
-		console.log('incorrect start date')
-	}
-	if(!dateValidation(secondData)){
-		console.log('incorrect end date')
-	}
 
-	if(dateCreater(firstData)<dateCreater(secondData)){
-		console.log('all dates are correct')
-	}else{
-		console.log('error: start date > end date')
-
-	}
-
-}
 
 export default function Input({
   id,
@@ -53,26 +41,41 @@ export default function Input({
   focused,
   onFocus,
 }) {
-	const { leftDate, rightDate } = usePickerState()
+
+
+	const { startDate, endDate, startDateIsCorrect, endDateIsCorrect, validFormData } = usePickerState()
   const dispatch = usePickerDispatch()
-  const value = id === 'startDate' ? leftDate : rightDate
+  const value = id === 'startDate' ? startDate : endDate
 
   const onChange = ({ target }) => {
+    //console.log(target.name);
+  	  
+    switch (target.name){
+      case 'startDate':
+        dispatch({type: CHANGE_START_DATE, startDate: target.value}) 
+        dispatch({type: VALID_START_DATE, startDateIsCorrect: dateValidation(target.value)})         
+        break;
+      case 'endDate':
+        dispatch({type: CHANGE_END_DATE, endDate: target.value}) 
+        dispatch({type: VALID_END_DATE, endDateIsCorrect: dateValidation(target.value)})         
+        break;
+    }
 
-  	if(id === 'startDate'){
-  		dispatch({ type: CHANGE_LEFT_DATE, leftDate: target.value })
-  		
-  	} 
-  	if(id === 'endDate'){
-  		dispatch({ type: CHANGE_RIGHT_DATE, rightDate: target.value })
-  		
-  	} 
+  
+    if(startDateIsCorrect && endDateIsCorrect){
+         
+      let firstData = target.name=='startDate' ? dateCreater(target.value) : dateCreater(startDate)
+      let secondData = target.name=='endDate' ? dateCreater(target.value) : dateCreater(endDate)
+      dispatch({type: VALID_FORM, validFormData: (firstData  < secondData)})
+      
+    }    
   	
   }
   const onBlur = e => {
-  	console.log('leftDate', leftDate)
-  	console.log('rightDate', rightDate)
-  	validateDates(leftDate, rightDate) 
+  	console.log('onBlur startDate string', startDate)
+    console.log('onBlur endDate string', endDate)
+    console.log(validFormData);
+
   }
 
   const clsx = classnames('input-field', { active: id === focused })

@@ -8,8 +8,13 @@ export const CHANGE_MONTH = 'CHANGE_MONTH'
 export const CHANGE_STEP = 'CHANGE_STEP'
 export const CHANGE_PERIOD = 'CHANGE_PERIOD'
 export const CHANGE_CALENDAR_TYPE = 'CHANGE_CALENDAR_TYPE'
-export const CHANGE_LEFT_DATE = 'CHANGE_LEFT_DATE'
-export const CHANGE_RIGHT_DATE = 'CHANGE_RIGHT_DATE'
+export const CHANGE_START_DATE = 'CHANGE_START_DATE'
+export const CHANGE_END_DATE = 'CHANGE_END_DATE'
+export const VALID_START_DATE = 'VALID_START_DATE'
+export const VALID_END_DATE = 'VALID_END_DATE'
+export const VALID_FORM = 'VALID_FORM'
+
+
 
 
 export const days = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']

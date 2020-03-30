@@ -5,12 +5,10 @@ import Input, { ArrowIcon } from './input/input'
 import Calendar from './calendars/calendar'
 import PeriodSideBar from './period-side-bar/period-side-bar'
 import './dates-picker.css'
-
+import SubmitElement from './submitElement';
 
 export default function DatesPicker(props) {
-  const [focused, setFocused] = useState(undefined)
-
-  
+  const [focused, setFocused] = useState(undefined) 
 
   console.log(focused)
 
@@ -28,9 +26,8 @@ export default function DatesPicker(props) {
     !focusInCurrentTarget(e) && setFocused(undefined)
 
   }
+  console.log('render');
 
-
-  
   return (
     <PickerProvider initialData={props}>
       <div className="dates-picker-wrapper" onBlur={onBlur}>
@@ -60,6 +57,11 @@ export default function DatesPicker(props) {
         </div>
 
       </div>
+      <SubmitElement/>
+      
+
+
+  
     </PickerProvider>
   )
 }

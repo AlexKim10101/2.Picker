@@ -11,16 +11,17 @@ export default function App() {
   const fakePeriod = 'month'
   const fakeCalendarType = 'month'
 
+  const leftDate = ''
+  const rightDate = ''
+  const leftDateIsCorrect = false
+  const rightDateIsCorrect = false
+  const validFormData = false
 
-
-  const leftDate = dateFormater(new Date())
-  const rightDate = dateFormater(new Date())
-
-  function dateFormater(date){
-    return date.getUTCDate() + 
-    '.' + ((date.getUTCMonth()+1) > 9 ? (date.getUTCMonth()+1): '0' + (date.getUTCMonth()+1)) + 
-    '.' + date.getUTCFullYear();
-  }
+  // function dateFormater(date){
+  //   return date.getUTCDate() + 
+  //   '.' + ((date.getUTCMonth()+1) > 9 ? (date.getUTCMonth()+1): '0' + (date.getUTCMonth()+1)) + 
+  //   '.' + date.getUTCFullYear();
+  // }
   return (
     <DatesPicker
       year={fakeYear}
@@ -30,6 +31,9 @@ export default function App() {
       calendarType={fakeCalendarType}
       leftDate={leftDate}
       rightDate={rightDate}
+      leftDateIsCorrect={leftDateIsCorrect}
+      rightDateIsCorrect={rightDateIsCorrect}
+      validFormData={validFormData}
     />
   )
 }
