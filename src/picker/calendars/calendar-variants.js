@@ -20,11 +20,16 @@ export const DaysWeeksRows = ({ data }) => {
     'td-curr': status === curr,
     'td-out': status === out,
   })
-  
+  function handleClick(x){
+    console.log(x);
+    
+    console.log('x');
+
+  }
   return data.map((item) => (
     <tr key={uuidv4()} className={trClsx}>
       {item.map((x) => (
-        <td key={uuidv4()} className={tdClsx(x.status)}>
+        <td key={uuidv4()} className={tdClsx(x.status)} onClick={()=>handleClick(x)}>
           {x.date}
         </td>
       ))}
@@ -34,7 +39,7 @@ export const DaysWeeksRows = ({ data }) => {
 
 
 export const MonthsYearsRows = ({ data }) => {
-  const { period, calendarType } = usePickerState()
+  const { period, calendarType, year } = usePickerState()
   const dispatch = usePickerDispatch()
 
   const [
@@ -46,7 +51,7 @@ export const MonthsYearsRows = ({ data }) => {
     YEAR
   ] = steps
 
-  const onDrill = () => {
+  const onDrill = (x) => {
     const idxInSteps = (x) => steps.indexOf(x)
     const drillDirection = () => {
       switch (calendarType) {
@@ -64,8 +69,14 @@ export const MonthsYearsRows = ({ data }) => {
         type: CHANGE_CALENDAR_TYPE,
         calendarType: drillDirection(),
       })
+      console.log('dispatch')
+
     } else {
       alert('The choice is made!')
+      console.log(year)
+      console.log(x)
+
+
     }
   }
 
@@ -75,11 +86,13 @@ export const MonthsYearsRows = ({ data }) => {
     'td-4': calendarType === QUARTER,
     'td-2': calendarType === HALFYEAR,
   })
-  
+  function handleClick(x){
+    console.log(x);
+  }
   return data.map((item) => (
     <tr key={uuidv4()}>
       {item.map((x) => (
-        <td key={uuidv4()} tabIndex={0} className={tdClsx} onClick={onDrill}>
+        <td key={uuidv4()} tabIndex={0} className={tdClsx} onClick={()=>onDrill(x)}>
           {x}
         </td>
       ))}

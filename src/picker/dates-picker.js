@@ -10,7 +10,7 @@ import SubmitElement from './submitElement';
 export default function DatesPicker(props) {
   const [focused, setFocused] = useState(undefined) 
 
-  console.log(focused)
+  // console.log(focused)
 
   const onBlur = e => {
     const focusInCurrentTarget = ({ relatedTarget, currentTarget }) => {
@@ -26,7 +26,6 @@ export default function DatesPicker(props) {
     !focusInCurrentTarget(e) && setFocused(undefined)
 
   }
-  console.log('render');
 
   return (
     <PickerProvider initialData={props}>

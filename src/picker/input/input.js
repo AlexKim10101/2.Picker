@@ -72,9 +72,9 @@ export default function Input({
   	
   }
   const onBlur = e => {
-  	console.log('onBlur startDate string', startDate)
-    console.log('onBlur endDate string', endDate)
-    console.log(validFormData);
+  	// console.log('onBlur startDate string', startDate)
+    // console.log('onBlur endDate string', endDate)
+    // console.log(validFormData);
 
   }
 
