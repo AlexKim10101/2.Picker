@@ -26,10 +26,10 @@ export const DaysWeeksRows = ({ data }) => {
     console.log('x');
 
   }
-  return data.map((item) => (
+  return data.map((item, index) => (
     <tr key={uuidv4()} className={trClsx}>
       {item.map((x) => (
-        <td key={uuidv4()} className={tdClsx(x.status)} onClick={()=>handleClick(x)}>
+        <td key={uuidv4()} tabIndex={0} className={tdClsx(x.status)} onClick={()=>handleClick(data[index][0])}>
           {x.date}
         </td>
       ))}

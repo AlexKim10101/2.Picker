@@ -11,10 +11,12 @@ export default function App() {
   const fakePeriod = 'month'
   const fakeCalendarType = 'month'
 
-  const leftDate = ''
-  const rightDate = ''
-  const leftDateIsCorrect = false
-  const rightDateIsCorrect = false
+  const startDate = ''
+  const endDate = ''
+  const resultStartDate = null;
+  const resultEndDate = null;
+  const startDateIsCorrect = false
+  const endDateIsCorrect = false
   const validFormData = false
 
   // function dateFormater(date){
@@ -29,10 +31,12 @@ export default function App() {
       step={fakeStep}
       period={fakePeriod}
       calendarType={fakeCalendarType}
-      leftDate={leftDate}
-      rightDate={rightDate}
-      leftDateIsCorrect={leftDateIsCorrect}
-      rightDateIsCorrect={rightDateIsCorrect}
+      startDate={startDate}
+      endDate={endDate}
+      resultStartDate={resultStartDate}
+      resultEndDate={resultEndDate}
+      startDateIsCorrect={startDateIsCorrect}
+      endDateIsCorrect={endDateIsCorrect}
       validFormData={validFormData}
     />
   )

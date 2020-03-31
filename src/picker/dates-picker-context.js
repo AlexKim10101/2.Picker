@@ -9,7 +9,9 @@ import {
   CHANGE_END_DATE,
   VALID_START_DATE,
   VALID_END_DATE,
-  VALID_FORM
+  VALID_FORM,
+  SET_RESULT_START_DATE,
+  SET_RESULT_END_DATE
 } from '../utils/consts'
 
 const PickerStateContext = createContext()
@@ -37,6 +39,10 @@ function pickerReducer(state, action) {
       return { ...state, endDateIsCorrect: action.endDateIsCorrect}
     case VALID_FORM:
       return { ...state, validFormData: action.validFormData}
+    case SET_RESULT_START_DATE:
+      return { ...state, resultStartDate: action.resultStartDate}
+    case SET_RESULT_END_DATE:
+      return { ...state, resultEndDate: action.resultEndDate}
     default: {
       throw new Error(`Unhandled action type: ${action.type}`)
     }
