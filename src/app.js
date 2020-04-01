@@ -18,6 +18,7 @@ export default function App() {
   const startDateIsCorrect = false
   const endDateIsCorrect = false
   const validFormData = false
+  const inputFocus = null;
 
   // function dateFormater(date){
   //   return date.getUTCDate() + 
@@ -38,6 +39,7 @@ export default function App() {
       startDateIsCorrect={startDateIsCorrect}
       endDateIsCorrect={endDateIsCorrect}
       validFormData={validFormData}
+      inputFocus={inputFocus}
     />
   )
 }

@@ -3,6 +3,10 @@ import classnames from 'classnames'
 import { usePickerState, usePickerDispatch } from '../dates-picker-context'
 import {
   steps,
+  months,
+  monthsFull,
+  quarters,
+  halfYear,
   stepsLabels,
   CHANGE_STEP,
   CHANGE_PERIOD,
@@ -13,7 +17,8 @@ import {
   VALID_END_DATE,
   VALID_FORM,
   SET_RESULT_START_DATE,
-  SET_RESULT_END_DATE
+  SET_RESULT_END_DATE,
+  SET_INPUT_FOCUS
 } from '../../utils/consts'
 import './input.css'
 const [
@@ -59,6 +64,7 @@ export default function Input({
     endDateIsCorrect, 
     validFormData, 
     period,
+    year,
     resultStartDate,
     resultEndDate
   } = usePickerState()
@@ -75,21 +81,102 @@ export default function Input({
         if(dateValidation(startDate)){
           dispatch({type: SET_RESULT_START_DATE, resultStartDate: dateCreater(startDate)})
         }
+       
+        break;
+      }
+      case MONTH :{
+        if(months.includes(startDate)){          
+          dispatch({type: SET_RESULT_START_DATE, resultStartDate: new Date(year, months.indexOf(startDate), 1)})
+        }       
+
+        if(monthsFull.includes(startDate)){          
+          dispatch({type: SET_RESULT_START_DATE, resultStartDate: new Date(year, monthsFull.indexOf(startDate), 1)})
+        }
+        
+        break;
+      }
+      case QUARTER :{
+        if(quarters.includes(startDate)){
+          const startQurtArr = ['01.01.', '01.04.', '01.07.','01.10.'];
+          const startIndex = quarters.indexOf(startDate)
+          const startBlank = startQurtArr[startIndex] + year;
+          dispatch({type: SET_RESULT_START_DATE, resultStartDate: dateCreater(startBlank)})
+        }
+            
+        break;
+      }
+
+      case HALFYEAR :{
+        if(halfYear.includes(startDate)){
+          const startHalfYearArr = ['01.01.', '01.07.'];
+          const startIndex = halfYear.indexOf(startDate)
+          const startBlank = startHalfYearArr[startIndex] + year;
+          dispatch({type: SET_RESULT_START_DATE, resultStartDate: dateCreater(startBlank)})
+        }             
+        break;
+      }
+
+      case YEAR:{
+        if(dateValidation('01.01.'+startDate)){
+          dispatch({type: SET_RESULT_START_DATE, resultStartDate: dateCreater('01.01.'+startDate)})
+        }
+      }
+    }  
+  },[startDate])
+
+
+
+  useEffect(()=>{
+    //валидация значения input
+
+    switch(period){
+      case DAY :{       
         if(dateValidation(endDate)){
           dispatch({type: SET_RESULT_END_DATE, resultEndDate: dateCreater(endDate)})
         }
-
-        // dispatch({type: VALID_START_DATE, startDateIsCorrect: dateValidation(startDate)})      
-        // dispatch({type: VALID_END_DATE, endDateIsCorrect: dateValidation(endDate)}) 
         break;
+      }
+      case MONTH :{
+        if(months.includes(endDate)){          
+          dispatch({type: SET_RESULT_END_DATE, resultEndDate:new Date( new Date(year, months.indexOf(endDate)+1, 1)-(3600 * 24 * 1000))})
+        }        
+        if(monthsFull.includes(endDate)){          
+          dispatch({type: SET_RESULT_END_DATE, resultEndDate:new Date( new Date(year, monthsFull.indexOf(endDate)+1, 1)-(3600 * 24 * 1000))})
+        }
+        break;
+      }
+      case QUARTER :{      
+        if(quarters.includes(endDate)){
+          const endQurtArr = ['31.03.', '30.06.', '30.09.','31.12.'];
+          const endIndex = quarters.indexOf(endDate)
+          const endBlank = endQurtArr[endIndex] + year;
+          dispatch({type: SET_RESULT_END_DATE, resultEndDate: dateCreater(endBlank)})
+        }       
+        break;
+      }
+      case HALFYEAR :{             
+        if(halfYear.includes(endDate)){
+          const endHalfYearArr = ['30.06.','31.12.'];
+          const endIndex = halfYear.indexOf(endDate)
+          const endBlank = endHalfYearArr[endIndex] + year;
+          dispatch({type: SET_RESULT_END_DATE, resultEndDate: dateCreater(endBlank)})
+        }       
+        break;
+      }
+
+      case YEAR:{  
+        if(dateValidation('31.12.'+endDate)){
+          dispatch({type: SET_RESULT_END_DATE, resultEndDate: dateCreater('31.12.'+endDate)})
+        }
       }
     }
 
     
-  },[startDate, endDate])
+  },[ endDate])
 
   useEffect(()=>{
     console.log(resultStartDate)
+    console.log(resultEndDate)
 
 
   },[resultStartDate, resultEndDate])
@@ -114,6 +201,15 @@ export default function Input({
   
   }
 
+
+  const myOnFocus = (e) =>{
+    console.log(e.target.name)
+
+    dispatch({type: SET_INPUT_FOCUS, inputFocus: e.target.name})
+    onFocus();
+
+  }
+
   const clsx = classnames('input-field', { active: id === focused })
   return (
     <div className="input-wrapper">
@@ -123,7 +219,7 @@ export default function Input({
         className={clsx}
         autoComplete="off"
         placeholder={placeholder}
-        onFocus={onFocus}
+        onFocus={myOnFocus}
         value={value}
         onChange={onChange}
         onBlur={onBlur}

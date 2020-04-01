@@ -2,12 +2,12 @@ import React from 'react'
 import classnames from 'classnames'
 import { v4 as uuidv4 } from 'uuid'
 import { usePickerState, usePickerDispatch } from '../dates-picker-context'
-import { steps, dayStatus, CHANGE_CALENDAR_TYPE, } from '../../utils/consts'
+import { steps, dayStatus, CHANGE_CALENDAR_TYPE,CHANGE_START_DATE, months, } from '../../utils/consts'
 
 
 export const DaysWeeksRows = ({ data }) => {
-  const { calendarType } = usePickerState()
-
+  const { period, calendarType, year, month, inputFocus } = usePickerState()
+  const dispatch = usePickerDispatch()
   const [DAY, WEEK] = steps
   const { curr, out } = dayStatus
 
@@ -22,14 +22,21 @@ export const DaysWeeksRows = ({ data }) => {
   })
   function handleClick(x){
     console.log(x);
-    
-    console.log('x');
+    if(inputFocus == 'startDate'){
+      switch (calendarType){
+        case DAY:{
+          console.log(month)
+          const value = x.date + '.' +(month+1)+'.'+year
+          dispatch({type: CHANGE_START_DATE, startDate: value}) 
+        }
+      }
+    }
 
   }
   return data.map((item, index) => (
     <tr key={uuidv4()} className={trClsx}>
       {item.map((x) => (
-        <td key={uuidv4()} tabIndex={0} className={tdClsx(x.status)} onClick={()=>handleClick(data[index][0])}>
+        <td key={uuidv4()} tabIndex={0} className={tdClsx(x.status)} onClick={()=>handleClick(x)}>
           {x.date}
         </td>
       ))}
@@ -39,7 +46,7 @@ export const DaysWeeksRows = ({ data }) => {
 
 
 export const MonthsYearsRows = ({ data }) => {
-  const { period, calendarType, year } = usePickerState()
+  const { period, calendarType, year, month, inputFocus } = usePickerState()
   const dispatch = usePickerDispatch()
 
   const [
@@ -69,13 +76,29 @@ export const MonthsYearsRows = ({ data }) => {
         type: CHANGE_CALENDAR_TYPE,
         calendarType: drillDirection(),
       })
-      console.log('dispatch')
 
     } else {
-      alert('The choice is made!')
+      //alert('The choice is made!')
       console.log(year)
       console.log(x)
+      if(inputFocus == 'startDate'){
+        switch (calendarType){
+          case DAY:{
+            const value = x.date + '.' +months.indexOf(month)+'.'+year
+            dispatch({type: CHANGE_START_DATE, startDate: value}) 
+          }
+        }
 
+
+
+
+
+      }
+      switch (calendarType){
+        case DAY:{
+          
+        }
+      }
 
     }
   }
