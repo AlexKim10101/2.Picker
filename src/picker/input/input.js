@@ -177,6 +177,12 @@ export default function Input({
   useEffect(()=>{
     console.log(resultStartDate)
     console.log(resultEndDate)
+    if(resultStartDate&&resultEndDate){
+      dispatch({type:VALID_FORM, validFormData: resultStartDate<resultEndDate})
+    } else{
+      dispatch({type:VALID_FORM, validFormData: false})
+
+    }
 
 
   },[resultStartDate, resultEndDate])

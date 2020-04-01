@@ -2,7 +2,7 @@ import React from 'react'
 import classnames from 'classnames'
 import { v4 as uuidv4 } from 'uuid'
 import { usePickerState, usePickerDispatch } from '../dates-picker-context'
-import { steps, dayStatus, CHANGE_CALENDAR_TYPE,CHANGE_START_DATE, months, } from '../../utils/consts'
+import { steps, dayStatus, CHANGE_CALENDAR_TYPE, CHANGE_START_DATE, CHANGE_END_DATE, months, halfYear, } from '../../utils/consts'
 
 
 export const DaysWeeksRows = ({ data }) => {
@@ -25,21 +25,71 @@ export const DaysWeeksRows = ({ data }) => {
     if(inputFocus == 'startDate'){
       switch (calendarType){
         case DAY:{
-          console.log(month)
-          const value = x.date + '.' +(month+1)+'.'+year
-          dispatch({type: CHANGE_START_DATE, startDate: value}) 
+          let correctMonth = month;
+          if(x.status === 'out'){
+            correctMonth = x.date > 7 ? correctMonth-1 : correctMonth+1;
+          }
+          const monthString = correctMonth > 8 ? String(correctMonth + 1) : ('0' + String(correctMonth+1))
+          const dayString = x.date > 9 ? String(x.date) : ('0' + String(x.date))
+          const value = dayString + '.' +monthString+'.'+year
+          dispatch({type: CHANGE_START_DATE, startDate: value})
+          return; 
+        }
+
+        case WEEK:{
+          const correctDay = x[0];
+          let correctMonth = month;
+          if(correctDay.status === 'out'){
+            correctMonth = correctDay.date > 7 ? correctMonth-1 : correctMonth+1;
+          }
+          const monthString = correctMonth > 8 ? String(correctMonth + 1) : ('0' + String(correctMonth+1))
+          const dayString = correctDay.date > 9 ? String(correctDay.date) : ('0' + String(correctDay.date))
+          const value = dayString + '.' +monthString+'.'+year
+          dispatch({type: CHANGE_START_DATE, startDate: value})
+          return; 
         }
       }
     }
 
+    if(inputFocus == 'endDate'){
+      switch (calendarType){
+        case DAY:{
+          let correctMonth = month;
+          if(x.status === 'out'){
+            correctMonth = x.date > 7 ? correctMonth-1 : correctMonth+1;
+          }
+          const monthString = correctMonth > 8 ? String(correctMonth + 1) : ('0' + String(correctMonth+1))
+          const dayString = x.date > 9 ? String(x.date) : ('0' + String(x.date))
+          const value = dayString + '.' +monthString+'.'+year
+          dispatch({type: CHANGE_END_DATE, endDate: value})
+          return; 
+        }
+
+        case WEEK:{
+          const correctDay = x[x.length-1];
+          let correctMonth = month;
+          if(correctDay.status === 'out'){
+            correctMonth = correctDay.date > 7 ? correctMonth-1 : correctMonth+1;
+          }
+          const monthString = correctMonth > 8 ? String(correctMonth + 1) : ('0' + String(correctMonth+1))
+          const dayString = correctDay.date > 9 ? String(correctDay.date) : ('0' + String(correctDay.date))
+          const value = dayString + '.' +monthString+'.'+year
+          dispatch({type: CHANGE_END_DATE, endDate: value})
+          return; 
+        }
+      }
+    }
   }
   return data.map((item, index) => (
     <tr key={uuidv4()} className={trClsx}>
-      {item.map((x) => (
-        <td key={uuidv4()} tabIndex={0} className={tdClsx(x.status)} onClick={()=>handleClick(x)}>
-          {x.date}
-        </td>
-      ))}
+      {item.map((x) => {
+        const arg = calendarType === WEEK ? item : x;
+        return(
+          <td key={uuidv4()} tabIndex={0} className={tdClsx(x.status)} onClick={()=>handleClick(arg)}>
+            {x.date}
+          </td>
+        )}
+      )}
     </tr>
   ))
 }
@@ -80,24 +130,39 @@ export const MonthsYearsRows = ({ data }) => {
     } else {
       //alert('The choice is made!')
       console.log(year)
-      console.log(x)
+      console.log('x',x)
       if(inputFocus == 'startDate'){
-        switch (calendarType){
-          case DAY:{
-            const value = x.date + '.' +months.indexOf(month)+'.'+year
-            dispatch({type: CHANGE_START_DATE, startDate: value}) 
-          }
-        }
+        dispatch({type: CHANGE_START_DATE, startDate: x})
 
-
-
-
-
+        // switch (calendarType){
+        //   case YEAR:{
+        //     const value = '01.01.' + x;
+        //     dispatch({type: CHANGE_START_DATE, startDate: value}) 
+        //     return
+        //   }
+        //   case HALFYEAR:{
+        //     const value = x===halfYear[0] ? ('01.01.'+year) : ('01.07.'+year);
+        //     dispatch({type: CHANGE_START_DATE, startDate: value}) 
+        //     return
+        //   }
+        // }
       }
-      switch (calendarType){
-        case DAY:{
-          
-        }
+      
+
+
+      if(inputFocus == 'endDate'){
+        dispatch({type: CHANGE_END_DATE, endDate: x})
+        // switch (calendarType){
+        //   case YEAR:{
+        //     const value = '31.12.' + x;
+        //     dispatch({type: CHANGE_END_DATE, endDate: value}) 
+        //   }
+        //   case HALFYEAR:{
+        //     const value = x===halfYear[0] ? ('30.06.'+year) : ('31.12.'+year);
+        //     dispatch({type: CHANGE_END_DATE, endDate: value}) 
+        //     return
+        //   }
+        // }
       }
 
     }
