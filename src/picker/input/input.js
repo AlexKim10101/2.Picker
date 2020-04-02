@@ -74,7 +74,7 @@ export default function Input({
 
 
   useEffect(()=>{
-    //валидация значения input
+    //валидация значения input startDate
 
     switch(period){
       case DAY :{        
@@ -127,7 +127,7 @@ export default function Input({
 
 
   useEffect(()=>{
-    //валидация значения input
+    //валидация значения input endDate
 
     switch(period){
       case DAY :{       
@@ -175,26 +175,24 @@ export default function Input({
   },[ endDate])
 
   useEffect(()=>{
-    console.log(resultStartDate)
-    console.log(resultEndDate)
+    //валидация всей формы
+    //console.log(resultStartDate)
+    //console.log(resultEndDate)
     if(resultStartDate&&resultEndDate){
       dispatch({type:VALID_FORM, validFormData: resultStartDate<resultEndDate})
     } else{
       dispatch({type:VALID_FORM, validFormData: false})
-
     }
-
-
   },[resultStartDate, resultEndDate])
 
   const onChange = ({ target }) => {
     const name = target.name;
     const value = target.value;
-    let type;
     
     //изменение значения input
     switch (name){
       case 'startDate':
+        
         dispatch({type: CHANGE_START_DATE, startDate: value})         
         break;
       case 'endDate':
@@ -210,10 +208,8 @@ export default function Input({
 
   const myOnFocus = (e) =>{
     console.log(e.target.name)
-
     dispatch({type: SET_INPUT_FOCUS, inputFocus: e.target.name})
-    onFocus();
-
+    return onFocus();
   }
 
   const clsx = classnames('input-field', { active: id === focused })
