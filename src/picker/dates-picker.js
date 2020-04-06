@@ -26,9 +26,17 @@ export default function DatesPicker(props) {
     !focusInCurrentTarget(e) && setFocused(undefined)
 
   }
-
+  let newProps = {
+    startDate : '',
+    endDate : '',
+    resultStartDate : null,
+    resultEndDate : null,  
+    validFormData : false,
+    inputFocus : null,
+  }
+  let expProps = Object.assign({},props,newProps)
   return (
-    <PickerProvider initialData={props}>
+    <PickerProvider initialData={expProps}>
       <div className="dates-picker-wrapper" onBlur={onBlur}>
         <Select />
         

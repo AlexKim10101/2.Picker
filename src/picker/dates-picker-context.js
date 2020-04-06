@@ -33,11 +33,7 @@ function pickerReducer(state, action) {
     case CHANGE_START_DATE:
       return { ...state, startDate: action.startDate}
     case CHANGE_END_DATE:
-      return { ...state, endDate: action.endDate}
-    case VALID_START_DATE:
-      return { ...state, startDateIsCorrect: action.startDateIsCorrect}
-    case VALID_END_DATE:
-      return { ...state, endDateIsCorrect: action.endDateIsCorrect}
+      return { ...state, endDate: action.endDate}    
     case VALID_FORM:
       return { ...state, validFormData: action.validFormData}
     case SET_RESULT_START_DATE:

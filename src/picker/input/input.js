@@ -12,9 +12,7 @@ import {
   CHANGE_PERIOD,
   CHANGE_CALENDAR_TYPE,
   CHANGE_START_DATE,
-  CHANGE_END_DATE,
-  VALID_START_DATE,
-  VALID_END_DATE,
+  CHANGE_END_DATE,  
   VALID_FORM,
   SET_RESULT_START_DATE,
   SET_RESULT_END_DATE,
@@ -59,9 +57,7 @@ export default function Input({
   
   const { 
     startDate, 
-    endDate, 
-    startDateIsCorrect, 
-    endDateIsCorrect, 
+    endDate,     
     validFormData, 
     period,
     year,
@@ -71,107 +67,108 @@ export default function Input({
   const dispatch = usePickerDispatch()
   const value = id === 'startDate' ? startDate : endDate
 
+  function inputValueValidation(fieldName, value, year, period){
+    let typeName;
+    const monthStartModificator = 0;
+    const monthEndModificator = 1;
+    let monthModificator
+
+    const monthStartDateModificator = 0;
+    const monthEndDateModificator = 3600 * 24 * 1000;
+
+    let monthDateModificator
+    const startQurtArr = ['01.01.', '01.04.', '01.07.','01.10.'];
+    const endQurtArr = ['31.03.', '30.06.', '30.09.','31.12.'];
+    let qurtArr
+    const halfYearStartArr = ['01.01.', '01.07.'];
+    const halfYearEndArr = ['30.06.','31.12.'];
+    let halfYearArr
+    const yearStartPreDate = '01.01.';
+    const yearEndPreDate = '31.12.'
+    let yearPreDate;
+
+    let result
+
+    if(fieldName=='resultStartDate'){
+      typeName = SET_RESULT_START_DATE;
+      monthModificator = monthStartModificator
+      monthDateModificator = monthStartDateModificator
+      qurtArr = startQurtArr;
+      halfYearArr = halfYearStartArr;      
+      yearPreDate = yearStartPreDate;
+
+    }
+
+    if(fieldName=='resultEndDate'){
+      typeName = SET_RESULT_END_DATE;
+      monthModificator = monthEndModificator;
+      monthDateModificator = monthEndDateModificator;
+      qurtArr = endQurtArr;
+      halfYearArr = halfYearEndArr;
+      yearPreDate = yearEndPreDate;
+    }
 
 
-  useEffect(()=>{
-    //валидация значения input startDate
 
     switch(period){
       case DAY :{        
-        if(dateValidation(startDate)){
-          dispatch({type: SET_RESULT_START_DATE, resultStartDate: dateCreater(startDate)})
+        if(dateValidation(value)){
+          dispatch({type: typeName, [fieldName]: dateCreater(value)})
         }
        
         break;
       }
       case MONTH :{
-        if(months.includes(startDate)){          
-          dispatch({type: SET_RESULT_START_DATE, resultStartDate: new Date(year, months.indexOf(startDate), 1)})
+        if(months.includes(value)){          
+          dispatch({type: typeName, [fieldName]:new Date( new Date(year, months.indexOf(value)+monthModificator, 1) - monthDateModificator)})
         }       
 
-        if(monthsFull.includes(startDate)){          
-          dispatch({type: SET_RESULT_START_DATE, resultStartDate: new Date(year, monthsFull.indexOf(startDate), 1)})
+        if(monthsFull.includes(value)){          
+          dispatch({type: typeName, [fieldName]: new Date( new Date(year, monthsFull.indexOf(value)+monthModificator, 1) - monthDateModificator)})
         }
         
         break;
       }
       case QUARTER :{
-        if(quarters.includes(startDate)){
-          const startQurtArr = ['01.01.', '01.04.', '01.07.','01.10.'];
-          const startIndex = quarters.indexOf(startDate)
-          const startBlank = startQurtArr[startIndex] + year;
-          dispatch({type: SET_RESULT_START_DATE, resultStartDate: dateCreater(startBlank)})
+        if(quarters.includes(value)){
+          
+          const qurtIndex = quarters.indexOf(value)
+          const blank = qurtArr[qurtIndex] + year;
+          dispatch({type: typeName, [fieldName]: dateCreater(blank)})
         }
             
         break;
       }
 
       case HALFYEAR :{
-        if(halfYear.includes(startDate)){
-          const startHalfYearArr = ['01.01.', '01.07.'];
-          const startIndex = halfYear.indexOf(startDate)
-          const startBlank = startHalfYearArr[startIndex] + year;
-          dispatch({type: SET_RESULT_START_DATE, resultStartDate: dateCreater(startBlank)})
+        if(halfYear.includes(value)){
+          const halfYearIndex = halfYear.indexOf(value)
+          const blank = halfYearArr[halfYearIndex] + year;
+          dispatch({type: typeName, [fieldName]: dateCreater(blank)})
         }             
         break;
       }
 
       case YEAR:{
-        if(dateValidation('01.01.'+startDate)){
-          dispatch({type: SET_RESULT_START_DATE, resultStartDate: dateCreater('01.01.'+startDate)})
+        if(dateValidation(yearPreDate + value)){
+          dispatch({type: typeName, [fieldName]: dateCreater(yearPreDate + value)})
         }
       }
-    }  
-  },[startDate])
+    }
+    
+  }
 
+  useEffect(()=>{
+    //валидация значения input startDate
+    inputValueValidation('resultStartDate', startDate, year, period)
+    
+  },[startDate])
 
 
   useEffect(()=>{
     //валидация значения input endDate
+    inputValueValidation('resultEndDate', endDate, year, period)
 
-    switch(period){
-      case DAY :{       
-        if(dateValidation(endDate)){
-          dispatch({type: SET_RESULT_END_DATE, resultEndDate: dateCreater(endDate)})
-        }
-        break;
-      }
-      case MONTH :{
-        if(months.includes(endDate)){          
-          dispatch({type: SET_RESULT_END_DATE, resultEndDate:new Date( new Date(year, months.indexOf(endDate)+1, 1)-(3600 * 24 * 1000))})
-        }        
-        if(monthsFull.includes(endDate)){          
-          dispatch({type: SET_RESULT_END_DATE, resultEndDate:new Date( new Date(year, monthsFull.indexOf(endDate)+1, 1)-(3600 * 24 * 1000))})
-        }
-        break;
-      }
-      case QUARTER :{      
-        if(quarters.includes(endDate)){
-          const endQurtArr = ['31.03.', '30.06.', '30.09.','31.12.'];
-          const endIndex = quarters.indexOf(endDate)
-          const endBlank = endQurtArr[endIndex] + year;
-          dispatch({type: SET_RESULT_END_DATE, resultEndDate: dateCreater(endBlank)})
-        }       
-        break;
-      }
-      case HALFYEAR :{             
-        if(halfYear.includes(endDate)){
-          const endHalfYearArr = ['30.06.','31.12.'];
-          const endIndex = halfYear.indexOf(endDate)
-          const endBlank = endHalfYearArr[endIndex] + year;
-          dispatch({type: SET_RESULT_END_DATE, resultEndDate: dateCreater(endBlank)})
-        }       
-        break;
-      }
-
-      case YEAR:{  
-        if(dateValidation('31.12.'+endDate)){
-          dispatch({type: SET_RESULT_END_DATE, resultEndDate: dateCreater('31.12.'+endDate)})
-        }
-      }
-    }
-
-    
   },[ endDate])
 
   useEffect(()=>{

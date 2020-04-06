@@ -11,15 +11,6 @@ export default function App() {
   const fakePeriod = 'month'
   const fakeCalendarType = 'month'
 
-  const startDate = ''
-  const endDate = ''
-  const resultStartDate = null;
-  const resultEndDate = null;
-  const startDateIsCorrect = false
-  const endDateIsCorrect = false
-  const validFormData = false
-  const inputFocus = null;
-
   // function dateFormater(date){
   //   return date.getUTCDate() + 
   //   '.' + ((date.getUTCMonth()+1) > 9 ? (date.getUTCMonth()+1): '0' + (date.getUTCMonth()+1)) + 
@@ -31,15 +22,7 @@ export default function App() {
       month={fakeMonth}
       step={fakeStep}
       period={fakePeriod}
-      calendarType={fakeCalendarType}
-      startDate={startDate}
-      endDate={endDate}
-      resultStartDate={resultStartDate}
-      resultEndDate={resultEndDate}
-      startDateIsCorrect={startDateIsCorrect}
-      endDateIsCorrect={endDateIsCorrect}
-      validFormData={validFormData}
-      inputFocus={inputFocus}
+      calendarType={fakeCalendarType}      
     />
   )
 }
