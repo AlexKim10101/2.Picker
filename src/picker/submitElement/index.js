@@ -17,6 +17,7 @@ export default function SubmitElement(){
 
     return dd + '.' + mm + '.' + yy;
   }
+  console.log('resultStartDate', resultStartDate)
   const firstDate = resultStartDate ? formatDate(resultStartDate) : null
   const secondDate = resultEndDate ? formatDate(resultEndDate) : null
 

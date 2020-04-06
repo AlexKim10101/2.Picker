@@ -36,7 +36,7 @@ export const DaysWeeksRows = ({ data }) => {
           const dayString = x.date > 9 ? String(x.date) : ('0' + String(x.date))
           const value = dayString + '.' + monthString + '.' + year
           
-          dispatch({type: CHANGE_START_DATE, startDate: value})
+          dispatch({type: CHANGE_START_DATE, startDate: {value: value, year: year}})
           return; 
         }
 
@@ -50,7 +50,7 @@ export const DaysWeeksRows = ({ data }) => {
           const dayString = correctDay.date > 9 ? String(correctDay.date) : ('0' + String(correctDay.date))
           const value = dayString + '.' +monthString+'.'+year
           
-          dispatch({type: CHANGE_START_DATE, startDate: value})
+          dispatch({type: CHANGE_START_DATE, startDate: {value: value, year: year}})
           return; 
         }
       }

@@ -115,7 +115,8 @@ export default function Input({
       case WEEK: {        
         if(dateValidation(dateObj.value)){
           newDate = dateObj.value;
-          dispatch({type: typeName, [fieldName]: newDate})
+          dispatch({type: typeName, [fieldName]: dateCreater(newDate)})
+          
         }
        
         break;
