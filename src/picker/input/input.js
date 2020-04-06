@@ -65,9 +65,9 @@ export default function Input({
     resultEndDate
   } = usePickerState()
   const dispatch = usePickerDispatch()
-  const value = id === 'startDate' ? startDate : endDate
+  const value = id === 'startDate' ? startDate.value : endDate.value
 
-  function inputValueValidation(fieldName, value, year, period){
+  function inputValueValidation(fieldName, dateObj, period){
     let typeName;
     const monthStartModificator = 0;
     const monthEndModificator = 1;
@@ -87,7 +87,7 @@ export default function Input({
     const yearEndPreDate = '31.12.'
     let yearPreDate;
 
-    let result
+    let newDate
 
     if(fieldName=='resultStartDate'){
       typeName = SET_RESULT_START_DATE;
@@ -111,47 +111,54 @@ export default function Input({
 
 
     switch(period){
-      case DAY :{        
-        if(dateValidation(value)){
-          dispatch({type: typeName, [fieldName]: dateCreater(value)})
+      case DAY :
+      case WEEK: {        
+        if(dateValidation(dateObj.value)){
+          newDate = dateObj.value;
+          dispatch({type: typeName, [fieldName]: newDate})
         }
        
         break;
       }
       case MONTH :{
-        if(months.includes(value)){          
-          dispatch({type: typeName, [fieldName]:new Date( new Date(year, months.indexOf(value)+monthModificator, 1) - monthDateModificator)})
+        if(months.includes(dateObj.value)){       
+          newDate = new Date( new Date(dateObj.year, months.indexOf(dateObj.value)+monthModificator, 1) - monthDateModificator)
+          dispatch({type: typeName, [fieldName]:newDate})
         }       
 
-        if(monthsFull.includes(value)){          
-          dispatch({type: typeName, [fieldName]: new Date( new Date(year, monthsFull.indexOf(value)+monthModificator, 1) - monthDateModificator)})
+        if(monthsFull.includes(dateObj.value)){  
+          newDate = new Date( new Date(dateObj.year, monthsFull.indexOf(dateObj.value)+monthModificator, 1) - monthDateModificator)    
+          dispatch({type: typeName, [fieldName]: newDate})
         }
         
         break;
       }
       case QUARTER :{
-        if(quarters.includes(value)){
+        if(quarters.includes(dateObj.value)){
           
-          const qurtIndex = quarters.indexOf(value)
-          const blank = qurtArr[qurtIndex] + year;
-          dispatch({type: typeName, [fieldName]: dateCreater(blank)})
+          const qurtIndex = quarters.indexOf(dateObj.value)
+          const blank = qurtArr[qurtIndex] + dateObj.year;
+          newDate = dateCreater(blank);
+          dispatch({type: typeName, [fieldName]: newDate})
         }
             
         break;
       }
 
       case HALFYEAR :{
-        if(halfYear.includes(value)){
-          const halfYearIndex = halfYear.indexOf(value)
-          const blank = halfYearArr[halfYearIndex] + year;
-          dispatch({type: typeName, [fieldName]: dateCreater(blank)})
+        if(halfYear.includes(dateObj.value)){
+          const halfYearIndex = halfYear.indexOf(dateObj.value)
+          const blank = halfYearArr[halfYearIndex] + dateObj.year;
+          newDate = dateCreater(blank)
+          dispatch({type: typeName, [fieldName]: newDate})
         }             
         break;
       }
 
       case YEAR:{
-        if(dateValidation(yearPreDate + value)){
-          dispatch({type: typeName, [fieldName]: dateCreater(yearPreDate + value)})
+        if(dateValidation(yearPreDate + dateObj.value)){
+          newDate = dateCreater(yearPreDate + dateObj.value)
+          dispatch({type: typeName, [fieldName]: newDate })
         }
       }
     }
@@ -160,14 +167,14 @@ export default function Input({
 
   useEffect(()=>{
     //валидация значения input startDate
-    inputValueValidation('resultStartDate', startDate, year, period)
+    inputValueValidation('resultStartDate', startDate,period)
     
   },[startDate])
 
 
   useEffect(()=>{
     //валидация значения input endDate
-    inputValueValidation('resultEndDate', endDate, year, period)
+    inputValueValidation('resultEndDate', endDate, period)
 
   },[ endDate])
 
@@ -190,10 +197,10 @@ export default function Input({
     switch (name){
       case 'startDate':
         
-        dispatch({type: CHANGE_START_DATE, startDate: value})         
+        dispatch({type: CHANGE_START_DATE, startDate: {value:value, year: year}})         
         break;
       case 'endDate':
-        dispatch({type: CHANGE_END_DATE, endDate: value}) 
+        dispatch({type: CHANGE_END_DATE, endDate: {value:value, year: year}}) 
         break;
     }
   

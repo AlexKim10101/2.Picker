@@ -1,6 +1,6 @@
 import React from 'react'
 import { usePickerState } from '../dates-picker-context'
-
+import './submitElement.css'
 
 export default function SubmitElement(){
 
@@ -21,7 +21,7 @@ export default function SubmitElement(){
   const secondDate = resultEndDate ? formatDate(resultEndDate) : null
 
   return(
-    <div>
+    <div className="submitElement">
       
       {!validFormData && (<div>Некорректные данные</div>)}
   

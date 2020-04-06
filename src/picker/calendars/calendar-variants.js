@@ -67,7 +67,7 @@ export const DaysWeeksRows = ({ data }) => {
           const dayString = x.date > 9 ? String(x.date) : ('0' + String(x.date))
           const value = dayString + '.' +monthString+'.'+year
          
-          dispatch({type: CHANGE_END_DATE, endDate: value})
+          dispatch({type: CHANGE_END_DATE, endDate: {value: value, year: year}})
           return; 
         }
 
@@ -81,7 +81,7 @@ export const DaysWeeksRows = ({ data }) => {
           const dayString = correctDay.date > 9 ? String(correctDay.date) : ('0' + String(correctDay.date))
           const value = dayString + '.' + monthString + '.' + year
           
-          dispatch({type: CHANGE_END_DATE, endDate: value})
+          dispatch({type: CHANGE_END_DATE, endDate: {value: value, year: year}})
           return; 
         }
       }
@@ -135,8 +135,8 @@ export const MonthsYearsRows = ({ data }) => {
       })
 
     } else {          
-      (inputFocus == 'startDate') && dispatch({type: CHANGE_START_DATE, startDate: x});
-      (inputFocus == 'endDate') && dispatch({type: CHANGE_END_DATE, endDate: x});   
+      (inputFocus == 'startDate') && dispatch({type: CHANGE_START_DATE, startDate: {value: x, year: year}});
+      (inputFocus == 'endDate') && dispatch({type: CHANGE_END_DATE, endDate: {value: x, year: year}});   
     }
   }
 

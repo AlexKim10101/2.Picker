@@ -27,13 +27,14 @@ export default function DatesPicker(props) {
 
   }
   let newProps = {
-    startDate : '',
-    endDate : '',
+    startDate : {value:'', year:null},
+    endDate : {value:'', year:null},
     resultStartDate : null,
     resultEndDate : null,  
     validFormData : false,
     inputFocus : null,
   }
+
   let expProps = Object.assign({},props,newProps)
   return (
     <PickerProvider initialData={expProps}>
