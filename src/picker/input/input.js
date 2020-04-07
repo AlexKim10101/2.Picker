@@ -16,7 +16,17 @@ import {
   VALID_FORM,
   SET_RESULT_START_DATE,
   SET_RESULT_END_DATE,
-  SET_INPUT_FOCUS
+  SET_INPUT_FOCUS,
+  MONTH_MODIFICATOR_FOR_START,
+  MONTH_MODIFICATOR_FOR_END,
+  DATE_MONTH_MODIFICATOR_FOR_START,
+  DATE_MONTH_MODIFICATOR_FOR_END,
+  QUART_VALUES_FOR_START,
+  QUART_VALUES_FOR_END,
+  HALF_YEAR_VALUES_FOR_START,
+  HALF_YEAR_VALUES_FOR_END,
+  YEAR_VALUE_FOR_START,
+  YEAR_VALUE_FOR_END,
 } from '../../utils/consts'
 import './input.css'
 const [
@@ -68,44 +78,31 @@ export default function Input({
   const value = id === 'startDate' ? startDate.value : endDate.value
 
   function inputValueValidation(fieldName, dateObj, period){
-    let typeName;
-    const monthStartModificator = 0;
-    const monthEndModificator = 1;
-    let monthModificator
-
-    const monthStartDateModificator = 0;
-    const monthEndDateModificator = 3600 * 24 * 1000;
-
-    let monthDateModificator
-    const startQurtArr = ['01.01.', '01.04.', '01.07.','01.10.'];
-    const endQurtArr = ['31.03.', '30.06.', '30.09.','31.12.'];
-    let qurtArr
-    const halfYearStartArr = ['01.01.', '01.07.'];
-    const halfYearEndArr = ['30.06.','31.12.'];
-    let halfYearArr
-    const yearStartPreDate = '01.01.';
-    const yearEndPreDate = '31.12.'
-    let yearPreDate;
-
-    let newDate
+    let typeName, 
+      monthModificator, 
+      monthDateModificator,   
+      qurtArr,    
+      halfYearArr,   
+      yearPreDate,
+      newDate;
 
     if(fieldName=='resultStartDate'){
       typeName = SET_RESULT_START_DATE;
-      monthModificator = monthStartModificator
-      monthDateModificator = monthStartDateModificator
-      qurtArr = startQurtArr;
-      halfYearArr = halfYearStartArr;      
-      yearPreDate = yearStartPreDate;
+      monthModificator = MONTH_MODIFICATOR_FOR_START
+      monthDateModificator = DATE_MONTH_MODIFICATOR_FOR_START
+      qurtArr = QUART_VALUES_FOR_START;
+      halfYearArr = HALF_YEAR_VALUES_FOR_START;      
+      yearPreDate = YEAR_VALUE_FOR_START;
 
     }
 
     if(fieldName=='resultEndDate'){
       typeName = SET_RESULT_END_DATE;
-      monthModificator = monthEndModificator;
-      monthDateModificator = monthEndDateModificator;
-      qurtArr = endQurtArr;
-      halfYearArr = halfYearEndArr;
-      yearPreDate = yearEndPreDate;
+      monthModificator = MONTH_MODIFICATOR_FOR_END;
+      monthDateModificator = DATE_MONTH_MODIFICATOR_FOR_END;
+      qurtArr = QUART_VALUES_FOR_END;
+      halfYearArr = HALF_YEAR_VALUES_FOR_END;
+      yearPreDate = YEAR_VALUE_FOR_END;
     }
 
 
@@ -115,8 +112,7 @@ export default function Input({
       case WEEK: {        
         if(dateValidation(dateObj.value)){
           newDate = dateObj.value;
-          dispatch({type: typeName, [fieldName]: dateCreater(newDate)})
-          
+          dispatch({type: typeName, [fieldName]: dateCreater(newDate)})          
         }
        
         break;
@@ -168,7 +164,7 @@ export default function Input({
 
   useEffect(()=>{
     //валидация значения input startDate
-    inputValueValidation('resultStartDate', startDate,period)
+    inputValueValidation('resultStartDate', startDate, period)
     
   },[startDate])
 
@@ -181,13 +177,14 @@ export default function Input({
 
   useEffect(()=>{
     //валидация всей формы
-    //console.log(resultStartDate)
-    //console.log(resultEndDate)
+    
     if(resultStartDate&&resultEndDate){
       dispatch({type:VALID_FORM, validFormData: resultStartDate<resultEndDate})
-    } else{
-      dispatch({type:VALID_FORM, validFormData: false})
-    }
+      return
+    } 
+    
+    dispatch({type:VALID_FORM, validFormData: false})
+    
   },[resultStartDate, resultEndDate])
 
   const onChange = ({ target }) => {
@@ -196,8 +193,7 @@ export default function Input({
     
     //изменение значения input
     switch (name){
-      case 'startDate':
-        
+      case 'startDate':        
         dispatch({type: CHANGE_START_DATE, startDate: {value:value, year: year}})         
         break;
       case 'endDate':

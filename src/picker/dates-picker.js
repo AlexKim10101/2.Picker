@@ -36,6 +36,8 @@ export default function DatesPicker(props) {
   }
 
   let expProps = Object.assign({},props,newProps)
+
+  console.log('focused', focused)
   return (
     <PickerProvider initialData={expProps}>
       <div className="dates-picker-wrapper" onBlur={onBlur}>

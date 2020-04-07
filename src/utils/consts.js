@@ -31,3 +31,13 @@ export const dayStatus = {
   out: 'out',
 }
 
+export const MONTH_MODIFICATOR_FOR_START = 0;
+export const MONTH_MODIFICATOR_FOR_END = 1;
+export const DATE_MONTH_MODIFICATOR_FOR_START = 0;
+export const DATE_MONTH_MODIFICATOR_FOR_END = 3600 * 24 * 1000;
+export const QUART_VALUES_FOR_START = ['01.01.', '01.04.', '01.07.','01.10.'];
+export const QUART_VALUES_FOR_END = ['31.03.', '30.06.', '30.09.','31.12.'];
+export const HALF_YEAR_VALUES_FOR_START = ['01.01.', '01.07.'];
+export const HALF_YEAR_VALUES_FOR_END = ['30.06.','31.12.'];
+export const YEAR_VALUE_FOR_START = '01.01.';
+export const YEAR_VALUE_FOR_END = '31.12.';
