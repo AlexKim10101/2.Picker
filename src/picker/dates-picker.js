@@ -27,12 +27,12 @@ export default function DatesPicker(props) {
 
   }
   let newProps = {
-    startDate : {value:'', year:null},
-    endDate : {value:'', year:null},
-    resultStartDate : null,
-    resultEndDate : null,  
-    validFormData : false,
-    inputFocus : null,
+    startDate : {value: '', year: null},
+    endDate : {value: '', year: null},
+    resultStartDate: null,
+    resultEndDate: null,  
+    validFormData: false,
+    inputFocus: null,
   }
 
   let expProps = Object.assign({},props,newProps)
@@ -59,11 +59,14 @@ export default function DatesPicker(props) {
           />
 
           {focused !== undefined && (
-            <div aria-roledescription="datepicker">
-              <Calendar />
+            <div aria-roledescription="datepicker" >
+              <Calendar 
+              onFocus={() => setFocused(undefined)}/>
               <PeriodSideBar />
             </div>
           )}
+          
+
         </div>
 
       </div>

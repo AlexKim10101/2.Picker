@@ -165,18 +165,20 @@ export default function Input({
   useEffect(()=>{
     //валидация значения input startDate
     inputValueValidation('resultStartDate', startDate, period)
-    
-  },[startDate])
+    console.log('useEffect startDate')
+  },[startDate, period])
 
 
   useEffect(()=>{
     //валидация значения input endDate
     inputValueValidation('resultEndDate', endDate, period)
+    console.log('useEffect endDate')
 
-  },[ endDate])
+  },[ endDate, period]) 
 
   useEffect(()=>{
     //валидация всей формы
+    console.log('useEffect VALID_FORM')
     
     if(resultStartDate&&resultEndDate){
       dispatch({type:VALID_FORM, validFormData: resultStartDate<resultEndDate})
@@ -202,15 +204,13 @@ export default function Input({
     }
   
   }
-  const onBlur = e => {
   
-  }
 
 
   const myOnFocus = (e) =>{
     console.log(e.target.name)
     dispatch({type: SET_INPUT_FOCUS, inputFocus: e.target.name})
-    return onFocus();
+    onFocus();
   }
 
   const clsx = classnames('input-field', { active: id === focused })
@@ -225,7 +225,7 @@ export default function Input({
         onFocus={myOnFocus}
         value={value}
         onChange={onChange}
-        onBlur={onBlur}
+        
       />
     </div>
   )

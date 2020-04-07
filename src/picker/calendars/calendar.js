@@ -14,7 +14,7 @@ import { steps, days } from '../../utils/consts'
 import './calendar.css'
 
 
-const Calendar = () => {
+const Calendar = (props) => {
   const [
     DAY,
     WEEK,
@@ -68,8 +68,14 @@ const Calendar = () => {
     }
   }
 
+  console.log('render calendar')
+  const onBlur = e => {
+    console.log('календарная потеря фокуса')
+  }
+
+  
   return (
-    <div className="calendar">
+    <div className="calendar" onBlur={onBlur}>
       <div style={{
         height,
         width: '312px',
@@ -82,7 +88,7 @@ const Calendar = () => {
 
         <div>
           {withDaysAWeek && (
-            <div className="calendar__days-a-week">
+            <div className="calendar__days-a-week" >
               <ul>
                 {days.map((day) => (
                   <li key={day}>
@@ -93,7 +99,7 @@ const Calendar = () => {
             </div>
           )}
 
-          <table className="calendar__table">
+          <table className="calendar__table" onClick={props.onFocus}>
             <tbody>
               {renderCalendar(calendarType)}
             </tbody>
