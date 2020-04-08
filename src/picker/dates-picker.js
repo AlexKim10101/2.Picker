@@ -13,6 +13,7 @@ export default function DatesPicker(props) {
   // console.log(focused)
 
   const onBlur = e => {
+    console.log('onBlur!!')
     const focusInCurrentTarget = ({ relatedTarget, currentTarget }) => {
       if (relatedTarget === null) return false;
       let node = relatedTarget.parentNode;

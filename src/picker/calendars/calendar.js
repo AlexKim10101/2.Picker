@@ -99,7 +99,7 @@ const Calendar = (props) => {
             </div>
           )}
 
-          <table className="calendar__table" onClick={props.onFocus}>
+          <table className="calendar__table" >
             <tbody>
               {renderCalendar(calendarType)}
             </tbody>
