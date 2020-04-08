@@ -166,7 +166,7 @@ export default function Input({
     //валидация значения input startDate
     inputValueValidation('resultStartDate', startDate, period)
     console.log('useEffect startDate')
-  },[startDate, period])
+  },[startDate])
 
 
   useEffect(()=>{
@@ -174,7 +174,7 @@ export default function Input({
     inputValueValidation('resultEndDate', endDate, period)
     console.log('useEffect endDate')
 
-  },[ endDate, period]) 
+  },[ endDate]) 
 
   useEffect(()=>{
     //валидация всей формы
