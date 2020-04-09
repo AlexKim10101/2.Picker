@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useRef} from 'react'
 import classnames from 'classnames'
 import { usePickerState, usePickerDispatch } from '../dates-picker-context'
 import {
@@ -214,9 +214,20 @@ export default function Input({
   }
 
   const clsx = classnames('input-field', { active: id === focused })
+
+
+  const inputEl = useRef(null)
+  useEffect(() => {
+    if (inputEl.current.id === focused) {
+      inputEl.current.focus()
+    }
+  }, [focused])
+
+
   return (
     <div className="input-wrapper">
       <input
+        ref={inputEl}
         id={id}
         name={id}
         className={clsx}

@@ -52,6 +52,16 @@ export default function DatesPicker(props) {
             focused={focused}             
           />
           <ArrowIcon />
+
+          {focused !== undefined && (
+            <div aria-roledescription="datepicker" >
+              <Calendar 
+                focused={focused}
+                setFocus={setFocused}/>
+              <PeriodSideBar />
+            </div>
+          )}
+
           <Input 
             id="endDate" 
             placeholder="Конец" 
@@ -59,13 +69,7 @@ export default function DatesPicker(props) {
             focused={focused}             
           />
 
-          {focused !== undefined && (
-            <div aria-roledescription="datepicker" >
-              <Calendar 
-              onFocus={() => setFocused(undefined)}/>
-              <PeriodSideBar />
-            </div>
-          )}
+          
           
 
         </div>
