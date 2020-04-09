@@ -57,40 +57,12 @@ const Calendar = ({ focused, setFocus }) => {
   
   const dispatch = usePickerDispatch()
 
-  const onDrill = (x) => {
-    const idxInSteps = (x) => steps.indexOf(x)
-    const drillDirection = () => {
-      switch (calendarType) {
-        case MONTH:
-          return steps[idxInSteps(period)]
-        case YEAR:
-          return (period === HALFYEAR || period === QUARTER) ? period : MONTH
-        default:
-          return steps[idxInSteps(calendarType) - 1]
-      }
-    }
-
-    if (period !== calendarType) {
-      console.log('тот самый случай')
-      dispatch({ type: CHANGE_CALENDAR_TYPE, calendarType: drillDirection() })
-
-    } else {          
-      if (focused === 'startDate') {
-        dispatch({ type: CHANGE_START_DATE, startDate: {value: x, year: year} })
-        setFocus('endDate')
-      }
-      if (focused === 'endDate') {
-        dispatch({ type: CHANGE_END_DATE, endDate: {value: x, year: year} })
-        setFocus(undefined)
-      }  
-    }
-  }
-
-
+  
   function handleClick(x){
     let typeValue
     let indexDayOfWeek
     let fieldName = inputFocus
+    let value
     if(inputFocus == 'startDate'){
       typeValue = CHANGE_START_DATE;
       indexDayOfWeek = 0;
@@ -108,9 +80,7 @@ const Calendar = ({ focused, setFocus }) => {
         }
         const monthString = correctMonth > 8 ? String(correctMonth + 1) : ('0' + String(correctMonth+1))
         const dayString = x.date > 9 ? String(x.date) : ('0' + String(x.date))
-        const value = dayString + '.' + monthString + '.' + year
-        
-        dispatch({type: typeValue, [fieldName]: {value: value, year: year}})
+        value = dayString + '.' + monthString + '.' + year        
         break; 
       }
 
@@ -122,12 +92,17 @@ const Calendar = ({ focused, setFocus }) => {
         }
         const monthString = correctMonth > 8 ? String(correctMonth + 1) : ('0' + String(correctMonth+1))
         const dayString = correctDay.date > 9 ? String(correctDay.date) : ('0' + String(correctDay.date))
-        const value = dayString + '.' +monthString+'.'+year
-        
-        dispatch({type: typeValue, [fieldName]: {value: value, year: year}})
+        value = dayString + '.' +monthString+'.'+year        
+        break; 
+      }
+      default:{
+        value = x
         break; 
       }
     }
+
+    dispatch({ type: typeValue, [fieldName]: {value: value, year: year} })
+
     if (focused === 'startDate') {
       setFocus('endDate')
     }
@@ -142,26 +117,21 @@ const Calendar = ({ focused, setFocus }) => {
       case WEEK:
         return <DaysWeeksRows data={weeks} onClick={handleClick}/>
       case MONTH:
-        return <MonthsYearsRows data={months} onClick={onDrill}/>
+        return <MonthsYearsRows data={months} onClick={handleClick}/>
       case QUARTER:
-        return <MonthsYearsRows data={quarters} onClick={onDrill}/>
+        return <MonthsYearsRows data={quarters} onClick={handleClick}/>
       case HALFYEAR:
-        return <MonthsYearsRows data={halfyears} onClick={onDrill}/>
+        return <MonthsYearsRows data={halfyears} onClick={handleClick}/>
       case YEAR:
-        return <MonthsYearsRows data={years} onClick={onDrill}/>
+        return <MonthsYearsRows data={years} onClick={handleClick}/>
       default:
         break
     }
   }
 
-  console.log('render calendar')
-  const onBlur = e => {
-    console.log('календарная потеря фокуса')
-  }
-
-  
+   
   return (
-    <div className="calendar" onBlur={onBlur}>
+    <div className="calendar">
       <div style={{
         height,
         width: '312px',
