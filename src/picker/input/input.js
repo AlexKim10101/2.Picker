@@ -27,6 +27,9 @@ import {
   HALF_YEAR_VALUES_FOR_END,
   YEAR_VALUE_FOR_START,
   YEAR_VALUE_FOR_END,
+  START_DATE,
+  END_DATE,
+  SUBMIT,
 } from '../../utils/consts'
 import './input.css'
 const [
@@ -62,6 +65,7 @@ export default function Input({
   placeholder,
   focused,
   onFocus,
+  keyPress
 }) {
 
   
@@ -107,7 +111,7 @@ export default function Input({
       yearPreDate = YEAR_VALUE_FOR_END;
     }
 
-
+    console.log(dateObj)
 
     switch(period){
       case DAY :
@@ -180,8 +184,9 @@ export default function Input({
 
   useEffect(()=>{
     //валидация значения input startDate
+    console.log('useEffect startDate', startDate)
+
     inputValueValidation('resultStartDate', startDate, period)
-    //console.log('useEffect startDate', startDate)
   },[startDate])
 
 
@@ -211,12 +216,12 @@ export default function Input({
     //console.log('changing')
     //изменение значения input
     switch (name){
-      case 'startDate':
+      case START_DATE:
         console.log(value)
 
         dispatch({type: CHANGE_START_DATE, startDate: {value:value, year: year}})         
         break;
-      case 'endDate':
+      case END_DATE:
         dispatch({type: CHANGE_END_DATE, endDate: {value:value, year: year}}) 
         break;
     }
@@ -228,7 +233,7 @@ export default function Input({
   const myOnFocus = (e) =>{
     //console.log(e.target.name)
     dispatch({type: SET_INPUT_FOCUS, inputFocus: e.target.name})
-    onFocus();
+    onFocus(id);
   }
 
   const clsx = classnames('input-field', { active: id === focused })
@@ -242,24 +247,31 @@ export default function Input({
   }, [focused])
 
   function needFocusOnThisElem(){
-    let needFocusElemId = 'startDate'
+    let needFocusElemId = START_DATE
     if(startDate.value){
-      needFocusElemId = 'endDate'
+      needFocusElemId = END_DATE
     }
     if(startDate.value&&endDate.value){
-      needFocusElemId = 'submit'
+      needFocusElemId = SUBMIT
     }
     return needFocusElemId===id
   }
   useEffect(() => {
     if(!focused && needFocusOnThisElem()){
       //console.log('needFocusOnThisElem', needFocusOnThisElem)
-      console.log('id', id)
+      //console.log('id', id)
 
       onFocus()
     }
   }, [focused])
 
+
+  function handleKeyPress(e){
+    if(e.key==="Enter"){
+      keyPress();
+      console.log('enter')
+    }
+  }
   return (
     <div className="input-wrapper">
       <input
@@ -272,7 +284,7 @@ export default function Input({
         onFocus={myOnFocus}
         value={value}
         onChange={onChange}
-        
+        onKeyPress={handleKeyPress}
       />
     </div>
   )

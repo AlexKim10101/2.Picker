@@ -109,36 +109,15 @@ export default function HeadingMarkers({ withDaysAWeek }) {
     }
   }
 
-  function prev(){
-                 
-    if (inputFocus==='startDate'){
-      dispatch({type: CHANGE_START_DATE, startDate: ''}) 
-    }    
-    if (inputFocus==='endDate'){
-      dispatch({type: CHANGE_END_DATE, endDate: ''})
-    }
-    return onBtns.onPrev()  
-  }
 
-  function next(){
-    
-    if (inputFocus==='startDate'){
-      dispatch({type: CHANGE_START_DATE, startDate: ''}) 
-    }    
-    if (inputFocus==='endDate'){
-      dispatch({type: CHANGE_END_DATE, endDate: ''})
-    }
-
-    return onBtns.onNext()
-  }
 
   const { text, onBtns, onText } = headingSet(calendarType)
   const clsx = classnames('interval', { 'with-days-a-week': withDaysAWeek })
 
   return (
     <div>
-      <button className="prev-Btn" onClick={prev}>Prev</button>
-      <button className="next-Btn" onClick={next}>Next</button> 
+      <button className="prev-Btn" onClick={onBtns.onPrev}>Prev</button>
+      <button className="next-Btn" onClick={onBtns.onNext}>Next</button> 
       <div className={clsx}>
         <button onClick={onText}>
           <strong>{text}</strong>

@@ -108,13 +108,10 @@ const Calendar = ({ focused, setFocus }) => {
     dispatch({ type: typeValue, [fieldName]: {value: value, year: year} })
     setFocus(undefined)
     console.log('setFocus(undefined)')
-    // if (focused === 'startDate') {
-    //   setFocus('endDate')
-    // }
-    // if (focused === 'endDate') {
-    //   setFocus(undefined)
-    // }  
+     
   }
+
+  
 
   const renderCalendar = (type) => {
     switch (type) {

@@ -6,7 +6,11 @@ import Calendar from './calendars/calendar'
 import PeriodSideBar from './period-side-bar/period-side-bar'
 import './dates-picker.css'
 import SubmitElement from './submitElement';
-
+import {
+  START_DATE,
+  END_DATE,
+  SUBMIT,
+} from '../utils/consts'
 export default function DatesPicker(props) {
   const [focused, setFocused] = useState(undefined) 
 
@@ -53,14 +57,15 @@ export default function DatesPicker(props) {
         
         <div>
           <Input 
-            id="startDate" 
+            id={START_DATE}
             placeholder="Начало" 
-            onFocus={() => setFocused("startDate")} 
-            focused={focused}             
+            onFocus={() => setFocused(START_DATE)} 
+            focused={focused} 
+            keyPress= {() => setFocused(undefined)}      
           />
           <ArrowIcon />
 
-          {((focused !== undefined)&&(focused!=='submit')) && (
+          {focused == START_DATE && (
             <div aria-roledescription="datepicker" >
               <Calendar 
                 
@@ -71,12 +76,21 @@ export default function DatesPicker(props) {
           )}
 
           <Input 
-            id="endDate" 
+            id={END_DATE} янв
             placeholder="Конец" 
-            onFocus={() => setFocused("endDate")} 
-            focused={focused}             
+            onFocus={() => setFocused(END_DATE)} 
+            focused={focused}  
+            keyPress= {() => setFocused(undefined)}           
           />
-
+          {focused == END_DATE   && (
+            <div aria-roledescription="datepicker" >
+              <Calendar 
+                
+                focused={focused}
+                setFocus={setFocused}/>
+              <PeriodSideBar />
+            </div>
+          )}
           
           
 
@@ -84,9 +98,9 @@ export default function DatesPicker(props) {
 
       </div>
       <SubmitElement
-        id="submit"
+        id={SUBMIT}
         focused={focused}
-        onFocus={() => setFocused("submit")}
+        onFocus={() => setFocused(SUBMIT)}
       />
       
 

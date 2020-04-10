@@ -17,6 +17,9 @@ export const SET_RESULT_START_DATE = 'SET_RESULT_START_DATE'
 export const SET_RESULT_END_DATE = 'SET_RESULT_END_DATE'
 export const SET_INPUT_FOCUS = 'SET_INPUT_FOCUS'
 
+export const START_DATE = 'startDate'
+export const END_DATE = 'endDate'
+export const SUBMIT = 'submit'
 
 
 
