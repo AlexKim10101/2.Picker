@@ -13,7 +13,7 @@ export default function DatesPicker(props) {
   // console.log(focused)
 
   const onBlur = e => {
-    console.log('onBlur!!')
+    //console.log('onBlur!!')
     const focusInCurrentTarget = ({ relatedTarget, currentTarget }) => {
       if (relatedTarget === null) return false;
       let node = relatedTarget.parentNode;
@@ -38,7 +38,14 @@ export default function DatesPicker(props) {
 
   let expProps = Object.assign({},props,newProps)
 
-  console.log('focused', focused)
+  // console.log('focused', focused)
+  // console.log(startDate)
+  // console.log(endDate)
+  // console.log(resultStartDate)
+  // console.log(resultEndDate)
+  // console.log(inputFocus)
+
+
   return (
     <PickerProvider initialData={expProps}>
       <div className="dates-picker-wrapper" onBlur={onBlur}>
@@ -53,9 +60,10 @@ export default function DatesPicker(props) {
           />
           <ArrowIcon />
 
-          {focused !== undefined && (
+          {((focused !== undefined)&&(focused!=='submit')) && (
             <div aria-roledescription="datepicker" >
               <Calendar 
+                
                 focused={focused}
                 setFocus={setFocused}/>
               <PeriodSideBar />
@@ -75,7 +83,11 @@ export default function DatesPicker(props) {
         </div>
 
       </div>
-      <SubmitElement/>
+      <SubmitElement
+        id="submit"
+        focused={focused}
+        onFocus={() => setFocused("submit")}
+      />
       
 
 

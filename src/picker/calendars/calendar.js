@@ -34,7 +34,7 @@ const Calendar = ({ focused, setFocus }) => {
 
   const d = (...args) => new Date(...args)
   const firstDay = d(year, month).getUTCDay()
-  // const y = d().getFullYear()
+  // const y = d().getFullYear()~
   
   const daysInMonth = (x) => 32 - d(year, month + x, 32).getDate()
   const daysInCurrMonth = daysInMonth(0)
@@ -92,23 +92,28 @@ const Calendar = ({ focused, setFocus }) => {
         }
         const monthString = correctMonth > 8 ? String(correctMonth + 1) : ('0' + String(correctMonth+1))
         const dayString = correctDay.date > 9 ? String(correctDay.date) : ('0' + String(correctDay.date))
-        value = dayString + '.' +monthString+'.'+year        
+        value = dayString + '.' + monthString + '.' + year        
         break; 
       }
-      default:{
+
+      case MONTH:
+      case QUARTER:
+      case HALFYEAR:
+      case YEAR: {
         value = x
         break; 
       }
     }
 
     dispatch({ type: typeValue, [fieldName]: {value: value, year: year} })
-
-    if (focused === 'startDate') {
-      setFocus('endDate')
-    }
-    if (focused === 'endDate') {
-      setFocus(undefined)
-    }  
+    setFocus(undefined)
+    console.log('setFocus(undefined)')
+    // if (focused === 'startDate') {
+    //   setFocus('endDate')
+    // }
+    // if (focused === 'endDate') {
+    //   setFocus(undefined)
+    // }  
   }
 
   const renderCalendar = (type) => {
