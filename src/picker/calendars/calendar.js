@@ -14,8 +14,11 @@ import {
   steps, 
   days,
   CHANGE_CALENDAR_TYPE,
+  SET_INPUT_FOCUS,
   CHANGE_START_DATE,
   CHANGE_END_DATE, 
+  START_DATE,
+  END_DATE
 } from '../../utils/consts'
 import './calendar.css'
 
@@ -57,17 +60,23 @@ const Calendar = ({ focused, setFocus }) => {
   
   const dispatch = usePickerDispatch()
 
-  
+  function updateFocusLocation(){
+
+    
+    dispatch({type: SET_INPUT_FOCUS, inputFocus: END_DATE})
+
+  }
   function handleClick(x){
+    console.log(inputFocus)
     let typeValue
     let indexDayOfWeek
     let fieldName = inputFocus
     let value
-    if(inputFocus == 'startDate'){
+    if(inputFocus == START_DATE){
       typeValue = CHANGE_START_DATE;
       indexDayOfWeek = 0;
     }
-    if(inputFocus == 'endDate'){
+    if(inputFocus == END_DATE){
       typeValue = CHANGE_END_DATE;
       indexDayOfWeek = 6;
     }  
@@ -106,9 +115,8 @@ const Calendar = ({ focused, setFocus }) => {
     }
 
     dispatch({ type: typeValue, [fieldName]: {value: value, year: year} })
-    setFocus(undefined)
-    console.log('setFocus(undefined)')
-     
+    
+    updateFocusLocation()
   }
 
   
