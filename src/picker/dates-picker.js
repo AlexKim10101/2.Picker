@@ -39,6 +39,25 @@ export default function DatesPicker(props) {
     resultEndDate: null,  
     validFormData: false,
     inputFocus: START_DATE,
+    needChangeFocus: false,
+    needInputValidation: false,
+    needFormValidation: false,
+    dates:{
+      [START_DATE]:{
+        name: START_DATE,
+        inputValue: '',
+        year: null,
+        result: null,
+        invalidValue: false,
+      },
+      [END_DATE]:{
+        name: END_DATE,
+        inputValue: '',
+        year: null,
+        result: null,
+        invalidValue: false,
+      }
+    }
   }
 
   let expProps = Object.assign({},props,newProps)

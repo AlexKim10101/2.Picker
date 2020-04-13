@@ -17,14 +17,13 @@ export const SET_RESULT_START_DATE = 'SET_RESULT_START_DATE'
 export const SET_RESULT_END_DATE = 'SET_RESULT_END_DATE'
 export const SET_INPUT_FOCUS = 'SET_INPUT_FOCUS'
 export const SET_FOCUS_TRANSFER = 'SET_FOCUS_TRANSFER'
-
-
+export const UPDATE_DATES = 'UPDATE_DATES'
+export const SET_INPUT_VALIDATION = 'SET_INPUT_VALIDATION'
+export const SET_FORM_VALIDATION = 'SET_FORM_VALIDATION'
 
 export const START_DATE = 'startDate'
 export const END_DATE = 'endDate'
 export const SUBMIT = 'submit'
-
-
 
 export const days = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
 export const months = ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек']

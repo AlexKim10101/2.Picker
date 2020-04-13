@@ -32,8 +32,14 @@ import {
   START_DATE,
   END_DATE,
   SUBMIT,
-  SET_FOCUS_TRANSFER
+  SET_FOCUS_TRANSFER,
+  SET_INPUT_VALIDATION,
+  SET_FORM_VALIDATION,
+  UPDATE_DATES
 } from '../../utils/consts'
+
+import {dateCreater, dateValidation, inputValueValidation} from  '../../utils/converters'
+
 import './input.css'
 const [
   DAY,
@@ -44,139 +50,25 @@ const [
   YEAR
 ] = steps
 
-function dateCreater(string){
-	let arrD = string.split(".");
-  arrD[1] -= 1;
-  return new Date(arrD[2], arrD[1], arrD[0]);
-}
-
-function dateValidation(value){
-	let arrD = value.split(".");
-  arrD[1] -= 1;
-  let d = new Date(arrD[2], arrD[1], arrD[0]);
-  if ((value.length == 10) && (d.getFullYear() == arrD[2]) && (d.getMonth() == arrD[1]) && (d.getDate() == arrD[0])) {
-    return true;
-  } else {    
-    return false;
-  }
-}
 
 
-
-export default function Input({
-  id,
-  placeholder,
-  focused,
-  onFocus,
-  keyPress
-}) {
-
-  
-  const { 
-    startDate, 
-    endDate,   
-    invalidStartDate,
-    invalidEndDate,
+export default function Input({ id, placeholder }){
+  const {      
     validFormData, 
     period,
     year,
-    resultStartDate,
-    resultEndDate,
     inputFocus,
-    needChangeFocus
+    needChangeFocus,
+    needInputValidation,
+    needFormValidation,
+    dates
   } = usePickerState()
   const dispatch = usePickerDispatch()
-  const value = id === 'startDate' ? startDate.value : endDate.value
 
-  function inputValueValidation(fieldName, dateObj, period){
-    let monthModificator, 
-      monthDateModificator,   
-      qurtArr,    
-      halfYearArr,   
-      yearPreDate;
-
-
-    let newDate = null;
-    let changeIsCorrect = false;
-
-    if(fieldName == START_DATE){
-      monthModificator = MONTH_MODIFICATOR_FOR_START
-      monthDateModificator = DATE_MONTH_MODIFICATOR_FOR_START
-      qurtArr = QUART_VALUES_FOR_START;
-      halfYearArr = HALF_YEAR_VALUES_FOR_START;      
-      yearPreDate = YEAR_VALUE_FOR_START;
-
-    }
-
-    if(fieldName == END_DATE){
-      monthModificator = MONTH_MODIFICATOR_FOR_END;
-      monthDateModificator = DATE_MONTH_MODIFICATOR_FOR_END;
-      qurtArr = QUART_VALUES_FOR_END;
-      halfYearArr = HALF_YEAR_VALUES_FOR_END;
-      yearPreDate = YEAR_VALUE_FOR_END;
-    }
-
-    console.log(dateObj)
-
-    switch(period){
-      case DAY :
-      case WEEK: {        
-        if(dateValidation(dateObj.value)){
-          newDate = dateCreater(dateObj.value)
-          changeIsCorrect = true;
-
-        }
-        break;
-      }
-      case MONTH :{
-        if(months.includes(dateObj.value)){       
-          newDate = new Date( new Date(dateObj.year, months.indexOf(dateObj.value)+monthModificator, 1) - monthDateModificator)
-          changeIsCorrect = true;
-        }       
-
-        if(monthsFull.includes(dateObj.value)){  
-          newDate = new Date( new Date(dateObj.year, monthsFull.indexOf(dateObj.value)+monthModificator, 1) - monthDateModificator)    
-          changeIsCorrect = true;
-        }
-        
-        break;
-      }
-      case QUARTER :{
-        if(quarters.includes(dateObj.value)){          
-          const qurtIndex = quarters.indexOf(dateObj.value)
-          const blank = qurtArr[qurtIndex] + dateObj.year;
-          newDate = dateCreater(blank);
-          changeIsCorrect = true;
-        }            
-        break;
-      }
-
-      case HALFYEAR :{
-        if(halfYear.includes(dateObj.value)){
-          const halfYearIndex = halfYear.indexOf(dateObj.value)
-          const blank = halfYearArr[halfYearIndex] + dateObj.year;
-          newDate = dateCreater(blank)
-          changeIsCorrect = true;
-
-        }             
-        break;
-      }
-
-      case YEAR:{
-        if(dateValidation(yearPreDate + dateObj.value)){
-          newDate = dateCreater(yearPreDate + dateObj.value)
-          changeIsCorrect = true;
-        }
-      }
-    }
-    
-    
-    return {verdict: changeIsCorrect, newDate: newDate}
-      
-  }
+  
   const myOnBlur = (e) =>{
     let value = e.target.id;
-    
+    let name = value
     console.log('test',e.relatedTarget)
     const clickOnCalendar = ({relatedTarget})=>{
       if (relatedTarget === undefined) return false
@@ -191,91 +83,109 @@ export default function Input({
     if (clickOnCalendar(e)){
       return
     }
-    if(value === START_DATE){
-      let {verdict, newDate} = inputValueValidation(START_DATE, startDate, period);    
-      dispatch({type: SET_RESULT_START_DATE, resultStartDate: newDate })      
-      dispatch({type: VALID_START_DATE, invalidStartDate: !verdict })
 
-    }
-
-    if(value === END_DATE){
-      let {verdict, newDate} = inputValueValidation(END_DATE, endDate, period);    
-      dispatch({type: SET_RESULT_END_DATE, resultEndDate: newDate })
-      dispatch({type: VALID_END_DATE, invalidEndDate: !verdict })
-    }
-
+    console.log('клик не по календарю')
+    dispatch({type: SET_INPUT_VALIDATION, needInputValidation: true})
+    /////
+    // let dateObj = {value: dates[name].inputValue, year: dates[name].year}
+    // const {verdict, newDate} = inputValueValidation(dates[name].name, dateObj, period)
+    // const newValue = Object.assign({}, dates[name], {result: newDate, invalidValue:verdict})
+    // const result = Object.assign({}, dates, {[name]:newValue})
+    // dispatch({type: UPDATE_DATES, dates: result})
+    
   }
 
+  useEffect(()=>{
+    if(!needInputValidation){return}
+    for (let key in dates){
+      //console.log(dates[key])
+      let dateObj = {value: dates[key].inputValue, year: dates[key].year}
+      const {verdict, newDate} = inputValueValidation(dates[key].name, dateObj, period)
+      console.log('newDate',newDate)
+      const newValue = Object.assign({}, dates[key], {result: newDate, invalidValue:verdict})
+      console.log('newValue', newValue)
+
+      const result = Object.assign({}, dates, {[key]:newValue})
+      console.log('result', result)
+
+      dispatch({type: UPDATE_DATES, dates: result})
+
+    }
+    dispatch({type: SET_INPUT_VALIDATION, needInputValidation: false})
+    dispatch({type: SET_FORM_VALIDATION, needFormValidation: true})
+
+    //console.log(dates)
+  },[needInputValidation])
 
 
-  // useEffect(()=>{
-  //   //валидация значения input startDate
-  //   let {verdict, newDate} = inputValueValidation(START_DATE, startDate, period);    
-  //   dispatch({type: SET_RESULT_START_DATE, resultStartDate: newDate })
-
-  // },[startDate])
-
-
-  // useEffect(()=>{
-  //   //валидация значения input endDate
-  //   let {verdict, newDate} = inputValueValidation(END_DATE, endDate, period)
-  //   dispatch({type: SET_RESULT_END_DATE, resultEndDate: newDate })
-
-
-  // },[ endDate]) 
 
   useEffect(()=>{
     //валидация всей формы
-    console.log('useEffect VALID_FORM')
-    console.log('resultEndDate', resultEndDate)
-    console.log('resultStartDate', resultStartDate)
 
-    
-    if(resultStartDate&&resultEndDate){
-      dispatch({type:VALID_FORM, validFormData: resultStartDate<resultEndDate})
-      return
-    } 
-    
-    dispatch({type:VALID_FORM, validFormData: false})
-    
-  },[resultStartDate, resultEndDate])
+    console.log('ALARM!!!!!!')
+    console.log('needFormValidation', needFormValidation)
+    console.log('dates.startDate.result', dates.startDate.result)
+
+
+
+    if(!needFormValidation){return}
+
+    if(dates.startDate.result && dates.endDate.result){
+      dispatch({type:VALID_FORM, validFormData: dates.startDate.result<dates.endDate.result})
+    } else{
+      dispatch({type: VALID_FORM, validFormData: false})
+    }    
+    dispatch({type: SET_FOCUS_TRANSFER, needChangeFocus:true})
+    dispatch({type: SET_FORM_VALIDATION, needFormValidation: false})
+
+    console.log('DISPATCH needFormValidation')
+  },[needFormValidation])
+
+
+  useEffect(()=>{
+    if(!needChangeFocus){return}
+    const{startDate, endDate} = dates
+    console.log(startDate)
+    const nextFocus = nextFocusSetter(startDate.inputValue,
+      startDate.invalidValue,
+      endDate.inputValue,
+      endDate.invalidValue)
+    console.log('nextFocus',nextFocus)
+    dispatch({type: SET_INPUT_FOCUS, inputFocus: nextFocus})
+    dispatch({type: SET_FOCUS_TRANSFER, needChangeFocus: false})
+
+  },[needChangeFocus, validFormData])
+
+
+  function nextFocusSetter(startDateInputValue, startDateStatus, endDateInputValue, endDateStatus){    
+    if((startDateInputValue === '') || (!startDateStatus)){
+      return START_DATE
+    }
+    if((endDateInputValue==='') || (!endDateStatus)){
+      return END_DATE
+    }
+    return SUBMIT
+  }
+
 
   const onChange = ({ target }) => {
     const name = target.name;
     const value = target.value;
-    //console.log('changing')
-    //изменение значения input
-    switch (name){
-      case START_DATE:
-        // console.log(value)
-
-        dispatch({type: CHANGE_START_DATE, startDate: {value:value, year: year}})         
-        break;
-      case END_DATE:
-        dispatch({type: CHANGE_END_DATE, endDate: {value:value, year: year}}) 
-        break;
-    }
+    const newValue = Object.assign({}, dates[name], {inputValue: value, year: year})
+    const result = Object.assign({}, dates, {[name]:newValue})
+    dispatch({type:UPDATE_DATES, dates: result})
   
   }
   
 
 
   const myOnFocus = (e) =>{
-    //console.log(e.target.name)
     let value = e.target.id;
-    dispatch({type: SET_INPUT_FOCUS, inputFocus: value})
-
-    if(value == START_DATE) {
-      dispatch({type: VALID_START_DATE, invalidStartDate: false})
-    }
-    if(value == END_DATE) {
-      dispatch({type: VALID_END_DATE, invalidEndDate: false})
-    }
-    
+    dispatch({type: SET_INPUT_FOCUS, inputFocus: value})    
   }
 
-  let rejected = id === START_DATE? invalidStartDate : invalidEndDate
-
+  //let rejected = id === START_DATE? invalidStartDate : invalidEndDate
+  const rejected = dates[id].invalidValue && id !== inputFocus;
   const clsx = classnames('input-field', { active: id === inputFocus }, {rejected: rejected})
   //const clsx = classnames('input-field',  {rejected: rejected})
 
@@ -285,38 +195,17 @@ export default function Input({
   
     if (inputEl.current.id === inputFocus) {
       inputEl.current.focus()
-      console.log('focus')
     }
   }, [inputFocus])
 
 
-  function nextFocusSetter(){    
-    if((startDate.value==='') || (invalidStartDate)){
-      return START_DATE
-    }
-    if((endDate.value==='') || (invalidEndDate)){
-      return END_DATE
-    }
-    return SUBMIT
-  }
-
-  useEffect(()=>{
-    if(!needChangeFocus){return}
-    const nextFocus = nextFocusSetter()
-    console.log('nextFocus',nextFocus)
-    dispatch({type: SET_INPUT_FOCUS, inputFocus: nextFocus})
-    dispatch({type: SET_FOCUS_TRANSFER, needChangeFocus: false})
-
-  },[needChangeFocus])
+  
 
 
   function handleKeyPress(e){
     if(e.key==="Enter"){      
       console.log('enter')
       myOnBlur(e)
-      dispatch({type: SET_FOCUS_TRANSFER, needChangeFocus: true})
-      
-
     }
   }
 
@@ -332,7 +221,7 @@ export default function Input({
         placeholder={placeholder}
         onFocus={myOnFocus}
         onBlur={myOnBlur}
-        value={value}
+        value={dates[id].inputValue}
         onChange={onChange}
         onKeyPress={handleKeyPress}
       />

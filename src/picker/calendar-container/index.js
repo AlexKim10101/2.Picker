@@ -11,8 +11,7 @@ import {
 export default function CalendarContainer(){
     return(
 			<div aria-roledescription="datepicker" >
-						<Calendar />
-							
+						<Calendar />					
 							
 						<PeriodSideBar />
 			</div>

@@ -280,7 +280,7 @@ const Calendar = ({ focused, setFocus }) => {
     let resullt = inputValueValidation(fieldChangeDate,{value: value, year: year}, period)
     console.log('click', resullt)
     dispatch({type: setResultDate, [fieldResultDate]: inputValueValidation(fieldChangeDate,{value: value, year: year}, period).newDate })
-
+    
     dispatch({type: SET_FOCUS_TRANSFER, needChangeFocus: true})
     // updateFocusLocation()
   }
