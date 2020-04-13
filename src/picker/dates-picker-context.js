@@ -12,7 +12,8 @@ import {
   VALID_FORM,
   SET_RESULT_START_DATE,
   SET_RESULT_END_DATE,
-  SET_INPUT_FOCUS
+  SET_INPUT_FOCUS,
+  SET_FOCUS_TRANSFER
 } from '../utils/consts'
 
 const PickerStateContext = createContext()
@@ -46,6 +47,9 @@ function pickerReducer(state, action) {
       return { ...state, resultEndDate: action.resultEndDate}
     case SET_INPUT_FOCUS:
       return { ...state, inputFocus: action.inputFocus}
+    case SET_FOCUS_TRANSFER:{
+      return { ...state, needChangeFocus: action.needChangeFocus}
+    }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`)
     }

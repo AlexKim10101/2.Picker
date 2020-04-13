@@ -32,6 +32,7 @@ import {
   START_DATE,
   END_DATE,
   SUBMIT,
+  SET_FOCUS_TRANSFER
 } from '../../utils/consts'
 import './input.css'
 const [
@@ -81,7 +82,8 @@ export default function Input({
     year,
     resultStartDate,
     resultEndDate,
-    inputFocus
+    inputFocus,
+    needChangeFocus
   } = usePickerState()
   const dispatch = usePickerDispatch()
   const value = id === 'startDate' ? startDate.value : endDate.value
@@ -172,26 +174,62 @@ export default function Input({
     return {verdict: changeIsCorrect, newDate: newDate}
       
   }
+  const myOnBlur = (e) =>{
+    let value = e.target.id;
+    
+    console.log('test',e.relatedTarget)
+    const clickOnCalendar = ({relatedTarget})=>{
+      if (relatedTarget === undefined) return false
+      if (relatedTarget === null) return false;
+      let node = relatedTarget.parentNode;
+      while (node !== null) {
+        if (node.id === 'calendar') return true;
+        node = node.parentNode;
+      }
+      return false
+    }
+    if (clickOnCalendar(e)){
+      return
+    }
+    if(value === START_DATE){
+      let {verdict, newDate} = inputValueValidation(START_DATE, startDate, period);    
+      dispatch({type: SET_RESULT_START_DATE, resultStartDate: newDate })      
+      dispatch({type: VALID_START_DATE, invalidStartDate: !verdict })
 
-  useEffect(()=>{
-    //валидация значения input startDate
-    let {verdict, newDate} = inputValueValidation(START_DATE, startDate, period);    
-    dispatch({type: SET_RESULT_START_DATE, resultStartDate: newDate })
+    }
 
-  },[startDate])
+    if(value === END_DATE){
+      let {verdict, newDate} = inputValueValidation(END_DATE, endDate, period);    
+      dispatch({type: SET_RESULT_END_DATE, resultEndDate: newDate })
+      dispatch({type: VALID_END_DATE, invalidEndDate: !verdict })
+    }
 
-
-  useEffect(()=>{
-    //валидация значения input endDate
-    let {verdict, newDate} = inputValueValidation(END_DATE, endDate, period)
-    dispatch({type: SET_RESULT_END_DATE, resultEndDate: newDate })
+  }
 
 
-  },[ endDate]) 
+
+  // useEffect(()=>{
+  //   //валидация значения input startDate
+  //   let {verdict, newDate} = inputValueValidation(START_DATE, startDate, period);    
+  //   dispatch({type: SET_RESULT_START_DATE, resultStartDate: newDate })
+
+  // },[startDate])
+
+
+  // useEffect(()=>{
+  //   //валидация значения input endDate
+  //   let {verdict, newDate} = inputValueValidation(END_DATE, endDate, period)
+  //   dispatch({type: SET_RESULT_END_DATE, resultEndDate: newDate })
+
+
+  // },[ endDate]) 
 
   useEffect(()=>{
     //валидация всей формы
     console.log('useEffect VALID_FORM')
+    console.log('resultEndDate', resultEndDate)
+    console.log('resultStartDate', resultStartDate)
+
     
     if(resultStartDate&&resultEndDate){
       dispatch({type:VALID_FORM, validFormData: resultStartDate<resultEndDate})
@@ -209,7 +247,7 @@ export default function Input({
     //изменение значения input
     switch (name){
       case START_DATE:
-        console.log(value)
+        // console.log(value)
 
         dispatch({type: CHANGE_START_DATE, startDate: {value:value, year: year}})         
         break;
@@ -236,60 +274,53 @@ export default function Input({
     
   }
 
-  const myOnBlur = (e) =>{
-    let value = e.target.id;
+  let rejected = id === START_DATE? invalidStartDate : invalidEndDate
 
-    console.log('e.relatedTarget',e.relatedTarget)
-
-  }
-
-
-
-  const clsx = classnames('input-field', { active: id === inputFocus })
+  const clsx = classnames('input-field', { active: id === inputFocus }, {rejected: rejected})
+  //const clsx = classnames('input-field',  {rejected: rejected})
 
   //установка фокуса
   const inputEl = useRef(null)
   useEffect(() => {
-    console.log('useeffect inputfocus')
-    if(inputEl.current){
-      console.log('inputEl.current==true')
-      
-
-
-
-    }
-
-
-
+  
     if (inputEl.current.id === inputFocus) {
       inputEl.current.focus()
       console.log('focus')
     }
   }, [inputFocus])
 
-  // function needFocusOnThisElem(){
-  //   let needFocusElemId = START_DATE
-  //   if(startDate.value){
-  //     needFocusElemId = END_DATE
-  //   }
-  //   if(startDate.value&&endDate.value){
-  //     needFocusElemId = SUBMIT
-  //   }
-  //   return needFocusElemId===id
-  // }
-  // useEffect(() => {
-  //   if(!focused && needFocusOnThisElem()){
-  //     onFocus()
-  //   }
-  // }, [focused])
+
+  function nextFocusSetter(){    
+    if((startDate.value==='') || (invalidStartDate)){
+      return START_DATE
+    }
+    if((endDate.value==='') || (invalidEndDate)){
+      return END_DATE
+    }
+    return SUBMIT
+  }
+
+  useEffect(()=>{
+    if(!needChangeFocus){return}
+    const nextFocus = nextFocusSetter()
+    console.log('nextFocus',nextFocus)
+    dispatch({type: SET_INPUT_FOCUS, inputFocus: nextFocus})
+    dispatch({type: SET_FOCUS_TRANSFER, needChangeFocus: false})
+
+  },[needChangeFocus])
 
 
   function handleKeyPress(e){
-    if(e.key==="Enter"){
-      
+    if(e.key==="Enter"){      
       console.log('enter')
+      myOnBlur(e)
+      dispatch({type: SET_FOCUS_TRANSFER, needChangeFocus: true})
+      
+
     }
   }
+
+
   return (
     <div className="input-wrapper">
       <input

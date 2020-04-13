@@ -4,7 +4,7 @@ import './submitElement.css'
 
 export default function SubmitElement({id, focused, onFocus}){
 
-  const { validFormData,resultStartDate,resultEndDate,startDate,endDate } = usePickerState();
+  const { validFormData,resultStartDate,resultEndDate,inputFocus,needChangeFocus } = usePickerState();
   function formatDate(date) {
 
     let dd = date.getDate();
@@ -24,28 +24,31 @@ export default function SubmitElement({id, focused, onFocus}){
   //установка фокуса
   const submitEl = useRef(null)
   useEffect(() => {
-    if (submitEl.current.id === focused) {
-      console.log('sda')
+    console.log('inputFocus',inputFocus)
+    console.log('validFormData',validFormData)
+
+    if (submitEl.current.id === inputFocus) {
+      
       submitEl.current.focus()
     }
-  }, [focused, validFormData])
+  }, [inputFocus,validFormData])
 
-  function needFocusOnThisElem(){
-    let needFocusElemId = 'startDate'
-    if(startDate.value){
-      needFocusElemId = 'endDate'
-    }
-    if(startDate.value&&endDate.value){
-      needFocusElemId = 'submit'
-    }
-    return needFocusElemId===id
-  }
-  useEffect(() => {
-    if(!focused && needFocusOnThisElem()){
-      console.log('ghbt')
-      onFocus()
-    }
-  }, [focused])
+  // function needFocusOnThisElem(){
+  //   let needFocusElemId = 'startDate'
+  //   if(startDate.value){
+  //     needFocusElemId = 'endDate'
+  //   }
+  //   if(startDate.value&&endDate.value){
+  //     needFocusElemId = 'submit'
+  //   }
+  //   return needFocusElemId===id
+  // }
+  // useEffect(() => {
+  //   if(!focused && needFocusOnThisElem()){
+  //     console.log('ghbt')
+  //     onFocus()
+  //   }
+  // }, [focused])
 
   return(
     <div className="submitElement">
