@@ -55,6 +55,7 @@ export function dateValidation(value){
 }
 
 export function inputValueValidation(fieldName, dateObj, period){
+    console.log(arguments)
     let monthModificator, 
       monthDateModificator,   
       qurtArr,    
@@ -67,10 +68,10 @@ export function inputValueValidation(fieldName, dateObj, period){
 
 
 
-    console.log('fieldName', fieldName)
-    console.log('dateObj', dateObj)
+    //console.log('fieldName', fieldName)
+    //console.log('dateObj', dateObj)
 
-    console.log('period', period)
+    //console.log('period', period)
 
     if(fieldName == START_DATE){
       monthModificator = MONTH_MODIFICATOR_FOR_START
@@ -148,4 +149,9 @@ export function inputValueValidation(fieldName, dateObj, period){
     
     return {verdict: changeIsCorrect, newDate: newDate}
       
-  }
+}
+
+
+export function inputValueCreater(){
+	
+}

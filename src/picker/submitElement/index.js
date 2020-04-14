@@ -4,7 +4,7 @@ import './submitElement.css'
 
 export default function SubmitElement({id, focused, onFocus}){
 
-  const { validFormData,resultStartDate,resultEndDate,inputFocus,needChangeFocus } = usePickerState();
+  const { validFormData,resultStartDate,resultEndDate,inputFocus,needChangeFocus, dates } = usePickerState();
   function formatDate(date) {
 
     let dd = date.getDate();
@@ -23,9 +23,15 @@ export default function SubmitElement({id, focused, onFocus}){
   
   //установка фокуса
   const submitEl = useRef(null)
+
+  useEffect(()=>{
+    console.log('dates update', dates)
+  },[dates])
+
+
   useEffect(() => {
-    console.log('inputFocus',inputFocus)
-    console.log('validFormData',validFormData)
+    //console.log('inputFocus',inputFocus)
+    //console.log('validFormData',validFormData)
 
     if (submitEl.current.id === inputFocus) {
       

@@ -1,66 +1,18 @@
 import React, {useEffect, useRef} from 'react'
 import classnames from 'classnames'
 import { usePickerState, usePickerDispatch } from '../dates-picker-context'
-import {
-  steps,
-  months,
-  monthsFull,
-  quarters,
-  halfYear,
-  stepsLabels,
-  CHANGE_STEP,
-  CHANGE_PERIOD,
-  CHANGE_CALENDAR_TYPE,
-  CHANGE_START_DATE,
-  CHANGE_END_DATE,
-  VALID_START_DATE,
-  VALID_END_DATE,  
-  VALID_FORM,
-  SET_RESULT_START_DATE,
-  SET_RESULT_END_DATE,
-  SET_INPUT_FOCUS,
-  MONTH_MODIFICATOR_FOR_START,
-  MONTH_MODIFICATOR_FOR_END,
-  DATE_MONTH_MODIFICATOR_FOR_START,
-  DATE_MONTH_MODIFICATOR_FOR_END,
-  QUART_VALUES_FOR_START,
-  QUART_VALUES_FOR_END,
-  HALF_YEAR_VALUES_FOR_START,
-  HALF_YEAR_VALUES_FOR_END,
-  YEAR_VALUE_FOR_START,
-  YEAR_VALUE_FOR_END,
-  START_DATE,
-  END_DATE,
-  SUBMIT,
-  SET_FOCUS_TRANSFER,
+import {  
+  SET_INPUT_FOCUS,  
   SET_INPUT_VALIDATION,
-  SET_FORM_VALIDATION,
   UPDATE_DATES
 } from '../../utils/consts'
 
-import {dateCreater, dateValidation, inputValueValidation} from  '../../utils/converters'
-
 import './input.css'
-const [
-  DAY,
-  WEEK,
-  MONTH,
-  QUARTER,
-  HALFYEAR,
-  YEAR
-] = steps
-
-
 
 export default function Input({ id, placeholder }){
-  const {      
-    validFormData, 
-    period,
+  const {    
     year,
-    inputFocus,
-    needChangeFocus,
-    needInputValidation,
-    needFormValidation,
+    inputFocus,    
     dates
   } = usePickerState()
   const dispatch = usePickerDispatch()
@@ -69,105 +21,28 @@ export default function Input({ id, placeholder }){
   const myOnBlur = (e) =>{
     let value = e.target.id;
     let name = value
-    console.log('test',e.relatedTarget)
-    const clickOnCalendar = ({relatedTarget})=>{
+    //console.log('test',e.relatedTarget)
+    const clickOnDatePicker = ({relatedTarget})=>{
       if (relatedTarget === undefined) return false
       if (relatedTarget === null) return false;
       let node = relatedTarget.parentNode;
       while (node !== null) {
-        if (node.id === 'calendar') return true;
+        if (node.id === 'datepicker') return true;
         node = node.parentNode;
       }
       return false
     }
-    if (clickOnCalendar(e)){
+    if (clickOnDatePicker(e)){      
       return
     }
-
-    console.log('клик не по календарю')
+    
+    console.log('событие ONBLUR')
+    if(e.target.value == '') return
     dispatch({type: SET_INPUT_VALIDATION, needInputValidation: true})
-    /////
-    // let dateObj = {value: dates[name].inputValue, year: dates[name].year}
-    // const {verdict, newDate} = inputValueValidation(dates[name].name, dateObj, period)
-    // const newValue = Object.assign({}, dates[name], {result: newDate, invalidValue:verdict})
-    // const result = Object.assign({}, dates, {[name]:newValue})
-    // dispatch({type: UPDATE_DATES, dates: result})
     
   }
 
-  useEffect(()=>{
-    if(!needInputValidation){return}
-    for (let key in dates){
-      //console.log(dates[key])
-      let dateObj = {value: dates[key].inputValue, year: dates[key].year}
-      const {verdict, newDate} = inputValueValidation(dates[key].name, dateObj, period)
-      console.log('newDate',newDate)
-      const newValue = Object.assign({}, dates[key], {result: newDate, invalidValue:verdict})
-      console.log('newValue', newValue)
-
-      const result = Object.assign({}, dates, {[key]:newValue})
-      console.log('result', result)
-
-      dispatch({type: UPDATE_DATES, dates: result})
-
-    }
-    dispatch({type: SET_INPUT_VALIDATION, needInputValidation: false})
-    dispatch({type: SET_FORM_VALIDATION, needFormValidation: true})
-
-    //console.log(dates)
-  },[needInputValidation])
-
-
-
-  useEffect(()=>{
-    //валидация всей формы
-
-    console.log('ALARM!!!!!!')
-    console.log('needFormValidation', needFormValidation)
-    console.log('dates.startDate.result', dates.startDate.result)
-
-
-
-    if(!needFormValidation){return}
-
-    if(dates.startDate.result && dates.endDate.result){
-      dispatch({type:VALID_FORM, validFormData: dates.startDate.result<dates.endDate.result})
-    } else{
-      dispatch({type: VALID_FORM, validFormData: false})
-    }    
-    dispatch({type: SET_FOCUS_TRANSFER, needChangeFocus:true})
-    dispatch({type: SET_FORM_VALIDATION, needFormValidation: false})
-
-    console.log('DISPATCH needFormValidation')
-  },[needFormValidation])
-
-
-  useEffect(()=>{
-    if(!needChangeFocus){return}
-    const{startDate, endDate} = dates
-    console.log(startDate)
-    const nextFocus = nextFocusSetter(startDate.inputValue,
-      startDate.invalidValue,
-      endDate.inputValue,
-      endDate.invalidValue)
-    console.log('nextFocus',nextFocus)
-    dispatch({type: SET_INPUT_FOCUS, inputFocus: nextFocus})
-    dispatch({type: SET_FOCUS_TRANSFER, needChangeFocus: false})
-
-  },[needChangeFocus, validFormData])
-
-
-  function nextFocusSetter(startDateInputValue, startDateStatus, endDateInputValue, endDateStatus){    
-    if((startDateInputValue === '') || (!startDateStatus)){
-      return START_DATE
-    }
-    if((endDateInputValue==='') || (!endDateStatus)){
-      return END_DATE
-    }
-    return SUBMIT
-  }
-
-
+  
   const onChange = ({ target }) => {
     const name = target.name;
     const value = target.value;
@@ -184,10 +59,8 @@ export default function Input({ id, placeholder }){
     dispatch({type: SET_INPUT_FOCUS, inputFocus: value})    
   }
 
-  //let rejected = id === START_DATE? invalidStartDate : invalidEndDate
-  const rejected = dates[id].invalidValue && id !== inputFocus;
+  const rejected = !dates[id].isCorrect && id !== inputFocus && dates[id].inputValue!=='' ;
   const clsx = classnames('input-field', { active: id === inputFocus }, {rejected: rejected})
-  //const clsx = classnames('input-field',  {rejected: rejected})
 
   //установка фокуса
   const inputEl = useRef(null)
@@ -198,17 +71,12 @@ export default function Input({ id, placeholder }){
     }
   }, [inputFocus])
 
-
-  
-
-
   function handleKeyPress(e){
     if(e.key==="Enter"){      
-      console.log('enter')
-      myOnBlur(e)
+      //console.log('enter')
+      inputEl.current.blur()
     }
   }
-
 
   return (
     <div className="input-wrapper">
