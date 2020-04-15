@@ -30,14 +30,14 @@ export default function DatesPicker(props) {
         inputValue: '',
         year: null,
         result: null,
-        isCorrect: true,
+        isCorrect: false,
       },
       [END_DATE]:{
         name: END_DATE,
         inputValue: '',
         year: null,
         result: null,
-        isCorrect: true,
+        isCorrect: false,
       }
     }
   }

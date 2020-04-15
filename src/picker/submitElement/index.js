@@ -24,9 +24,9 @@ export default function SubmitElement({id, focused, onFocus}){
   //установка фокуса
   const submitEl = useRef(null)
 
-  useEffect(()=>{
-    console.log('dates update', dates)
-  },[dates])
+  // useEffect(()=>{
+  //   //console.log('dates update', dates)
+  // },[dates])
 
 
   useEffect(() => {

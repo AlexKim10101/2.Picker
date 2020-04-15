@@ -55,23 +55,16 @@ export function dateValidation(value){
 }
 
 export function inputValueValidation(fieldName, dateObj, period){
-    console.log(arguments)
+    //console.log(arguments)
     let monthModificator, 
       monthDateModificator,   
       qurtArr,    
       halfYearArr,   
       yearPreDate;
 
-
     let newDate = null;
     let changeIsCorrect = false;
 
-
-
-    //console.log('fieldName', fieldName)
-    //console.log('dateObj', dateObj)
-
-    //console.log('period', period)
 
     if(fieldName == START_DATE){
       monthModificator = MONTH_MODIFICATOR_FOR_START
@@ -90,7 +83,7 @@ export function inputValueValidation(fieldName, dateObj, period){
       yearPreDate = YEAR_VALUE_FOR_END;
     }
 
-    //console.log(dateObj)
+    
 
     switch(period){
       case DAY :
@@ -145,7 +138,7 @@ export function inputValueValidation(fieldName, dateObj, period){
         }
       }
     }
-    console.log('newDate',newDate)
+    //console.log('newDate',newDate)
     
     return {verdict: changeIsCorrect, newDate: newDate}
       

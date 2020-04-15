@@ -76,13 +76,19 @@ export default function InputContainer(){
 		dispatch({type: UPDATE_DATES, dates: result})
     dispatch({type: SET_INPUT_VALIDATION, needInputValidation: false})
     dispatch({type: SET_FORM_VALIDATION, needFormValidation: true})
-
+    console.log('Валидация значения INPUT', inputFocus)
     //console.log(dates)
   },[needInputValidation])
 
 	useEffect(()=>{
     //валидация всей формы
     if(!needFormValidation){return}
+
+    let formIsValid = false;
+
+    if(dates.startDate.result && dates.endDate.result && dates.startDate.result<dates.endDate.result){
+      formIsValid = true
+    }
 
     if(dates.startDate.result && dates.endDate.result){
       dispatch({type:VALID_FORM, validFormData: dates.startDate.result<dates.endDate.result})
@@ -92,7 +98,9 @@ export default function InputContainer(){
     dispatch({type: SET_FOCUS_TRANSFER, needChangeFocus:true})
     dispatch({type: SET_FORM_VALIDATION, needFormValidation: false})
 
-    //console.log('DISPATCH needFormValidation')
+    console.log('Валидация формы. Вердикт', formIsValid)
+    console.log('Валидация формы. Подробнее', dates)
+
   },[needFormValidation])
 
 	useEffect(()=>{
@@ -100,16 +108,17 @@ export default function InputContainer(){
     const{startDate, endDate} = dates
     //console.log(startDate)
     const nextFocus = nextFocusSetter(startDate.inputValue,
-      startDate.invalidValue,
+      startDate.isCorrect,
       endDate.inputValue,
-      endDate.invalidValue)
+      endDate.isCorrect)
     //console.log('nextFocus',nextFocus)
     dispatch({type: SET_INPUT_FOCUS, inputFocus: nextFocus})
     dispatch({type: SET_FOCUS_TRANSFER, needChangeFocus: false})
-
+    console.log('Установка фокуса', nextFocus)
 	},[needChangeFocus, validFormData])
 	
 	function nextFocusSetter(startDateInputValue, startDateStatus, endDateInputValue, endDateStatus){    
+    console.log('NextFocusArgs', arguments)
     if((startDateInputValue === '') || (!startDateStatus)){
       return START_DATE
     }
