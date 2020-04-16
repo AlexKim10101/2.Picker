@@ -58,7 +58,7 @@ const Calendar = () => {
   const dispatch = usePickerDispatch()
 
   function handleClick(x){
-    // console.log(inputFocus)
+    console.log(inputFocus)
    
     let indexDayOfWeek
     let value

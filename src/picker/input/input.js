@@ -12,8 +12,6 @@ import {
 import './input.css'
 
 export default function Input({ id, placeholder }){
-  let inputElem
-
   const {    
     year,
     inputFocus,    
@@ -31,6 +29,8 @@ export default function Input({ id, placeholder }){
   ] = steps
   
   const myOnBlur = (e) =>{
+    //console.log('событие ONBLUR', e.relatedTarget.value)
+
     let value = e.target.id;
     let name = value
     //console.log('test',e.relatedTarget)
@@ -48,8 +48,8 @@ export default function Input({ id, placeholder }){
       return
     }
     
-    console.log('событие ONBLUR')
     if(e.target.value == '') return
+
     dispatch({type: SET_INPUT_VALIDATION, needInputValidation: true})
     
   }
@@ -66,24 +66,29 @@ export default function Input({ id, placeholder }){
   
 
 
-  const myOnFocus = (e) =>{
-    let value = e.target.id;
-    dispatch({type: SET_INPUT_FOCUS, inputFocus: value})  
-    console.log("SETFOCUS",value)  
+  const myOnFocus = ({ target }) =>{
+    dispatch({type: SET_INPUT_FOCUS, inputFocus: target.id})  
+    console.log("SETFOCUS",target.id)  
   }
 
   const rejected = !dates[id].isCorrect && id !== inputFocus && dates[id].inputValue!=='' ;
   const clsx = classnames('input-field', { active: id === inputFocus }, {rejected: rejected})
 
+
+/////////////////////////////
+
+  let inputElem
+  const [myRef, setMyRef] = useState();
+
+
   //установка фокуса
-  const inputEl = useRef(null)
   useEffect(() => {
     if(!myRef)return
     if (myRef.id === inputFocus) {
 
       myRef.focus()
     }
-  }, [inputFocus,inputElem])
+  }, [inputFocus, myRef])
 
   function handleKeyPress(e){
     if(e.key==="Enter"){      
@@ -95,13 +100,6 @@ export default function Input({ id, placeholder }){
   }
 ////////////////
 
-
-
-
-
-  const [myRef, setMyRef] = useState();
-
-
   useEffect(()=>{
 		if(!inputElem) return
 		setMyRef(inputElem)
@@ -110,8 +108,29 @@ export default function Input({ id, placeholder }){
   let mask = ((period===DAY) || (period ===WEEK))? "99.99.9999":''
 
   return (
-    <div className="input-wrapper">
-     
+    <div className="input-wrapper">      
+      
+      <InputMask         
+        mask={mask}
+			  inputRef={(input)=>inputElem=input}		
+		    onChange={onChange}
+	      onKeyPress={handleKeyPress}		    
+        value={dates[id].inputValue} 
+        placeholder={placeholder}
+        onFocus={myOnFocus}
+        onBlur={myOnBlur}
+        autoComplete="off"        
+        id={id}
+        name={id}
+        className={clsx}
+	    >
+        
+
+
+
+
+      </InputMask>
+
       {/* <input
         ref={inputEl}
         id={id}
@@ -125,22 +144,6 @@ export default function Input({ id, placeholder }){
         onChange={onChange}
         onKeyPress={handleKeyPress}
       /> */}
-      
-      <InputMask 
-        
-        mask={mask}
-			  inputRef={(input)=>inputElem=input}		
-		    onChange={onChange}
-	      onKeyPress={handleKeyPress}		    
-        value={dates[id].inputValue} 
-        placeholder={placeholder}
-        onFocus={myOnFocus}
-        onBlur={myOnBlur}
-        autoComplete="off"        
-        id={id}
-        name={id}
-        className={clsx}
-	    ></InputMask>
 
     </div>
   )
