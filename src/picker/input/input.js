@@ -1,22 +1,34 @@
-import React, {useEffect, useRef} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
+import InputMask from 'react-input-mask';
 import classnames from 'classnames'
 import { usePickerState, usePickerDispatch } from '../dates-picker-context'
 import {  
   SET_INPUT_FOCUS,  
   SET_INPUT_VALIDATION,
-  UPDATE_DATES
+  UPDATE_DATES,
+  steps
 } from '../../utils/consts'
 
 import './input.css'
 
 export default function Input({ id, placeholder }){
+  let inputElem
+
   const {    
     year,
     inputFocus,    
-    dates
+    dates,
+    period
   } = usePickerState()
   const dispatch = usePickerDispatch()
-
+  const [
+    DAY,
+    WEEK,
+    MONTH,
+    QUARTER,
+    HALFYEAR,
+    YEAR
+  ] = steps
   
   const myOnBlur = (e) =>{
     let value = e.target.id;
@@ -56,7 +68,8 @@ export default function Input({ id, placeholder }){
 
   const myOnFocus = (e) =>{
     let value = e.target.id;
-    dispatch({type: SET_INPUT_FOCUS, inputFocus: value})    
+    dispatch({type: SET_INPUT_FOCUS, inputFocus: value})  
+    console.log("SETFOCUS",value)  
   }
 
   const rejected = !dates[id].isCorrect && id !== inputFocus && dates[id].inputValue!=='' ;
@@ -65,22 +78,41 @@ export default function Input({ id, placeholder }){
   //установка фокуса
   const inputEl = useRef(null)
   useEffect(() => {
-  
-    if (inputEl.current.id === inputFocus) {
-      inputEl.current.focus()
+    if(!myRef)return
+    if (myRef.id === inputFocus) {
+
+      myRef.focus()
     }
-  }, [inputFocus])
+  }, [inputFocus,inputElem])
 
   function handleKeyPress(e){
     if(e.key==="Enter"){      
       //console.log('enter')
-      inputEl.current.blur()
+      
+        myRef.blur()
+      
     }
   }
+////////////////
+
+
+
+
+
+  const [myRef, setMyRef] = useState();
+
+
+  useEffect(()=>{
+		if(!inputElem) return
+		setMyRef(inputElem)
+  },[inputElem])
+
+  let mask = ((period===DAY) || (period ===WEEK))? "99.99.9999":''
 
   return (
     <div className="input-wrapper">
-      <input
+     
+      {/* <input
         ref={inputEl}
         id={id}
         name={id}
@@ -92,7 +124,24 @@ export default function Input({ id, placeholder }){
         value={dates[id].inputValue}
         onChange={onChange}
         onKeyPress={handleKeyPress}
-      />
+      /> */}
+      
+      <InputMask 
+        
+        mask={mask}
+			  inputRef={(input)=>inputElem=input}		
+		    onChange={onChange}
+	      onKeyPress={handleKeyPress}		    
+        value={dates[id].inputValue} 
+        placeholder={placeholder}
+        onFocus={myOnFocus}
+        onBlur={myOnBlur}
+        autoComplete="off"        
+        id={id}
+        name={id}
+        className={clsx}
+	    ></InputMask>
+
     </div>
   )
 }

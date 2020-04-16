@@ -19,5 +19,6 @@ export default function CalendarContainer(){
 						<PeriodSideBar />
 			</div>
 		)
-	}else return null
+	}
+	return null
 }

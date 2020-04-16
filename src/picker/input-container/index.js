@@ -3,33 +3,9 @@ import Input, { ArrowIcon } from '../input/input'
 import { usePickerState, usePickerDispatch } from '../dates-picker-context'
 
 import {
-  steps,
-  months,
-  monthsFull,
-  quarters,
-  halfYear,
-  stepsLabels,
-  CHANGE_STEP,
-  CHANGE_PERIOD,
-  CHANGE_CALENDAR_TYPE,
-  CHANGE_START_DATE,
-  CHANGE_END_DATE,
-  VALID_START_DATE,
-  VALID_END_DATE,  
+  steps,  
   VALID_FORM,
-  SET_RESULT_START_DATE,
-  SET_RESULT_END_DATE,
   SET_INPUT_FOCUS,
-  MONTH_MODIFICATOR_FOR_START,
-  MONTH_MODIFICATOR_FOR_END,
-  DATE_MONTH_MODIFICATOR_FOR_START,
-  DATE_MONTH_MODIFICATOR_FOR_END,
-  QUART_VALUES_FOR_START,
-  QUART_VALUES_FOR_END,
-  HALF_YEAR_VALUES_FOR_START,
-  HALF_YEAR_VALUES_FOR_END,
-  YEAR_VALUE_FOR_START,
-  YEAR_VALUE_FOR_END,
   START_DATE,
   END_DATE,
   SUBMIT,
@@ -39,14 +15,7 @@ import {
   UPDATE_DATES
 } from '../../utils/consts'
 import {inputValueValidation} from  '../../utils/converters'
-const [
-  DAY,
-  WEEK,
-  MONTH,
-  QUARTER,
-  HALFYEAR,
-  YEAR
-] = steps
+
 
 export default function InputContainer(){
 	const {      

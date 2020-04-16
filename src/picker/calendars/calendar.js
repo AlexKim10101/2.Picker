@@ -14,44 +14,13 @@ import {
   steps, 
   days,
   START_DATE,
-  END_DATE,
-  CHANGE_START_DATE,
-  CHANGE_END_DATE, 
-  VALID_START_DATE,
-  VALID_END_DATE,  
-  VALID_FORM,
-  SET_RESULT_START_DATE,
-  SET_RESULT_END_DATE,
+  END_DATE,  
   UPDATE_DATES,
-  SET_INPUT_VALIDATION,
-  SET_FOCUS_TRANSFER,
-  MONTH_MODIFICATOR_FOR_START,
-  MONTH_MODIFICATOR_FOR_END,
-  DATE_MONTH_MODIFICATOR_FOR_START,
-  DATE_MONTH_MODIFICATOR_FOR_END,
-  QUART_VALUES_FOR_START,
-  QUART_VALUES_FOR_END,
-  HALF_YEAR_VALUES_FOR_START,
-  HALF_YEAR_VALUES_FOR_END,
-  YEAR_VALUE_FOR_START,
-  YEAR_VALUE_FOR_END,
+  SET_INPUT_VALIDATION,  
 } from '../../utils/consts'
 import './calendar.css'
 
-import {inputValueValidation} from  '../../utils/converters'
-
-const [
-  DAY,
-  WEEK,
-  MONTH,
-  QUARTER,
-  HALFYEAR,
-  YEAR
-] = steps
-
-
-
-const Calendar = ({ focused, setFocus }) => {
+const Calendar = () => {
   const [
     DAY,
     WEEK,
@@ -133,16 +102,11 @@ const Calendar = ({ focused, setFocus }) => {
       }
     }
 
-
-    //
-    //const datesCopy = JSON.parse(JSON.stringify(dates));
     const newValue = Object.assign({}, dates[inputFocus], {inputValue: value, year: year})
     const result = Object.assign({}, dates, {[inputFocus]:newValue})
     dispatch({type: UPDATE_DATES, dates: result})
     dispatch({type: SET_INPUT_VALIDATION, needInputValidation: true})
   }
-
-  
 
   const renderCalendar = (type) => {
     switch (type) {
