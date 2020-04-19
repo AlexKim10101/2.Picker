@@ -29,6 +29,7 @@ export default function Input({ id, placeholder }){
   ] = steps
   
   const myOnBlur = (e) =>{
+    console.log('event', {e})
     console.log('событие ONBLUR target:', e.target)
     console.log('событие ONBLUR relatedTarget', e.relatedTarget)
     //console.log('событие ONBLUR', e.relatedTarget.value)
@@ -46,7 +47,8 @@ export default function Input({ id, placeholder }){
       }
       return false
     }
-    if (clickOnDatePicker(e)){      
+    if (clickOnDatePicker(e)){    
+      console.log('клик по календарю')  
       return
     }
     if(e.target.value == '') return
@@ -79,30 +81,47 @@ export default function Input({ id, placeholder }){
 
 /////////////////////////////
 
-  const myRef = useRef(null);
+  // const myRef = useRef(null);
 
 
-  //установка фокуса
+  // //установка фокуса
+  // useEffect(() => {
+  //   console.log(myRef)
+  //   if(!myRef)return
+  //   if (myRef.current.id === inputFocus) {
+  //     console.log('asdasda')
+  //     myRef.current.focus()
+  //   }
+  // }, [inputFocus])
+
+  // function handleKeyPress(e){
+
+  //   if(e.key==="Enter"){      
+  //     //console.log('enter')
+      
+  //       myRef.current.blur()
+      
+  //   }
+  // }
+////////////////
+
+
+  const inputEl = useRef(null)
+
   useEffect(() => {
-    console.log(myRef)
-    if(!myRef)return
-    if (myRef.current.id === inputFocus) {
-      console.log('asdasda')
-      myRef.current.focus()
+    if(!inputEl)return
+    if (inputEl.current.id === inputFocus) {
+      inputEl.current.focus()
     }
   }, [inputFocus])
 
   function handleKeyPress(e){
 
     if(e.key==="Enter"){      
-      //console.log('enter')
-      
-        myRef.current.blur()
-      
+      console.log(inputEl)
+      inputEl.current.blur()
     }
   }
-////////////////
-
   
 
   let mask = ((period===DAY) || (period ===WEEK))? "99.99.9999":''
@@ -111,8 +130,10 @@ export default function Input({ id, placeholder }){
     <div className="input-wrapper">      
       
       <InputMask  
-        value={dates[id].inputValue}      
-        mask={mask}			  	
+        inputRef={(node)=>inputEl.current=node}
+        value={dates[id].inputValue} 
+        mask={mask}			  
+        alwaysShowMask={true}	
 		    onChange={(e)=>onChange(e)}
 	      onKeyPress={handleKeyPress}		  
         placeholder={placeholder}
@@ -123,7 +144,7 @@ export default function Input({ id, placeholder }){
         name={id}
         className={clsx}
 	    >
-        {inputProps => <input ref={myRef}  {...inputProps}/>}
+        
       
       </InputMask>
 

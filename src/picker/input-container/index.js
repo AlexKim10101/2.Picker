@@ -31,8 +31,10 @@ export default function InputContainer(){
 	const dispatch = usePickerDispatch()
 	
 	useEffect(()=>{
-		if(!needInputValidation){return}
-		let result = {}
+    if(!needInputValidation) return
+    if(inputFocus==='submit') return
+    let result = {}
+    console.log('Валидация даты', inputFocus)
     
     let datesUpdateFieldCopy = {value: dates[inputFocus].inputValue, year: dates[inputFocus].year}
 
