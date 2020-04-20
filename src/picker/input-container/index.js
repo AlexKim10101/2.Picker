@@ -14,7 +14,7 @@ import {
   SET_FORM_VALIDATION,
   UPDATE_DATES
 } from '../../utils/consts'
-import {inputValueValidation} from  '../../utils/converters'
+import {inputValueValidation, inputValueCreater} from  '../../utils/converters'
 
 
 export default function InputContainer(){
@@ -40,11 +40,16 @@ export default function InputContainer(){
 
     const {verdict, newDate} = inputValueValidation(inputFocus, datesUpdateFieldCopy, period)
 
+
+
+    const newResult = inputValueCreater(dates, inputFocus, {result: newDate, isCorrect: verdict})
+
+    console.log('result new func', newResult)
     const newDatesField = Object.assign({}, dates[inputFocus], {result: newDate, isCorrect:verdict})
     result = Object.assign({}, dates, {[inputFocus]:newDatesField})
 		//console.log(result)
 
-		dispatch({type: UPDATE_DATES, dates: result})
+		dispatch({type: UPDATE_DATES, dates: newResult})
     dispatch({type: SET_INPUT_VALIDATION, needInputValidation: false})
     dispatch({type: SET_FORM_VALIDATION, needFormValidation: true})
     console.log('Валидация значения INPUT', inputFocus)

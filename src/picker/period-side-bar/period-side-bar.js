@@ -6,15 +6,26 @@ import {
   stepsLabels,
   CHANGE_PERIOD,
   CHANGE_CALENDAR_TYPE,
+  UPDATE_DATES
 } from '../../utils/consts'
+import {inputValueCreater} from  '../../utils/converters'
+
 import './period-side-bar.css'
 
 
 export default function PeriodSideBar() {
-  const { step, period } = usePickerState()
+  const { step, period, inputFocus, dates } = usePickerState()
   const dispatch = usePickerDispatch()
   
-  const onClick = (p) => dispatch({ type: CHANGE_PERIOD, period: p })
+  // const onClick = (p) => dispatch({ type: CHANGE_PERIOD, period: p })
+
+  function onClick(p){
+    const newDates = inputValueCreater(dates, inputFocus, {period: p})
+		dispatch({type: UPDATE_DATES, dates: newDates})
+    dispatch({ type: CHANGE_PERIOD, period: p })
+
+    console.log('hw!!')
+  }
 
   const allowedPeriodTypes = steps.slice(0, steps.indexOf(step) + 1)
   const clsx = (p) => classnames('period-Btn', { 'active-period': p === period })

@@ -34,7 +34,7 @@ export default function SubmitElement({id}){
       submitEl.current.focus()
     }
   }, [inputFocus,validFormData])
-
+  console.log(dates)
   return(
     <div className="submitElement">
       

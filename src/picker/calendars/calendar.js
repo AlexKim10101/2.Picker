@@ -19,6 +19,7 @@ import {
   SET_INPUT_VALIDATION,  
 } from '../../utils/consts'
 import './calendar.css'
+import { inputValueCreater } from '../../utils/converters'
 
 const Calendar = () => {
   const [
@@ -104,7 +105,9 @@ const Calendar = () => {
 
     const newValue = Object.assign({}, dates[inputFocus], {inputValue: value, year: year})
     const result = Object.assign({}, dates, {[inputFocus]:newValue})
-    dispatch({type: UPDATE_DATES, dates: result})
+
+    const newDates = inputValueCreater(dates, inputFocus, {inputValue: value, year: year})
+    dispatch({type: UPDATE_DATES, dates: newDates})
     dispatch({type: SET_INPUT_VALIDATION, needInputValidation: true})
   }
 

@@ -8,6 +8,7 @@ import {
   UPDATE_DATES,
   steps
 } from '../../utils/consts'
+import { inputValueCreater } from '../../utils/converters'
 
 import './input.css'
 
@@ -29,7 +30,6 @@ export default function Input({ id, placeholder }){
   ] = steps
   
   const myOnBlur = (e) =>{
-    console.log('event', {e})
     console.log('событие ONBLUR target:', e.target)
     console.log('событие ONBLUR relatedTarget', e.relatedTarget)
     //console.log('событие ONBLUR', e.relatedTarget.value)
@@ -60,11 +60,11 @@ export default function Input({ id, placeholder }){
   
   const onChange = ({ target }) => {
     console.log('onChange')
-    const name = target.name;
     const value = target.value;
-    const newValue = Object.assign({}, dates[name], {inputValue: value, year: year})
-    const result = Object.assign({}, dates, {[name]:newValue})
-    dispatch({type:UPDATE_DATES, dates: result})
+    const newDates = inputValueCreater(dates, inputFocus, {inputValue: value, year: year})
+    // const newValue = Object.assign({}, dates[name], {inputValue: value, year: year})
+    // const result = Object.assign({}, dates, {[name]:newValue})
+    dispatch({type:UPDATE_DATES, dates: newDates})
   
   }
   
@@ -77,33 +77,6 @@ export default function Input({ id, placeholder }){
 
   const rejected = !dates[id].isCorrect && id !== inputFocus && dates[id].inputValue!=='' ;
   const clsx = classnames('input-field', { active: id === inputFocus }, {rejected: rejected})
-
-
-/////////////////////////////
-
-  // const myRef = useRef(null);
-
-
-  // //установка фокуса
-  // useEffect(() => {
-  //   console.log(myRef)
-  //   if(!myRef)return
-  //   if (myRef.current.id === inputFocus) {
-  //     console.log('asdasda')
-  //     myRef.current.focus()
-  //   }
-  // }, [inputFocus])
-
-  // function handleKeyPress(e){
-
-  //   if(e.key==="Enter"){      
-  //     //console.log('enter')
-      
-  //       myRef.current.blur()
-      
-  //   }
-  // }
-////////////////
 
 
   const inputEl = useRef(null)
@@ -124,7 +97,7 @@ export default function Input({ id, placeholder }){
   }
   
 
-  let mask = ((period===DAY) || (period ===WEEK))? "99.99.9999":''
+  let mask = ((dates[id].period===DAY) || (dates[id].period ===WEEK))? "99.99.9999":''
 
   return (
     <div className="input-wrapper">      

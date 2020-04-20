@@ -145,6 +145,8 @@ export function inputValueValidation(fieldName, dateObj, period){
 }
 
 
-export function inputValueCreater(){
-	
+export function inputValueCreater(dates, input, newValues){
+  const datesCopy = Object.assign({}, dates)
+  const newInputValues = Object.assign({}, datesCopy[input], newValues)
+  return Object.assign({}, datesCopy, {[input]:newInputValues})
 }

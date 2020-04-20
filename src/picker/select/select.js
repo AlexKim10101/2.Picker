@@ -6,14 +6,18 @@ import {
   CHANGE_STEP,
   CHANGE_PERIOD,
   CHANGE_CALENDAR_TYPE,
+  UPDATE_DATES,
 } from '../../utils/consts'
+import {inputValueCreater} from  '../../utils/converters'
 
 
 export default function Select() {
-  const { step } = usePickerState()
+  const { step, inputFocus, dates } = usePickerState()
   const dispatch = usePickerDispatch()
 
   const onChange = ({ target }) => {
+    const newDates = inputValueCreater(dates, inputFocus, {period: target.value})
+    dispatch({type: UPDATE_DATES, dates: newDates})
     dispatch({ type: CHANGE_STEP, step: target.value })
     dispatch({ type: CHANGE_PERIOD, period: target.value })
     dispatch({ type: CHANGE_CALENDAR_TYPE, calendarType: target.value })

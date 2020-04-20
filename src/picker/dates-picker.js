@@ -12,13 +12,8 @@ import {
 } from '../utils/consts'
 export default function DatesPicker(props) {
   
-  let newProps = {
-    startDate : {value: '', year: null},
-    endDate : {value: '', year: null},
-    invalidStartDate: false,
-    invalidEndDate: false,
-    resultStartDate: null,
-    resultEndDate: null,  
+  console.log('PROPS', props)
+  let newProps = { 
     validFormData: false,
     inputFocus: START_DATE,
     needChangeFocus: false,
@@ -31,6 +26,7 @@ export default function DatesPicker(props) {
         year: null,
         result: null,
         isCorrect: false,
+        period: props.period
       },
       [END_DATE]:{
         name: END_DATE,
@@ -38,6 +34,7 @@ export default function DatesPicker(props) {
         year: null,
         result: null,
         isCorrect: false,
+        period: props.period
       }
     }
   }
