@@ -86,6 +86,10 @@ export default function Input({ id, placeholder }){
     if(!inputEl)return
     if (inputEl.current.id === inputFocus) {
       inputEl.current.focus()
+      //console.log(period)
+      const newDates = inputValueCreater(dates, inputFocus, {period: period})
+      dispatch({type:UPDATE_DATES, dates: newDates})
+
     }
   }, [inputFocus])
 
