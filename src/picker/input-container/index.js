@@ -32,27 +32,29 @@ export default function InputContainer(){
 	
 	useEffect(()=>{
     if(!needInputValidation) return
-    if(inputFocus==='submit') return
+    console.log('useeffect Валидация даты', inputFocus)
+    if(inputFocus==='submit') {
+      dispatch({type: SET_INPUT_VALIDATION, needInputValidation: false})
+      return
+    }
     let result = {}
-    console.log('Валидация даты', inputFocus)
+    //console.log('Валидация даты', inputFocus)
     
     let datesUpdateFieldCopy = {value: dates[inputFocus].inputValue, year: dates[inputFocus].year}
 
     const {verdict, newDate} = inputValueValidation(inputFocus, datesUpdateFieldCopy, period)
+    
+    const newDates = inputValueCreater(dates, inputFocus, {result: newDate, isCorrect: verdict})
 
+    //console.log('result new func', newResult)
+    // const newDatesField = Object.assign({}, dates[inputFocus], {result: newDate, isCorrect:verdict})
+    // result = Object.assign({}, dates, {[inputFocus]:newDatesField})
+		// console.log(result)
 
-
-    const newResult = inputValueCreater(dates, inputFocus, {result: newDate, isCorrect: verdict})
-
-    console.log('result new func', newResult)
-    const newDatesField = Object.assign({}, dates[inputFocus], {result: newDate, isCorrect:verdict})
-    result = Object.assign({}, dates, {[inputFocus]:newDatesField})
-		//console.log(result)
-
-		dispatch({type: UPDATE_DATES, dates: newResult})
+		dispatch({type: UPDATE_DATES, dates: newDates})
     dispatch({type: SET_INPUT_VALIDATION, needInputValidation: false})
     dispatch({type: SET_FORM_VALIDATION, needFormValidation: true})
-    console.log('Валидация значения INPUT', inputFocus)
+    //console.log('Валидация значения INPUT', inputFocus)
     //console.log(dates)
   },[needInputValidation])
 
@@ -74,8 +76,8 @@ export default function InputContainer(){
     dispatch({type: SET_FOCUS_TRANSFER, needChangeFocus:true})
     dispatch({type: SET_FORM_VALIDATION, needFormValidation: false})
 
-    console.log('Валидация формы. Вердикт', formIsValid)
-    console.log('Валидация формы. Подробнее', dates)
+    //console.log('Валидация формы. Вердикт', formIsValid)
+    //console.log('Валидация формы. Подробнее', dates)
 
   },[needFormValidation])
 
@@ -90,11 +92,11 @@ export default function InputContainer(){
     //console.log('nextFocus',nextFocus)
     dispatch({type: SET_INPUT_FOCUS, inputFocus: nextFocus})
     dispatch({type: SET_FOCUS_TRANSFER, needChangeFocus: false})
-    console.log('Установка фокуса', nextFocus)
+    //console.log('Установка фокуса', nextFocus)
 	},[needChangeFocus, validFormData])
 	
 	function nextFocusSetter(startDateInputValue, startDateStatus, endDateInputValue, endDateStatus){    
-    console.log('NextFocusArgs', arguments)
+    //console.log('NextFocusArgs', arguments)
     if((startDateInputValue === '') || (!startDateStatus)){
       return START_DATE
     }

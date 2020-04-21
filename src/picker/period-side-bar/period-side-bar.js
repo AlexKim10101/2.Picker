@@ -21,10 +21,11 @@ export default function PeriodSideBar() {
 
   function onClick(p){
     const newDates = inputValueCreater(dates, inputFocus, {period: p})
-		dispatch({type: UPDATE_DATES, dates: newDates})
+    dispatch({type: UPDATE_DATES, dates: newDates})
+    
+
     dispatch({ type: CHANGE_PERIOD, period: p })
 
-    console.log('hw!!')
   }
 
   const allowedPeriodTypes = steps.slice(0, steps.indexOf(step) + 1)

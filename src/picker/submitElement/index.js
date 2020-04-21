@@ -6,9 +6,10 @@ export default function SubmitElement({id}){
 
   const { 
     validFormData, 
-    resultStartDate, 
-    resultEndDate, 
-    inputFocus, 
+    inputFocus,
+    needChangeFocus,
+    needInputValidation,
+    needFormValidation, 
     dates 
   } = usePickerState();
 
@@ -34,7 +35,17 @@ export default function SubmitElement({id}){
       submitEl.current.focus()
     }
   }, [inputFocus,validFormData])
-  console.log(dates)
+  console.log('inputFocus',inputFocus)
+  console.log('needChangeFocus', needChangeFocus)
+  console.log('needInputValidation',needInputValidation)
+  console.log('needFormValidation', needFormValidation)
+  console.log('----------------------------')
+
+  
+  
+  
+
+
   return(
     <div className="submitElement">
       

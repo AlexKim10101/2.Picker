@@ -59,7 +59,7 @@ const Calendar = () => {
   const dispatch = usePickerDispatch()
 
   function handleClick(x){
-    console.log('handleClick',inputFocus)
+    console.log('______handleClick',inputFocus)
    
     let indexDayOfWeek
     let value
@@ -103,8 +103,8 @@ const Calendar = () => {
       }
     }
 
-    const newValue = Object.assign({}, dates[inputFocus], {inputValue: value, year: year})
-    const result = Object.assign({}, dates, {[inputFocus]:newValue})
+    // const newValue = Object.assign({}, dates[inputFocus], {inputValue: value, year: year})
+    // const result = Object.assign({}, dates, {[inputFocus]:newValue})
 
     const newDates = inputValueCreater(dates, inputFocus, {inputValue: value, year: year})
     dispatch({type: UPDATE_DATES, dates: newDates})

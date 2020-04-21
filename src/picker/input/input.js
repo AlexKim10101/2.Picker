@@ -30,8 +30,8 @@ export default function Input({ id, placeholder }){
   ] = steps
   
   const myOnBlur = (e) =>{
-    console.log('событие ONBLUR target:', e.target)
-    console.log('событие ONBLUR relatedTarget', e.relatedTarget)
+    //console.log('событие ONBLUR target:', e.target)
+    //console.log('событие ONBLUR relatedTarget', e.relatedTarget)
     //console.log('событие ONBLUR', e.relatedTarget.value)
 
     let value = e.target.id;
@@ -59,7 +59,7 @@ export default function Input({ id, placeholder }){
 
   
   const onChange = ({ target }) => {
-    console.log('onChange')
+    //console.log('onChange')
     const value = target.value;
     const newDates = inputValueCreater(dates, inputFocus, {inputValue: value, year: year})
     // const newValue = Object.assign({}, dates[name], {inputValue: value, year: year})
@@ -71,8 +71,9 @@ export default function Input({ id, placeholder }){
 
 
   const myOnFocus = ({ target }) =>{
+    console.log('фокус на Input', target.id)
     dispatch({type: SET_INPUT_FOCUS, inputFocus: target.id})  
-    console.log("SETFOCUS",target.id)  
+    //console.log("SETFOCUS",target.id)  
   }
 
   const rejected = !dates[id].isCorrect && id !== inputFocus && dates[id].inputValue!=='' ;
