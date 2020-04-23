@@ -121,8 +121,8 @@ export default function Input({ id, placeholder }){
 
   useEffect(()=>{
     console.log(`новое значение ${id}: ${dates[id].inputValue} `)
-    const needOnBlur = inputValueValidation(id, {value:dates[id].inputValue, year:dates[id].year}, dates[id].period).verdict
-    console.log(inputValueValidation(id, {value:dates[id].inputValue, year:dates[id].year}, dates[id].period))
+    const needOnBlur = inputValueValidation(id, dates[id].inputValue, dates[id].year, dates[id].period).verdict
+    console.log(inputValueValidation(id, dates[id].inputValue, dates[id].year, dates[id].period))
     if(needOnBlur){
       inputEl.current.blur()
     }

@@ -44,7 +44,7 @@ export function dateValidation(value){
   }
 }
 
-export function inputValueValidation(fieldName, dateObj, period){
+export function inputValueValidation(fieldName, value, year, period){
     console.log(arguments)
     let monthModificator, 
       monthDateModificator,   
@@ -54,7 +54,8 @@ export function inputValueValidation(fieldName, dateObj, period){
 
     let newDate = null;
     let changeIsCorrect = false;
-
+    // let value = dateObj.value;
+    // let year = dateObj.year
 
     if(fieldName == START_DATE){
       monthModificator = MONTH_MODIFICATOR_FOR_START
@@ -78,32 +79,32 @@ export function inputValueValidation(fieldName, dateObj, period){
     switch(period){
       case DAY :
       case WEEK: {        
-        if(dateValidation(dateObj.value)){
-          newDate = dateCreater(dateObj.value)
+        if(dateValidation(value)){
+          newDate = dateCreater(value)
           changeIsCorrect = true;
 
         }
         break;
       }
       case MONTH :{
-        if(months.includes(dateObj.value)){       
-          newDate = new Date( new Date(dateObj.year, months.indexOf(dateObj.value)+monthModificator, 1) - monthDateModificator)
+        if(months.includes(value)){       
+          newDate = new Date( new Date(year, months.indexOf(value)+monthModificator, 1) - monthDateModificator)
           changeIsCorrect = true;
             
 
         }       
 
-        if(monthsFull.includes(dateObj.value)){  
-          newDate = new Date( new Date(dateObj.year, monthsFull.indexOf(dateObj.value)+monthModificator, 1) - monthDateModificator)    
+        if(monthsFull.includes(value)){  
+          newDate = new Date( new Date(year, monthsFull.indexOf(value)+monthModificator, 1) - monthDateModificator)    
           changeIsCorrect = true;
         }
         
         break;
       }
       case QUARTER :{
-        if(quarters.includes(dateObj.value)){          
-          const qurtIndex = quarters.indexOf(dateObj.value)
-          const blank = qurtArr[qurtIndex] + dateObj.year;
+        if(quarters.includes(value)){          
+          const qurtIndex = quarters.indexOf(value)
+          const blank = qurtArr[qurtIndex] + year;
           newDate = dateCreater(blank);
           changeIsCorrect = true;
         }            
@@ -111,9 +112,9 @@ export function inputValueValidation(fieldName, dateObj, period){
       }
 
       case HALFYEAR :{
-        if(halfYear.includes(dateObj.value)){
-          const halfYearIndex = halfYear.indexOf(dateObj.value)
-          const blank = halfYearArr[halfYearIndex] + dateObj.year;
+        if(halfYear.includes(value)){
+          const halfYearIndex = halfYear.indexOf(value)
+          const blank = halfYearArr[halfYearIndex] + year;
           newDate = dateCreater(blank)
           changeIsCorrect = true;
 
@@ -122,8 +123,8 @@ export function inputValueValidation(fieldName, dateObj, period){
       }
 
       case YEAR:{
-        if(dateValidation(yearPreDate + dateObj.value)){
-          newDate = dateCreater(yearPreDate + dateObj.value)
+        if(dateValidation(yearPreDate + value)){
+          newDate = dateCreater(yearPreDate + value)
           changeIsCorrect = true;
         }
       }

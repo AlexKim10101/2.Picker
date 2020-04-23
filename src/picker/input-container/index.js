@@ -37,12 +37,11 @@ export default function InputContainer(){
       dispatch({type: SET_INPUT_VALIDATION, needInputValidation: false})
       return
     }
-    let result = {}
     //console.log('Валидация даты', inputFocus)
     
-    let datesUpdateFieldCopy = {value: dates[inputFocus].inputValue, year: dates[inputFocus].year}
+    //let datesUpdateFieldCopy = {value: dates[inputFocus].inputValue, year: dates[inputFocus].year}
 
-    const {verdict, newDate} = inputValueValidation(inputFocus, datesUpdateFieldCopy, period)
+    const {verdict, newDate} = inputValueValidation(inputFocus, dates[inputFocus].inputValue, dates[inputFocus].year, period)
     
     const newDates = inputValueCreater(dates, inputFocus, {result: newDate, isCorrect: verdict})
 
