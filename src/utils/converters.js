@@ -33,6 +33,7 @@ export function dateCreater(string){
 }
 
 export function dateValidation(value){
+  if(typeof(value)!=='string') return false
 	let arrD = value.split(".");
   arrD[1] -= 1;
   let d = new Date(arrD[2], arrD[1], arrD[0]);
@@ -44,7 +45,7 @@ export function dateValidation(value){
 }
 
 export function inputValueValidation(fieldName, dateObj, period){
-    //console.log(arguments)
+    console.log(arguments)
     let monthModificator, 
       monthDateModificator,   
       qurtArr,    
@@ -139,3 +140,42 @@ export function inputValueCreater(dates, input, newValues){
   const newInputValues = Object.assign({}, datesCopy[input], newValues)
   return Object.assign({}, datesCopy, {[input]:newInputValues})
 }
+
+
+export function maskQualifier(dates, id, inputFocus){
+  switch (dates[id].period) {
+    case DAY:
+    case WEEK: {
+      if((dates[id].inputValue === '')&&(id !== inputFocus)){
+        return ''
+      }
+      return "99.99.9999"
+    }
+    case HALFYEAR:{
+      if((dates[id].inputValue === '')&&(id !== inputFocus)){
+        return ''
+      }
+      return "9-ое полугодие"
+    }
+    default: return ''
+  }
+
+}
+
+// DAY,
+//     WEEK,
+//     MONTH,
+//     QUARTER,
+//     HALFYEAR,
+//     YEAR
+// function preChecking(value, period){
+//   switch(period){
+//     case YEAR:{
+//       if(value < 1000) return false;
+//       console.log('preChecking YEAR', '01.01.'+value)
+//       return dateValidation('01.01.'+value)
+//     }
+
+//     default: return false
+//   }
+// }

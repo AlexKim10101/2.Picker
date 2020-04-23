@@ -8,7 +8,7 @@ import {
   UPDATE_DATES,
   steps
 } from '../../utils/consts'
-import { inputValueCreater } from '../../utils/converters'
+import { inputValueCreater, inputValueValidation, maskQualifier } from '../../utils/converters'
 
 import './input.css'
 
@@ -59,15 +59,16 @@ export default function Input({ id, placeholder }){
 
   
   const onChange = ({ target }) => {
-    //console.log('onChange')
+    console.log('onChange')
+    console.log('value', dates[id].inputValue)
+
     const value = target.value;
     const newDates = inputValueCreater(dates, inputFocus, {inputValue: value, year: year})
-    // const newValue = Object.assign({}, dates[name], {inputValue: value, year: year})
-    // const result = Object.assign({}, dates, {[name]:newValue})
     dispatch({type:UPDATE_DATES, dates: newDates})
   
   }
   
+
 
 
   const myOnFocus = ({ target }) =>{
@@ -82,6 +83,7 @@ export default function Input({ id, placeholder }){
 
   const inputEl = useRef(null)
 
+  //ставит фокус при изменении значения inputFocus
   useEffect(() => {
     if(!inputEl)return
     if (inputEl.current.id === inputFocus) {
@@ -101,8 +103,31 @@ export default function Input({ id, placeholder }){
     }
   }
   
+  // console.log('------------------------------')
+  // console.log('dates[id].inputValue',dates[id].inputValue)
+  // console.log('------------------------------')
 
-  let mask = ((dates[id].period===DAY) || (dates[id].period ===WEEK))? "99.99.9999":''
+
+  //исправляет баг при смене периода и пустом значении input
+  useEffect(()=>{
+    if(dates[id].inputValue==='__.__.____'){
+      const newDates = inputValueCreater(dates, id, {inputValue: ''})
+      dispatch({type:UPDATE_DATES, dates: newDates})
+    }
+  },[period])
+  
+
+  const mask = maskQualifier(dates, id, inputFocus)
+
+  useEffect(()=>{
+    console.log(`новое значение ${id}: ${dates[id].inputValue} `)
+    const needOnBlur = inputValueValidation(id, {value:dates[id].inputValue, year:dates[id].year}, dates[id].period).verdict
+    console.log(inputValueValidation(id, {value:dates[id].inputValue, year:dates[id].year}, dates[id].period))
+    if(needOnBlur){
+      inputEl.current.blur()
+    }
+  },[dates[id].inputValue])
+
 
   return (
     <div className="input-wrapper">      
@@ -121,24 +146,8 @@ export default function Input({ id, placeholder }){
         id={id}
         name={id}
         className={clsx}
-	    >
-        
-      
-      </InputMask>
-
-      {/* <input
-        ref={inputEl}
-        id={id}
-        name={id}
-        className={clsx}
-        autoComplete="off"
-        placeholder={placeholder}
-        onFocus={myOnFocus}
-        onBlur={myOnBlur}
-        value={dates[id].inputValue}
-        onChange={onChange}
-        onKeyPress={handleKeyPress}
-      /> */}
+	    />
+     
 
     </div>
   )
