@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react'
+import React, { useEffect } from 'react'
 import Input, { ArrowIcon } from '../input/input'
 import { usePickerState, usePickerDispatch } from '../dates-picker-context'
 
@@ -32,29 +32,45 @@ export default function InputContainer(){
 	
 	useEffect(()=>{
     if(!needInputValidation) return
-    console.log('useeffect Валидация даты', inputFocus)
+    //console.log('useeffect Валидация даты', inputFocus)
     if(inputFocus==='submit') {
       dispatch({type: SET_INPUT_VALIDATION, needInputValidation: false})
       return
     }
-    //console.log('Валидация даты', inputFocus)
+   
+    let errorMessage = null;
+    let potencialTrueValue = false;
+    let result
+    for (let per of steps){
+      result = inputValueValidation(inputFocus, 
+        dates[inputFocus].inputValue, 
+        dates[inputFocus].year, 
+        per).verdict;
+      if(result){
+        potencialTrueValue = true
+      }
+    }
+
+
+
+    const {verdict, newDate} = inputValueValidation(inputFocus, 
+      dates[inputFocus].inputValue, 
+      dates[inputFocus].year, 
+      period)
     
-    //let datesUpdateFieldCopy = {value: dates[inputFocus].inputValue, year: dates[inputFocus].year}
+    errorMessage = verdict ? null : `Значение ${inputFocus} некорректно`;
+        
+    if(potencialTrueValue && !verdict){
+      errorMessage = `Значение ${inputFocus} не соответствует выбранному периоду ${period}`
+    }
 
-    const {verdict, newDate} = inputValueValidation(inputFocus, dates[inputFocus].inputValue, dates[inputFocus].year, period)
-    
-    const newDates = inputValueCreater(dates, inputFocus, {result: newDate, isCorrect: verdict})
+    const newDates = inputValueCreater(dates, inputFocus, {result: newDate, isCorrect: verdict, errorMessage:errorMessage})
 
-    //console.log('result new func', newResult)
-    // const newDatesField = Object.assign({}, dates[inputFocus], {result: newDate, isCorrect:verdict})
-    // result = Object.assign({}, dates, {[inputFocus]:newDatesField})
-		// console.log(result)
-
+  
 		dispatch({type: UPDATE_DATES, dates: newDates})
     dispatch({type: SET_INPUT_VALIDATION, needInputValidation: false})
     dispatch({type: SET_FORM_VALIDATION, needFormValidation: true})
-    //console.log('Валидация значения INPUT', inputFocus)
-    //console.log(dates)
+
   },[needInputValidation])
 
 	useEffect(()=>{
@@ -75,23 +91,17 @@ export default function InputContainer(){
     dispatch({type: SET_FOCUS_TRANSFER, needChangeFocus:true})
     dispatch({type: SET_FORM_VALIDATION, needFormValidation: false})
 
-    //console.log('Валидация формы. Вердикт', formIsValid)
-    //console.log('Валидация формы. Подробнее', dates)
-
   },[needFormValidation])
 
 	useEffect(()=>{
     if(!needChangeFocus){return}
     const{startDate, endDate} = dates
-    //console.log(startDate)
     const nextFocus = nextFocusSetter(startDate.inputValue,
       startDate.isCorrect,
       endDate.inputValue,
       endDate.isCorrect)
-    //console.log('nextFocus',nextFocus)
     dispatch({type: SET_INPUT_FOCUS, inputFocus: nextFocus})
     dispatch({type: SET_FOCUS_TRANSFER, needChangeFocus: false})
-    //console.log('Установка фокуса', nextFocus)
 	},[needChangeFocus, validFormData])
 	
 	function nextFocusSetter(startDateInputValue, startDateStatus, endDateInputValue, endDateStatus){    

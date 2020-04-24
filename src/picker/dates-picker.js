@@ -26,7 +26,8 @@ export default function DatesPicker(props) {
         year: null,
         result: null,
         isCorrect: false,
-        period: props.period
+        period: props.period,
+        errorMessage: null
       },
       [END_DATE]:{
         name: END_DATE,
@@ -34,7 +35,8 @@ export default function DatesPicker(props) {
         year: null,
         result: null,
         isCorrect: false,
-        period: props.period
+        period: props.period,
+        errorMessage: null
       }
     }
   }
@@ -52,14 +54,11 @@ export default function DatesPicker(props) {
         </div>
 
       </div>
+      
       <SubmitElement
         id={SUBMIT}
-        
       />
       
-
-
-  
     </PickerProvider>
   )
 }

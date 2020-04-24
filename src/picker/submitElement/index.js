@@ -1,6 +1,7 @@
 import React, {useEffect, useRef} from 'react'
 import { usePickerState } from '../dates-picker-context'
 import './submitElement.css'
+import { START_DATE, END_DATE } from '../../utils/consts';
 
 export default function SubmitElement({id}){
 
@@ -42,15 +43,18 @@ export default function SubmitElement({id}){
   console.log('----------------------------')
 
   
+  const showErrorMessageStartDate = ((dates.startDate.inputValue!=='')||(inputFocus===START_DATE)||(dates.startDate.isCorrect))? false : true;
+  const showErrorMessageEndDate = ((dates.endDate.inputValue!=='')||(inputFocus===END_DATE)||(dates.endDate.isCorrect))? false : true;
   
-  
-
+  console.log(showErrorMessageStartDate)
 
   return(
     <div className="submitElement">
       
-      {!validFormData && (<div>Некорректные данные</div>)}
-  
+      {/* {!validFormData && (<div>Некорректные данные</div>)} */}
+      {!showErrorMessageStartDate && (<div>{dates.startDate.errorMessage}</div>)}
+      {!showErrorMessageEndDate && (<div>{dates.endDate.errorMessage}</div>)}
+
       {validFormData && (<div>Выбран период с {firstDate} по {secondDate}</div>)}
       
 
