@@ -57,7 +57,9 @@ export default function SubmitElement({id}){
       {showErrorMessageStartDate && (<div>{dates.startDate.errorMessage}</div>)}
       {showErrorMessageEndDate && (<div>{dates.endDate.errorMessage}</div>)}
       {showErrorMessageEndLessStart && (<div>Ошибка: первая дата больше второй</div>)}
-      {validFormData && (<div>Выбран период с {firstDate} по {secondDate}</div>)}
+      {validFormData && (<div>Данные корректны</div>)}
+      {(dates.startDate.isCorrect&&dates.endDate.isCorrect) && (<div>Выбран период с {firstDate} по {secondDate}</div>)}
+      
       
 
       <input ref={submitEl} id={id} type="submit" value="Отправить" disabled={!validFormData}></input>
