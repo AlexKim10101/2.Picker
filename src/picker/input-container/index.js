@@ -100,26 +100,30 @@ export default function InputContainer(){
 
       switch(resultInputValidation){
         case 'Wrong Value':{
+          let message = inputFocus === START_DATE? 'первой даты' : 'второй даты'
+
+
           newObj[inputFocus] = Object.assign({}, dates[inputFocus], {
             result: null, 
             dateIsCorrect: false,
             periodIsCorrect: true,
             isCorrect: false, 
-            errorMessage:`Значение ${inputFocus} некорректно`
+            errorMessage:`Значение ${message} некорректно`
           })
-          console.log('промежуточное состояние',newObj)
+          //console.log('промежуточное состояние',newObj)
           
           break;
         }
         case 'Wrong period':{
+          let message = inputFocus === START_DATE? 'первой даты' : 'второй даты'
           newObj[inputFocus] = Object.assign({}, dates[inputFocus], {
             result: null, 
             dateIsCorrect: false,
             periodIsCorrect: false,
             isCorrect: false, 
-            errorMessage:`Значение ${inputFocus} не соответствует выбранному периоду`            
+            errorMessage:`Значение ${message} не соответствует выбранному периоду`            
           })
-          console.log('промежуточное состояние',newObj)
+          //console.log('промежуточное состояние',newObj)
 
           break;
          
