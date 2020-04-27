@@ -6,8 +6,9 @@ import {
   CHANGE_STEP,
   CHANGE_PERIOD,
   CHANGE_CALENDAR_TYPE,
+  SET_INPUT_FOCUS,
   UPDATE_DATES,
-  SET_INPUT_VALIDATION
+  START_DATE,
 } from '../../utils/consts'
 import {inputValueCreater} from  '../../utils/converters'
 
@@ -22,7 +23,7 @@ export default function Select() {
     dispatch({ type: CHANGE_STEP, step: target.value })
     dispatch({ type: CHANGE_PERIOD, period: target.value })
     dispatch({ type: CHANGE_CALENDAR_TYPE, calendarType: target.value })
-    dispatch({type: SET_INPUT_VALIDATION, needInputValidation: true})
+    dispatch({type: SET_INPUT_FOCUS, inputFocus: START_DATE})  
 
   }
 

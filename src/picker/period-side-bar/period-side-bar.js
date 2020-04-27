@@ -25,6 +25,8 @@ export default function PeriodSideBar() {
     
 
     dispatch({ type: CHANGE_PERIOD, period: p })
+    //dispatch({type: SET_INPUT_FOCUS, inputFocus: target.id})  
+
     
   }
 
