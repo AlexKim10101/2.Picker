@@ -29,42 +29,155 @@ export default function InputContainer(){
     dates
   } = usePickerState()
 	const dispatch = usePickerDispatch()
-	
+  
+  
+  function updaterField(fieldName, ){
+
+  }
+
+
 	useEffect(()=>{
     if(!needInputValidation) return
-    //console.log('useeffect Валидация даты', inputFocus)
+    console.log('useeffect Валидация даты', inputFocus)
     if(inputFocus==='submit') {
       dispatch({type: SET_INPUT_VALIDATION, needInputValidation: false})
       return
     }
-   
-    let errorMessage = null;
-    let potencialTrueValue = false;
-    let result
-    for (let per of steps){
-      result = inputValueValidation(inputFocus, 
+
+    //let newDates = Object.assign({}, dates)
+
+    let newObj={
+      [START_DATE]:{},
+      [END_DATE]:{}
+    }
+    newObj[START_DATE] = Object.assign({}, dates[START_DATE])
+    newObj[END_DATE] = Object.assign({}, dates[END_DATE])
+
+    console.log('Начальнле состояние', newObj)
+
+    for (let inputFocus of [START_DATE, END_DATE] ){
+      let errorMessage = null;
+      let potencialTrueValue = false;
+      let result
+      let arrayApprovedPeriods = []
+      let resultInputValidation = null
+      //let newObj ={}
+
+      const {verdict, newDate} = inputValueValidation(inputFocus, 
         dates[inputFocus].inputValue, 
         dates[inputFocus].year, 
-        per).verdict;
-      if(result){
-        potencialTrueValue = true
+        period);
+
+      if (verdict){
+        resultInputValidation = 'Check passed'
+
+      }else{
+        resultInputValidation = 'Wrong period'
+
       }
+      
+      //неверная дата для всех периодов
+      for (let per of steps){
+        result = inputValueValidation(inputFocus, 
+          dates[inputFocus].inputValue, 
+          dates[inputFocus].year, 
+          per).verdict;
+        if(result){
+          arrayApprovedPeriods.push(per)
+          potencialTrueValue = true
+        }
+      }
+      if(!potencialTrueValue){
+        resultInputValidation = 'Wrong Value'
+      }
+      //
+      
+      console.log('inputValidation', inputFocus)
+      console.log('resultInputValidation', resultInputValidation)
+      //let copyDates = Object.assign({}, newDates)
+
+
+
+      //newObj[]
+
+
+      switch(resultInputValidation){
+        case 'Wrong Value':{
+          newObj[inputFocus] = Object.assign({}, dates[inputFocus], {
+            result: null, 
+            dateIsCorrect: false,
+            periodIsCorrect: true,
+            isCorrect: false, 
+            errorMessage:`Значение ${inputFocus} некорректно`
+          })
+          console.log('промежуточное состояние',newObj)
+          // newDates = inputValueCreater(
+          //   copyDates, 
+          //   inputFocus, 
+          //   {
+          //     result: null, 
+          //     dateIsCorrect: false,
+          //     periodIsCorrect: true,
+          //     isCorrect: false, 
+          //     errorMessage:`Значение ${inputFocus} некорректно`
+          //   }
+          // )
+          break;
+        }
+        case 'Wrong period':{
+          newObj[inputFocus] = Object.assign({}, dates[inputFocus], {
+            result: null, 
+            dateIsCorrect: false,
+            periodIsCorrect: false,
+            isCorrect: false, 
+            errorMessage:`Значение ${inputFocus} не соответствует выбранному периоду`            
+          })
+          console.log('промежуточное состояние',newObj)
+
+          break;
+          // newDates = inputValueCreater(
+          //   copyDates, 
+          //   inputFocus, 
+          //   {
+          //     result: null, 
+          //     dateIsCorrect: false,
+          //     periodIsCorrect: false,
+          //     isCorrect: false, 
+          //     errorMessage:`Значение ${inputFocus} не соответствует выбранному периоду`
+          //   }
+          // )
+        }
+        case 'Check passed':{
+          newObj[inputFocus] = Object.assign({}, dates[inputFocus], {
+            result: newDate, 
+            dateIsCorrect: true,
+            periodIsCorrect: true,
+            isCorrect: true, 
+            errorMessage: null
+          })
+          console.log('промежуточное состояние',newObj)
+          
+          break;
+          // newDates = inputValueCreater(
+          //   copyDates, 
+          //   inputFocus, 
+          //   {
+          //     result: newDate, 
+          //     dateIsCorrect: true,
+          //     periodIsCorrect: true,
+          //     isCorrect: true, 
+          //     errorMessage: null
+          //   }
+          // )
+        }
+      }
+      //console.log('новое значение', newDates)
+
     }
 
+    console.log('конечное состояние ',newObj);
 
-
-    const {verdict, newDate} = inputValueValidation(inputFocus, 
-      dates[inputFocus].inputValue, 
-      dates[inputFocus].year, 
-      period)
-    
-    errorMessage = verdict ? null : `Значение ${inputFocus} некорректно`;
-        
-    if(potencialTrueValue && !verdict){
-      errorMessage = `Значение ${inputFocus} не соответствует выбранному периоду ${period}`
-    }
-
-    const newDates = inputValueCreater(dates, inputFocus, {result: newDate, isCorrect: verdict, errorMessage:errorMessage})
+    const newDates = Object.assign({}, dates, newObj)
 
   
 		dispatch({type: UPDATE_DATES, dates: newDates})

@@ -45,7 +45,7 @@ export function dateValidation(value){
 }
 
 export function inputValueValidation(fieldName, value, year, period){
-    console.log(arguments)
+    //console.log(arguments)
     let monthModificator, 
       monthDateModificator,   
       qurtArr,    
@@ -137,6 +137,7 @@ export function inputValueValidation(fieldName, value, year, period){
 
 
 export function inputValueCreater(dates, input, newValues){
+  //console.log({arguments[dates]})
   const datesCopy = Object.assign({}, dates)
   const newInputValues = Object.assign({}, datesCopy[input], newValues)
   return Object.assign({}, datesCopy, {[input]:newInputValues})

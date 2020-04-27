@@ -78,7 +78,8 @@ export default function Input({ id, placeholder }){
   }
 
   const rejected = !dates[id].isCorrect && id !== inputFocus && dates[id].inputValue!=='' ;
-  const clsx = classnames('input-field', { active: id === inputFocus }, {rejected: rejected})
+  //const clsx = classnames('input-field', { active: id === inputFocus }, {rejected: rejected})
+  const clsx = classnames('input-field', { active: id === inputFocus })
 
 
   const inputEl = useRef(null)
@@ -120,9 +121,9 @@ export default function Input({ id, placeholder }){
   const mask = maskQualifier(dates, id, inputFocus)
 
   useEffect(()=>{
-    console.log(`новое значение ${id}: ${dates[id].inputValue} `)
+    //console.log(`новое значение ${id}: ${dates[id].inputValue} `)
     const needOnBlur = inputValueValidation(id, dates[id].inputValue, dates[id].year, dates[id].period).verdict
-    console.log(inputValueValidation(id, dates[id].inputValue, dates[id].year, dates[id].period))
+    //console.log(inputValueValidation(id, dates[id].inputValue, dates[id].year, dates[id].period))
     if(needOnBlur){
       inputEl.current.blur()
     }

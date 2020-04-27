@@ -36,24 +36,32 @@ export default function SubmitElement({id}){
       submitEl.current.focus()
     }
   }, [inputFocus,validFormData])
-  console.log('inputFocus',inputFocus)
-  console.log('needChangeFocus', needChangeFocus)
-  console.log('needInputValidation',needInputValidation)
-  console.log('needFormValidation', needFormValidation)
+  // console.log('inputFocus',inputFocus)
+  // console.log('needChangeFocus', needChangeFocus)
+  // console.log('needInputValidation',needInputValidation)
+  // console.log('needFormValidation', needFormValidation)
+  console.log(dates)
   console.log('----------------------------')
 
+  console.log('dates.endDate.inputValue', dates.endDate.inputValue==='')
+  console.log('----------------------------')
   
-  const showErrorMessageStartDate = ((dates.startDate.inputValue!=='')||(inputFocus===START_DATE)||(dates.startDate.isCorrect))? false : true;
-  const showErrorMessageEndDate = ((dates.endDate.inputValue!=='')||(inputFocus===END_DATE)||(dates.endDate.isCorrect))? false : true;
+  const showErrorMessageStartDate = ((dates.startDate.inputValue==='')||(dates.startDate.isCorrect))? false : true;
+  const showErrorMessageEndDate = ((dates.endDate.inputValue==='')||(dates.endDate.isCorrect))? false : true;
+  // console.log('dates.startDate.inputValue',dates.startDate.inputValue==='')
+  // console.log('showErrorMessageStartDate',showErrorMessageStartDate)
+  // console.log('showErrorMessageStartDate',showErrorMessageStartDate)
+  // console.log('showErrorMessageStartDate',showErrorMessageStartDate)
   
-  console.log(showErrorMessageStartDate)
+  console.log('showErrorMessageStartDate',showErrorMessageStartDate)
+  console.log('showErrorMessageEndDate',showErrorMessageEndDate)
 
   return(
     <div className="submitElement">
       
       {/* {!validFormData && (<div>Некорректные данные</div>)} */}
-      {!showErrorMessageStartDate && (<div>{dates.startDate.errorMessage}</div>)}
-      {!showErrorMessageEndDate && (<div>{dates.endDate.errorMessage}</div>)}
+      {showErrorMessageStartDate && (<div>{dates.startDate.errorMessage}</div>)}
+      {showErrorMessageEndDate && (<div>{dates.endDate.errorMessage}</div>)}
 
       {validFormData && (<div>Выбран период с {firstDate} по {secondDate}</div>)}
       
