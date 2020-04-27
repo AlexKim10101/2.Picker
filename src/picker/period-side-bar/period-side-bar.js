@@ -7,7 +7,6 @@ import {
   CHANGE_PERIOD,
   CHANGE_CALENDAR_TYPE,
   UPDATE_DATES,
-  SET_INPUT_VALIDATION
 } from '../../utils/consts'
 import {inputValueCreater} from  '../../utils/converters'
 
@@ -26,7 +25,6 @@ export default function PeriodSideBar() {
     
 
     dispatch({ type: CHANGE_PERIOD, period: p })
-    dispatch({type: SET_INPUT_VALIDATION, needInputValidation: true})
     
   }
 

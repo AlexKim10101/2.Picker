@@ -36,20 +36,21 @@ export default function InputContainer(){
   }
 
 
+  useEffect(()=>{
+    console.log('изменился период')
+    dispatch({type: SET_INPUT_VALIDATION, needInputValidation: true})
+  },
+  [period])
+
 	useEffect(()=>{
     if(!needInputValidation) return
-    console.log('useeffect Валидация даты', inputFocus)
-    if(inputFocus==='submit') {
-      dispatch({type: SET_INPUT_VALIDATION, needInputValidation: false})
-      return
-    }
-
-    //let newDates = Object.assign({}, dates)
+    
 
     let newObj={
       [START_DATE]:{},
       [END_DATE]:{}
     }
+    
     newObj[START_DATE] = Object.assign({}, dates[START_DATE])
     newObj[END_DATE] = Object.assign({}, dates[END_DATE])
 
@@ -94,11 +95,7 @@ export default function InputContainer(){
       
       console.log('inputValidation', inputFocus)
       console.log('resultInputValidation', resultInputValidation)
-      //let copyDates = Object.assign({}, newDates)
-
-
-
-      //newObj[]
+      
 
 
       switch(resultInputValidation){
@@ -111,17 +108,7 @@ export default function InputContainer(){
             errorMessage:`Значение ${inputFocus} некорректно`
           })
           console.log('промежуточное состояние',newObj)
-          // newDates = inputValueCreater(
-          //   copyDates, 
-          //   inputFocus, 
-          //   {
-          //     result: null, 
-          //     dateIsCorrect: false,
-          //     periodIsCorrect: true,
-          //     isCorrect: false, 
-          //     errorMessage:`Значение ${inputFocus} некорректно`
-          //   }
-          // )
+          
           break;
         }
         case 'Wrong period':{
@@ -135,17 +122,7 @@ export default function InputContainer(){
           console.log('промежуточное состояние',newObj)
 
           break;
-          // newDates = inputValueCreater(
-          //   copyDates, 
-          //   inputFocus, 
-          //   {
-          //     result: null, 
-          //     dateIsCorrect: false,
-          //     periodIsCorrect: false,
-          //     isCorrect: false, 
-          //     errorMessage:`Значение ${inputFocus} не соответствует выбранному периоду`
-          //   }
-          // )
+         
         }
         case 'Check passed':{
           newObj[inputFocus] = Object.assign({}, dates[inputFocus], {
@@ -158,20 +135,9 @@ export default function InputContainer(){
           console.log('промежуточное состояние',newObj)
           
           break;
-          // newDates = inputValueCreater(
-          //   copyDates, 
-          //   inputFocus, 
-          //   {
-          //     result: newDate, 
-          //     dateIsCorrect: true,
-          //     periodIsCorrect: true,
-          //     isCorrect: true, 
-          //     errorMessage: null
-          //   }
-          // )
+          
         }
       }
-      //console.log('новое значение', newDates)
 
     }
 
@@ -219,13 +185,43 @@ export default function InputContainer(){
 	
 	function nextFocusSetter(startDateInputValue, startDateStatus, endDateInputValue, endDateStatus){    
     //console.log('NextFocusArgs', arguments)
-    if((startDateInputValue === '') || (!startDateStatus)){
-      return START_DATE
+    // if(inputFocus===SUBMIT) return
+    // if((startDateInputValue === '') || (!startDateStatus)){
+    //   return START_DATE
+    // }
+    // if((endDateInputValue==='') || (!endDateStatus)){
+    //   return END_DATE
+    // }
+    // return SUBMIT
+
+    switch(inputFocus){
+      case START_DATE:{
+        if(!startDateStatus){
+          return START_DATE
+        }
+        if(!endDateStatus){
+          return END_DATE
+        }
+        return SUBMIT
+      }
+      case END_DATE:{
+        if(!endDateStatus){
+          return END_DATE
+        }
+        if(!startDateStatus){
+          return START_DATE
+        }        
+        return SUBMIT
+      }
+      case SUBMIT:{
+        console.log('focus on SUBMIT. something doing wrong')
+      }
+      default:{
+        console.log('default. something doing wrong')
+
+      }
     }
-    if((endDateInputValue==='') || (!endDateStatus)){
-      return END_DATE
-    }
-    return SUBMIT
+
   }
 
 	return(

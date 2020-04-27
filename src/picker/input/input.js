@@ -111,7 +111,7 @@ export default function Input({ id, placeholder }){
 
   //исправляет баг при смене периода и пустом значении input
   useEffect(()=>{
-    if(dates[id].inputValue==='__.__.____'){
+    if((dates[id].inputValue==='__.__.____')||(dates[id].inputValue==='_-ое полугодие')){
       const newDates = inputValueCreater(dates, id, {inputValue: ''})
       dispatch({type:UPDATE_DATES, dates: newDates})
     }
@@ -126,6 +126,8 @@ export default function Input({ id, placeholder }){
     //console.log(inputValueValidation(id, dates[id].inputValue, dates[id].year, dates[id].period))
     if(needOnBlur){
       inputEl.current.blur()
+    }else{
+      dispatch({type: SET_INPUT_VALIDATION, needInputValidation: true})
     }
   },[dates[id].inputValue])
 
