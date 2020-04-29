@@ -8,9 +8,6 @@ export default function SubmitElement({id}){
   const { 
     validFormData, 
     inputFocus,
-    needChangeFocus,
-    needInputValidation,
-    needFormValidation, 
     dates 
   } = usePickerState();
 

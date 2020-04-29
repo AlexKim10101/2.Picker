@@ -16,9 +16,9 @@ export default function DatesPicker(props) {
   let newProps = { 
     validFormData: false,
     inputFocus: START_DATE,
-    needChangeFocus: false,
-    needInputValidation: false,
-    needFormValidation: false,
+    needChangeFocus: false,//убрать
+    needInputValidation: false,//убрать
+    needFormValidation: false,//убрать
     dates:{
       [START_DATE]:{
         name: START_DATE,

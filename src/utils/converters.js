@@ -163,21 +163,3 @@ export function maskQualifier(dates, id, inputFocus){
   }
 
 }
-
-// DAY,
-//     WEEK,
-//     MONTH,
-//     QUARTER,
-//     HALFYEAR,
-//     YEAR
-// function preChecking(value, period){
-//   switch(period){
-//     case YEAR:{
-//       if(value < 1000) return false;
-//       console.log('preChecking YEAR', '01.01.'+value)
-//       return dateValidation('01.01.'+value)
-//     }
-
-//     default: return false
-//   }
-// }
