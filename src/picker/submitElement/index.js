@@ -1,15 +1,10 @@
 import React, {useEffect, useRef} from 'react'
-import { usePickerState } from '../dates-picker-context'
 import './submitElement.css'
 import { START_DATE, END_DATE } from '../../utils/consts';
 
-export default function SubmitElement({id}){
+export default function SubmitElement({id, focusLocation, validFormData, startDate, endDate}){
 
-  const { 
-    validFormData, 
-    inputFocus,
-    dates 
-  } = usePickerState();
+  
 
   function formatDate(date) {
 
@@ -23,16 +18,16 @@ export default function SubmitElement({id}){
 
     return dd + '.' + mm + '.' + yy;
   }
-  const firstDate = dates.startDate.result ? formatDate(dates.startDate.result) : null
-  const secondDate = dates.endDate.result ? formatDate(dates.endDate.result) : null
+  const firstDate = startDate ? formatDate(startDate) : null
+  const secondDate = endDate ? formatDate(endDate) : null
   
   const submitEl = useRef(null)
 
   useEffect(() => {
-    if (submitEl.current.id === inputFocus) {
+    if (submitEl.current.id === focusLocation) {
       submitEl.current.focus()
     }
-  }, [inputFocus,validFormData])
+  }, [focusLocation,validFormData])
   
   // console.log(dates)
   // console.log('----------------------------')
@@ -40,22 +35,23 @@ export default function SubmitElement({id}){
   // console.log('dates.endDate.inputValue', dates.endDate.inputValue==='')
   // console.log('----------------------------')
   
-  const showErrorMessageStartDate = ((dates.startDate.inputValue==='')||(inputFocus===START_DATE)||(dates.startDate.isCorrect))? false : true;
-  const showErrorMessageEndDate = ((dates.endDate.inputValue==='')||(inputFocus===END_DATE)||(dates.endDate.isCorrect))? false : true;
+  //const showErrorMessageStartDate = ((dates.startDate.inputValue==='')||(inputFocus===START_DATE)||(dates.startDate.isCorrect))? false : true;
+  //const showErrorMessageEndDate = ((dates.endDate.inputValue==='')||(inputFocus===END_DATE)||(dates.endDate.isCorrect))? false : true;
  
-  const showErrorMessageEndLessStart = dates.startDate.isCorrect&&dates.endDate.isCorrect&&!validFormData
+  //const showErrorMessageEndLessStart = dates.startDate.isCorrect&&dates.endDate.isCorrect&&!validFormData
   // console.log('showErrorMessageStartDate',showErrorMessageStartDate)
   // console.log('showErrorMessageEndDate',showErrorMessageEndDate)
-
+  
   return(
     <div className="submitElement">
       
       {/* {!validFormData && (<div>Некорректные данные</div>)} */}
-      {showErrorMessageStartDate && (<div>{dates.startDate.errorMessage}</div>)}
+      {/* {showErrorMessageStartDate && (<div>{dates.startDate.errorMessage}</div>)}
       {showErrorMessageEndDate && (<div>{dates.endDate.errorMessage}</div>)}
-      {showErrorMessageEndLessStart && (<div>Ошибка: первая дата больше второй</div>)}
+      {showErrorMessageEndLessStart && (<div>Ошибка: первая дата больше второй</div>)} */}
       {validFormData && (<div>Данные корректны</div>)}
-      {(dates.startDate.isCorrect&&dates.endDate.isCorrect) && (<div>Выбран период с {firstDate} по {secondDate}</div>)}
+      {(!validFormData&&(startDate||endDate)) && (<div>Данные некорректны</div>)}
+      {(startDate&&endDate) && (<div>Выбран период с {firstDate} по {secondDate}</div>)}
       
       
 

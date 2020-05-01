@@ -1,68 +1,210 @@
-import React from 'react'
-import { PickerProvider } from './dates-picker-context'
+import React, {useReducer, useEffect, useRef} from 'react'
 import Select from './select/select'
 import './dates-picker.css'
-import SubmitElement from './submitElement';
-import CalendarContainer from './calendar-container'
-import InputContainer from './input-container'
+import './submitElement.css'
+import Input, { ArrowIcon } from './input/input'
+import Calendar from './calendars/calendar'
+import PeriodSideBar from './period-side-bar/period-side-bar'
+import {pickerReducer} from './pickerReducer'
+import { inputValueCreater, inputValueValidation, maskQualifier } from '../utils/converters'
+
+
 import {
   START_DATE,
   END_DATE,
   SUBMIT,
+  CHANGE_STEP,
+  CHANGE_PERIOD,
+  CHANGE_CALENDAR_TYPE,
+  SET_INPUT_FOCUS,
+  UPDATE_DATES,
+  VALID_FORM,
+  steps
 } from '../utils/consts'
 export default function DatesPicker(props) {
-  
-  //console.log('PROPS', props)
+  const changePeriodInSelect = (target) =>{
+    dispatch({ type: CHANGE_STEP, step: target.value })
+    dispatch({ type: CHANGE_PERIOD, period: target.value })
+    dispatch({ type: CHANGE_CALENDAR_TYPE, calendarType: target.value })
+    dispatch({ type: SET_INPUT_FOCUS, inputFocus: START_DATE})  
+    //console.log(state.step)
+  }
+
+
   let newProps = { 
     validFormData: false,
-    inputFocus: START_DATE,
-    needChangeFocus: false,//убрать
-    needInputValidation: false,//убрать
-    needFormValidation: false,//убрать
-    dates:{
-      [START_DATE]:{
-        name: START_DATE,
-        inputValue: '',
-        year: null,
-        period: props.period,
-        result: null,
-        isCorrect: false,
-        dateIsCorrect: false,
-        periodIsCorrect: true,        
-        errorMessage: null
-      },
-      [END_DATE]:{
-        name: END_DATE,
-        inputValue: '',
-        year: null,
-        period: props.period,
-        result: null,
-        isCorrect: false,
-        dateIsCorrect: false,
-        periodIsCorrect: true,
-        errorMessage: null
-      }
+    inputFocus: null,
+    startDate:{
+      name: START_DATE,
+      inputValue: '',
+      year: null,
+      result: null,
+      status: false,
+    },
+    endDate:{
+      name: END_DATE,
+      inputValue: '',
+      year: null,
+      result: null,
+      status: false,
     }
   }
 
   let expProps = Object.assign({}, props, newProps)
 
+  const [state, dispatch] = useReducer(pickerReducer, expProps)
+
+
+  //input's functions
+  const changeFocusLocation = (id) => {
+    // console.log(state.inputFocus)
+    // console.log(state.inputFocus)
+
+    if(id) {
+      dispatch({ type: SET_INPUT_FOCUS, inputFocus: id})  
+      return
+    }
+
+    if(!state.inputFocus){
+      console.log('!state.inputFocus')
+      return
+    }
+    if(state.startDate.result && state.endDate.result){
+      dispatch({ type: SET_INPUT_FOCUS, inputFocus: SUBMIT})
+      console.log('state.startDate.result && state.endDate.result')
+      return
+    }
+    if((state.inputFocus===START_DATE && !state.startDate.result)||(state.inputFocus===END_DATE && state.endDate.result)){
+      dispatch({ type: SET_INPUT_FOCUS, inputFocus: START_DATE})
+      console.log('state.inputFocus===START_DATE && !state.startDate.result')
+      
+      return
+    }
+    console.log('на второй')
+
+    dispatch({ type: SET_INPUT_FOCUS, inputFocus: END_DATE})
+  }
+
+  const changeInputValue = (id, value) => {
+    const resultValidation = inputValueValidation(id, value, state[id].year, state.period)
+    const newField = Object.assign({}, state[id])
+
+    newField.inputValue = (value==='__.__.____'||value==='_-ое полугодие') ? '' : value;
+    newField.year = state.year
+
+    
+    newField.result = resultValidation.newDate
+    
+
+    dispatch({type: UPDATE_DATES, id: id, value: newField})
+    
+  }
+
+  const inputsValidation = () => {
+    const newStartDate = Object.assign({}, state.startDate)
+    const newEndDate = Object.assign({}, state.endDate)
+
+    const validationResultStartDate = inputValueValidation(START_DATE, state.startDate.inputValue, state.startDate.year, state.period)
+    const validationResultEndDate = inputValueValidation(END_DATE, state.endDate.inputValue, state.endDate.year, state.period)
+
+    newStartDate.result = validationResultStartDate.newDate
+    newEndDate.result = validationResultEndDate.newDate
+  
+    dispatch({type: UPDATE_DATES, id: START_DATE, value: newStartDate})
+    dispatch({type: UPDATE_DATES, id: END_DATE, value: newEndDate})
+
+  }
+
+  useEffect(()=>{
+    console.log('state.startDate.result ', state.startDate.result)
+    console.log('state.endDate.result ', state.endDate.result)
+    changeFocusLocation()
+    if(state.startDate.result && state.endDate.result){
+      dispatch({type:VALID_FORM, validFormData: state.startDate.result<state.endDate.result})
+      return
+    }
+    dispatch({type:VALID_FORM, validFormData: false})
+
+  },[state.startDate.result, state.endDate.result])
+
+  useEffect(()=>{
+    console.log('изменился период')
+    inputsValidation()
+
+  },[state.period])
+
+//submitElem
+  const submitEl = useRef(null)
+
+  useEffect(() => {
+    if (submitEl.current.id === state.inputFocus) {
+      submitEl.current.focus()
+    }
+  }, [state.inputFocus, state.validFormData])
+  
+
+  //test
+
+  useEffect(()=>{
+    console.log(state.validFormData)
+  },[state.validFormData])
+
+  //const showCalendar = (inputFocus===START_DATE)||(inputFocus===END_DATE)
+
+
   return (
-    <PickerProvider initialData={expProps}>
+    <>
       <div className="dates-picker-wrapper">
-        <Select />
+        <Select changePeriod={changePeriodInSelect} step={state.step}/>
         
         <div>
-          <InputContainer/>
-          <CalendarContainer/>
+          <Input 
+            data={state[START_DATE]} 
+            focusLocation={state.inputFocus} 
+            period={state.period} 
+            placeholder="Начало" 
+            changeFocusLocation={changeFocusLocation}
+            changeInputValue={changeInputValue}
+            inputsValidation={inputsValidation}
+          />
+          <ArrowIcon />
+          <Input 
+            data={state[END_DATE]} 
+            focusLocation={state.inputFocus} 
+            period={state.period} 
+            placeholder="Конец" 
+            changeFocusLocation={changeFocusLocation}
+            changeInputValue={changeInputValue}
+            inputsValidation={inputsValidation}
+          />
+
+          {/* {showCalendar && (
+          <div aria-roledescription="datepicker" id="datepicker">
+						<Calendar />		
+						<PeriodSideBar />
+			    </div>)} */}
+
         </div>
 
       </div>
+      <div className="submitElement">
+        
+        {/* {!validFormData && (<div>Некорректные данные</div>)} */}
+        {/* {showErrorMessageStartDate && (<div>{dates.startDate.errorMessage}</div>)}
+        {showErrorMessageEndDate && (<div>{dates.endDate.errorMessage}</div>)}
+        {showErrorMessageEndLessStart && (<div>Ошибка: первая дата больше второй</div>)} */}
+        {state.validFormData && (<div>Данные корректны</div>)}
+        {(!state.validFormData&&(state.startDate.inputValue&&state.endDate.inputValue)) && (<div>Данные некорректны</div>)}
+        {/* {(startDate&&endDate) && (<div>Выбран период с {firstDate} по {secondDate}</div>)} */}
+        
+        
+
+        <input ref={submitEl} id={SUBMIT} type="submit" value="Отправить" disabled={!state.validFormData}></input>
+
+
+      </div>
       
-      <SubmitElement
-        id={SUBMIT}
-      />
-      
-    </PickerProvider>
+    </>
+    
   )
 }

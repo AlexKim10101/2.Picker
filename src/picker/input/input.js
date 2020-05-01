@@ -1,7 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react'
 import InputMask from 'react-input-mask';
 import classnames from 'classnames'
-import { usePickerState, usePickerDispatch } from '../dates-picker-context'
 import {  
   SET_INPUT_FOCUS,  
   SET_INPUT_VALIDATION,
@@ -12,30 +11,26 @@ import { inputValueCreater, inputValueValidation, maskQualifier } from '../../ut
 
 import './input.css'
 
-export default function Input({ id, placeholder }){
-  const {    
-    year,
-    inputFocus,    
-    dates,
-    period
-  } = usePickerState()
-  const dispatch = usePickerDispatch()
-  const [
-    DAY,
-    WEEK,
-    MONTH,
-    QUARTER,
-    HALFYEAR,
-    YEAR
-  ] = steps
+export default function Input(props){
   
+  const {
+    data, 
+    focusLocation, 
+    period, 
+    placeholder, 
+    changeFocusLocation, 
+    changeInputValue,
+    inputsValidation
+  } = props
+
   const myOnBlur = (e) =>{
     //console.log('событие ONBLUR target:', e.target)
     //console.log('событие ONBLUR relatedTarget', e.relatedTarget)
     //console.log('событие ONBLUR', e.relatedTarget.value)
+    console.log('onBlur')
 
     let value = e.target.id;
-    let name = value
+    //let name = value
     //console.log('test',e.relatedTarget)
     const clickOnDatePicker = ({relatedTarget})=>{
       if (relatedTarget === undefined) return false
@@ -52,34 +47,25 @@ export default function Input({ id, placeholder }){
       return
     }
     if(e.target.value == '') return
-
-    dispatch({type: SET_INPUT_VALIDATION, needInputValidation: true})
-    
+    //что происходит при потере фокуса
+    //dispatch({type: SET_INPUT_VALIDATION, needInputValidation: true})
   }
 
-  
   const onChange = ({ target }) => {
-    console.log('onChange')
-    console.log('value', dates[id].inputValue)
-
-    const value = target.value;
-    const newDates = inputValueCreater(dates, inputFocus, {inputValue: value, year: year})
-    dispatch({type:UPDATE_DATES, dates: newDates})
+    //console.log('onChange')
+    changeInputValue(target.id, target.value)
+    //что происходит при onChange
   
   }
   
-
-
-
   const myOnFocus = ({ target }) =>{
     console.log('фокус на Input', target.id)
-    dispatch({type: SET_INPUT_FOCUS, inputFocus: target.id})  
-    //console.log("SETFOCUS",target.id)  
+    changeFocusLocation(target.id)
   }
 
-  const rejected = !dates[id].isCorrect && id !== inputFocus && dates[id].inputValue!=='' ;
-  //const clsx = classnames('input-field', { active: id === inputFocus }, {rejected: rejected})
-  const clsx = classnames('input-field', { active: id === inputFocus })
+  //const rejected = !dates[id].isCorrect && id !== inputFocus && dates[id].inputValue!=='' ;
+  const rejected = false;
+  const clsx = classnames('input-field', { active: data.name === focusLocation })
 
 
   const inputEl = useRef(null)
@@ -87,49 +73,27 @@ export default function Input({ id, placeholder }){
   //ставит фокус при изменении значения inputFocus
   useEffect(() => {
     if(!inputEl)return
-    if (inputEl.current.id === inputFocus) {
+    if (inputEl.current.id === focusLocation) {
       inputEl.current.focus()
-      //console.log(period)
-      const newDates = inputValueCreater(dates, inputFocus, {period: period})
-      dispatch({type:UPDATE_DATES, dates: newDates})
-
     }
-  }, [inputFocus])
+  }, [focusLocation])
 
   function handleKeyPress(e){
 
     if(e.key==="Enter"){      
-      console.log(inputEl)
-      inputEl.current.blur()
+      //console.log(inputEl)
+      //inputEl.current.blur()
+      inputsValidation()
     }
   }
   
-  // console.log('------------------------------')
-  // console.log('dates[id].inputValue',dates[id].inputValue)
-  // console.log('------------------------------')
 
 
-  //исправляет баг при смене периода и пустом значении input
-  useEffect(()=>{
-    if((dates[id].inputValue==='__.__.____')||(dates[id].inputValue==='_-ое полугодие')){
-      const newDates = inputValueCreater(dates, id, {inputValue: ''})
-      dispatch({type:UPDATE_DATES, dates: newDates})
-    }
-  },[period])
-  
-
-  const mask = maskQualifier(dates, id, inputFocus)
+  const mask = maskQualifier(data.name, data.inputValue, focusLocation, period)
 
   useEffect(()=>{
-    //console.log(`новое значение ${id}: ${dates[id].inputValue} `)
-    const needOnBlur = inputValueValidation(id, dates[id].inputValue, dates[id].year, dates[id].period).verdict
-    //console.log(inputValueValidation(id, dates[id].inputValue, dates[id].year, dates[id].period))
-    if(needOnBlur){
-      inputEl.current.blur()
-    }else{
-      dispatch({type: SET_INPUT_VALIDATION, needInputValidation: true})
-    }
-  },[dates[id].inputValue])
+    
+  },[data.inputValue])
 
 
   return (
@@ -137,7 +101,7 @@ export default function Input({ id, placeholder }){
       
       <InputMask  
         inputRef={(node)=>inputEl.current=node}
-        value={dates[id].inputValue} 
+        value={data.inputValue} 
         mask={mask}			  
         alwaysShowMask={true}	
 		    onChange={(e)=>onChange(e)}
@@ -146,8 +110,8 @@ export default function Input({ id, placeholder }){
         onFocus={myOnFocus}
         onBlur={myOnBlur}
         autoComplete="off"        
-        id={id}
-        name={id}
+        id={data.name}
+        name={data.name}
         className={clsx}
 	    />
      

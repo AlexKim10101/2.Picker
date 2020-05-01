@@ -144,17 +144,17 @@ export function inputValueCreater(dates, input, newValues){
 }
 
 
-export function maskQualifier(dates, id, inputFocus){
-  switch (dates[id].period) {
+export function maskQualifier(id, inputValue, focusLocation, period){
+  switch (period) {
     case DAY:
     case WEEK: {
-      if((dates[id].inputValue === '')&&(id !== inputFocus)){
+      if((inputValue === '')&&(id !== focusLocation)){
         return ''
       }
       return "99.99.9999"
     }
     case HALFYEAR:{
-      if((dates[id].inputValue === '')&&(id !== inputFocus)){
+      if((inputValue === '')&&(id !== focusLocation)){
         return ''
       }
       return "9-ое полугодие"
@@ -163,3 +163,21 @@ export function maskQualifier(dates, id, inputFocus){
   }
 
 }
+
+// DAY,
+//     WEEK,
+//     MONTH,
+//     QUARTER,
+//     HALFYEAR,
+//     YEAR
+// function preChecking(value, period){
+//   switch(period){
+//     case YEAR:{
+//       if(value < 1000) return false;
+//       console.log('preChecking YEAR', '01.01.'+value)
+//       return dateValidation('01.01.'+value)
+//     }
+
+//     default: return false
+//   }
+// }
