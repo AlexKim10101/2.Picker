@@ -19,13 +19,12 @@ import {
   SET_INPUT_VALIDATION,  
 } from '../../utils/consts'
 import './calendar.css'
-import { inputValueCreater } from '../../utils/converters'
 
 const Calendar = ({ 
   calendarType, 
   year, 
   month, 
-  inputFocus, 
+  focusLocation, 
   step, 
   changeInputValue,
   changeClendarType,
@@ -41,18 +40,12 @@ const Calendar = ({
     YEAR
   ] = steps
 
-
-  
-  //const { calendarType, year, month, inputFocus, dates } = usePickerState()
-
   const d = (...args) => new Date(...args)
   const firstDay = d(year, month).getUTCDay()
-  // const y = d().getFullYear()~
   
   const daysInMonth = (x) => 32 - d(year, month + x, 32).getDate()
   const daysInCurrMonth = daysInMonth(0)
   const daysInPrevMonth = daysInMonth(-1)
-  // const daysInNextMonth = daysInMonth(1)
   
   const weeksAmount = Math.ceil((firstDay + daysInCurrMonth) / 7)
   const forepart = createSequence(daysInPrevMonth - firstDay + 1, daysInPrevMonth, 1)
@@ -68,17 +61,15 @@ const Calendar = ({
   
   const height = withDaysAWeek ? weeks.length * 37 + 82 : (calendarType === MONTH || calendarType === YEAR) ? 256 : 194
   
-  //const dispatch = usePickerDispatch()
 
   function handleClick(x){
-    console.log('______handleClick',inputFocus)
    
     let indexDayOfWeek
     let value
-    if(inputFocus == START_DATE){      
+    if(focusLocation == START_DATE){      
       indexDayOfWeek = 0;
     }
-    if(inputFocus == END_DATE){      
+    if(focusLocation == END_DATE){      
       indexDayOfWeek = 6;
     }  
 
@@ -115,14 +106,7 @@ const Calendar = ({
       }
     }
 
-    // const newValue = Object.assign({}, dates[inputFocus], {inputValue: value, year: year})
-    // const result = Object.assign({}, dates, {[inputFocus]:newValue})
-
-    // const newDates = inputValueCreater(dates, inputFocus, {inputValue: value, year: year})
-    // dispatch({type: UPDATE_DATES, dates: newDates})
-    // dispatch({type: SET_INPUT_VALIDATION, needInputValidation: true})
-    console.log('click', value, year)
-    changeInputValue(inputFocus, value)
+    changeInputValue(focusLocation, value)
   }
 
   const renderCalendar = (type) => {
@@ -142,12 +126,6 @@ const Calendar = ({
         break
     }
   }
-// const {
-  //   year,
-  //   month,
-  //   step,
-  //   calendarType,
-  // } = usePickerState()
    
   return (
     <div className="calendar" id="calendar">
@@ -169,7 +147,6 @@ const Calendar = ({
           changeYear={changeYear}
         />
 
-      
         <div>
           {withDaysAWeek && (
             <div className="calendar__days-a-week" >

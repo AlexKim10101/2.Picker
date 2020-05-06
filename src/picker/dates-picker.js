@@ -6,8 +6,7 @@ import Input, { ArrowIcon } from './input/input'
 import Calendar from './calendars/calendar'
 import PeriodSideBar from './period-side-bar/period-side-bar'
 import {pickerReducer} from './pickerReducer'
-import { inputValueCreater, inputValueValidation, maskQualifier, formatDate } from '../utils/converters'
-
+import { inputValueValidation, formatDate } from '../utils/converters'
 
 import {
   START_DATE,
@@ -21,14 +20,13 @@ import {
   SET_INPUT_FOCUS,
   UPDATE_DATES,
   VALID_FORM,
-  steps
 } from '../utils/consts'
 export default function DatesPicker(props) {
   
 
   let newProps = { 
     validFormData: false,
-    inputFocus: null,
+    focusLocation: null,
     startDate:{
       name: START_DATE,
       inputValue: '',
@@ -51,49 +49,30 @@ export default function DatesPicker(props) {
   const changePeriodInSelect = (target) => {
     dispatch({ type: CHANGE_STEP, step: target.value })
     dispatch({ type: CHANGE_PERIOD, period: target.value })
-    //dispatch({ type: CHANGE_CALENDAR_TYPE, calendarType: target.value })
-    dispatch({ type: SET_INPUT_FOCUS, inputFocus: START_DATE})  
+    dispatch({ type: SET_INPUT_FOCUS, focusLocation: START_DATE})  
   }
 
-  const changeYear = (year) => {
-    dispatch({ type: CHANGE_YEAR, year: year })
-  }
-
-  const changeMonth = (month) => {
-    dispatch({ type: CHANGE_MONTH, month: month })
-
-  }
-
-  const changeClendarType = (type) =>{
-    dispatch({ type: CHANGE_CALENDAR_TYPE, calendarType: type })
-  }
-
+  
   //input's functions
   const changeFocusLocation = (id) => {
 
     if(id) {
-      dispatch({ type: SET_INPUT_FOCUS, inputFocus: id})  
+      dispatch({ type: SET_INPUT_FOCUS, focusLocation: id})  
       return
     }
-
-    // if(!state.inputFocus){
-    //   console.log('!state.inputFocus')
-    //   return
-    // }
 
     if(state.startDate.result && state.endDate.result){
-      dispatch({ type: SET_INPUT_FOCUS, inputFocus: SUBMIT})
-      console.log('state.startDate.result && state.endDate.result')
+      dispatch({ type: SET_INPUT_FOCUS, focusLocation: SUBMIT})
       return
     }
 
-    if(state.inputFocus===START_DATE && state.startDate.result){
-      dispatch({ type: SET_INPUT_FOCUS, inputFocus: END_DATE})
+    if(state.focusLocation===START_DATE && state.startDate.result){
+      dispatch({ type: SET_INPUT_FOCUS, focusLocation: END_DATE})
       return
     }
 
-    if(state.inputFocus===END_DATE && state.endDate.result){
-      dispatch({ type: SET_INPUT_FOCUS, inputFocus: START_DATE})
+    if(state.focusLocation===END_DATE && state.endDate.result){
+      dispatch({ type: SET_INPUT_FOCUS, focusLocation: START_DATE})
       return
     }
     
@@ -150,33 +129,15 @@ export default function DatesPicker(props) {
   const submitEl = useRef(null)
 
   useEffect(() => {
-    if (submitEl.current.id === state.inputFocus) {
+    if (submitEl.current.id === state.focusLocation) {
       submitEl.current.focus()
     }
-  }, [state.inputFocus, state.validFormData])
+  }, [state.focusLocation, state.validFormData])
   
-  const startDateIsOk = (state.startDate.inputValue===''||state.inputFocus===START_DATE||state.startDate.result)? true : false
-  const endDateIsOk = (state.endDate.inputValue===''||state.inputFocus===END_DATE||state.endDate.result)? true : false
-  const showErrorMessage = !startDateIsOk||!endDateIsOk||(!state.validFormData&&state.startDate.result&&state.endDate.result&&state.inputFocus!==START_DATE&&state.inputFocus!==END_DATE)
-
-
-  //const showErrorMessage = (state.inputFocus!==START_DATE&&state.inputFocus!==END_DATE)
-  //test
-
-  useEffect(()=>{
-    console.log(state.validFormData)
-  },[state.validFormData])
-
-
-
-  useEffect(()=>{
-    console.log(state.inputFocus)
-  },[state.inputFocus])
-  const showCalendar = (state.inputFocus===START_DATE)||(state.inputFocus===END_DATE)
-
-
-
-
+  const startDateIsOk = (state.startDate.inputValue===''||state.focusLocation===START_DATE||state.startDate.result)? true : false
+  const endDateIsOk = (state.endDate.inputValue===''||state.focusLocation===END_DATE||state.endDate.result)? true : false
+  const showErrorMessage = !startDateIsOk||!endDateIsOk||(!state.validFormData&&state.startDate.result&&state.endDate.result&&state.focusLocation!==START_DATE&&state.focusLocation!==END_DATE)
+  const showCalendar = (state.focusLocation===START_DATE)||(state.focusLocation===END_DATE)
 
   return (
     <>
@@ -186,7 +147,7 @@ export default function DatesPicker(props) {
         <div>
           <Input 
             data={state[START_DATE]} 
-            focusLocation={state.inputFocus} 
+            focusLocation={state.focusLocation} 
             period={state.period} 
             placeholder="Начало" 
             changeFocusLocation={changeFocusLocation}
@@ -195,7 +156,7 @@ export default function DatesPicker(props) {
           <ArrowIcon />
           <Input 
             data={state[END_DATE]} 
-            focusLocation={state.inputFocus} 
+            focusLocation={state.focusLocation} 
             period={state.period} 
             placeholder="Конец" 
             changeFocusLocation={changeFocusLocation}
@@ -210,11 +171,11 @@ export default function DatesPicker(props) {
               calendarType={state.calendarType}
               year={state.year}
               month={state.month}
-              inputFocus={state.inputFocus}
+              focusLocation={state.focusLocation}
               changeInputValue={changeInputValue}
-              changeClendarType={changeClendarType}
-              changeMonth={changeMonth}
-              changeYear={changeYear}
+              changeClendarType={(type)=>dispatch({ type: CHANGE_CALENDAR_TYPE, calendarType: type })}
+              changeMonth={(month)=>dispatch({ type: CHANGE_MONTH, month: month })}
+              changeYear={(year)=>dispatch({ type: CHANGE_YEAR, year: year })}
             />		
             <PeriodSideBar 
               period={state.period} 

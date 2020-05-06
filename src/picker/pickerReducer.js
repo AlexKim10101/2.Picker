@@ -46,7 +46,7 @@ export function pickerReducer(state, action) {
         case SET_RESULT_END_DATE:
             return { ...state, resultEndDate: action.resultEndDate}
         case SET_INPUT_FOCUS:
-            return { ...state, inputFocus: action.inputFocus}
+            return { ...state, focusLocation: action.focusLocation}
         case SET_FOCUS_TRANSFER:
             return { ...state, needChangeFocus: action.needChangeFocus}    
         case SET_INPUT_VALIDATION:

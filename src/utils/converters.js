@@ -54,8 +54,7 @@ export function inputValueValidation(fieldName, value, year, period){
 
     let newDate = null;
     let changeIsCorrect = false;
-    // let value = dateObj.value;
-    // let year = dateObj.year
+    
 
     if(fieldName == START_DATE){
       monthModificator = MONTH_MODIFICATOR_FOR_START
@@ -129,7 +128,6 @@ export function inputValueValidation(fieldName, value, year, period){
         }
       }
     }
-    //console.log('newDate',newDate)
     
     return {verdict: changeIsCorrect, newDate: newDate}
       
@@ -137,7 +135,6 @@ export function inputValueValidation(fieldName, value, year, period){
 
 
 export function inputValueCreater(dates, input, newValues){
-  //console.log({arguments[dates]})
   const datesCopy = Object.assign({}, dates)
   const newInputValues = Object.assign({}, datesCopy[input], newValues)
   return Object.assign({}, datesCopy, {[input]:newInputValues})
@@ -177,20 +174,3 @@ export function formatDate(date) {
   return dd + '.' + mm + '.' + yy;
 }
 
-// DAY,
-//     WEEK,
-//     MONTH,
-//     QUARTER,
-//     HALFYEAR,
-//     YEAR
-// function preChecking(value, period){
-//   switch(period){
-//     case YEAR:{
-//       if(value < 1000) return false;
-//       console.log('preChecking YEAR', '01.01.'+value)
-//       return dateValidation('01.01.'+value)
-//     }
-
-//     default: return false
-//   }
-// }
