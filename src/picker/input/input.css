@@ -27,7 +27,7 @@
 
 .input-field.rejected{
   color: red;
-  border-bottom: 2px solid red;
+  /* border-bottom: 2px solid red; */
 }
 
 .arrow-icon {

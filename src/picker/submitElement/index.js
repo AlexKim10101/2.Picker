@@ -29,18 +29,7 @@ export default function SubmitElement({id, focusLocation, validFormData, startDa
     }
   }, [focusLocation,validFormData])
   
-  // console.log(dates)
-  // console.log('----------------------------')
-
-  // console.log('dates.endDate.inputValue', dates.endDate.inputValue==='')
-  // console.log('----------------------------')
-  
-  //const showErrorMessageStartDate = ((dates.startDate.inputValue==='')||(inputFocus===START_DATE)||(dates.startDate.isCorrect))? false : true;
-  //const showErrorMessageEndDate = ((dates.endDate.inputValue==='')||(inputFocus===END_DATE)||(dates.endDate.isCorrect))? false : true;
- 
-  //const showErrorMessageEndLessStart = dates.startDate.isCorrect&&dates.endDate.isCorrect&&!validFormData
-  // console.log('showErrorMessageStartDate',showErrorMessageStartDate)
-  // console.log('showErrorMessageEndDate',showErrorMessageEndDate)
+  console.log('validFormData', validFormData)
   
   return(
     <div className="submitElement">
@@ -49,9 +38,11 @@ export default function SubmitElement({id, focusLocation, validFormData, startDa
       {/* {showErrorMessageStartDate && (<div>{dates.startDate.errorMessage}</div>)}
       {showErrorMessageEndDate && (<div>{dates.endDate.errorMessage}</div>)}
       {showErrorMessageEndLessStart && (<div>Ошибка: первая дата больше второй</div>)} */}
+      
       {validFormData && (<div>Данные корректны</div>)}
       {(!validFormData&&(startDate||endDate)) && (<div>Данные некорректны</div>)}
-      {(startDate&&endDate) && (<div>Выбран период с {firstDate} по {secondDate}</div>)}
+
+      {(startDate||endDate) && (<div>Выбран период с {firstDate} по {secondDate}</div>)}
       
       
 

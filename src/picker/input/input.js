@@ -1,38 +1,31 @@
-import React, {useState, useEffect, useRef} from 'react'
+import React, { useEffect, useRef} from 'react'
 import InputMask from 'react-input-mask';
 import classnames from 'classnames'
 import {  
-  SET_INPUT_FOCUS,  
   START_DATE,
   END_DATE,
-  SET_INPUT_VALIDATION,
-  UPDATE_DATES,
-  steps
 } from '../../utils/consts'
-import { inputValueCreater, inputValueValidation, maskQualifier } from '../../utils/converters'
+import { maskQualifier } from '../../utils/converters'
 
 import './input.css'
 
-export default function Input(props){
+export default function Input({
+  data, 
+  focusLocation, 
+  period, 
+  placeholder, 
+  changeFocusLocation, 
+  changeInputValue,
+}){
   
-  const {
-    data, 
-    focusLocation, 
-    period, 
-    placeholder, 
-    changeFocusLocation, 
-    changeInputValue,
-  } = props
+
+  const rejected = (focusLocation !== data.name && !data.result && data.inputValue)  
+  const clsx = classnames('input-field', { active: data.name === focusLocation, rejected: rejected})
+  const inputEl = useRef(null)
+  const mask = maskQualifier(data.name, data.inputValue, focusLocation, period)
 
   const myOnBlur = (e) =>{
-    //console.log('событие ONBLUR target:', e.target)
-    //console.log('событие ONBLUR relatedTarget', e.relatedTarget)
-    //console.log('событие ONBLUR', e.relatedTarget.value)
-    console.log('onBlur')
-
-    let value = e.target.id;
-    //let name = value
-    //console.log('test',e.relatedTarget)
+    //console.log('onBlur')
     const clickOnDatePicker = ({relatedTarget})=>{
       if (relatedTarget === undefined) return false
       if (relatedTarget === null) return false;
@@ -44,67 +37,30 @@ export default function Input(props){
       return false
     }
     if (clickOnDatePicker(e)){    
-      console.log('клик по календарю')  
+      //console.log('клик по календарю')  
       return
     }
-    //if(e.target.value == '') return
-    console.log('клик не по календарю')
-    //console.log('e.relatedTarget', e.relatedTarget.id)
-    if((!e.relatedTarget)||((e.relatedTarget.id===START_DATE)||(e.relatedTarget.id===END_DATE))){
+    //console.log('клик не по календарю')    
+    if((!e.relatedTarget)||(e.relatedTarget.id===START_DATE)||(e.relatedTarget.id===END_DATE)){
       changeFocusLocation('Not on input')
-
       return
     }
-    // if((e.relatedTarget.id===START_DATE)||(e.relatedTarget.id===END_DATE)){
-    //   return
-    // }
-
   }
 
-  const onChange = ({ target }) => {
-    //console.log('onChange')
-    changeInputValue(target.id, target.value)
-    //что происходит при onChange
-  
-  }
-  
-  const myOnFocus = ({ target }) =>{
-    console.log('фокус на Input', target.id)
-    changeFocusLocation(target.id)
+  function handleKeyPress(e){
+    if(e.key==="Enter"){      
+      console.log('enter')
+      if(focusLocation===START_DATE){changeFocusLocation(END_DATE)}
+      if(focusLocation===END_DATE){changeFocusLocation(START_DATE)}
+    }
   }
 
-  //const rejected = !dates[id].isCorrect && id !== inputFocus && dates[id].inputValue!=='' ;
-  const rejected = false;
-  const clsx = classnames('input-field', { active: data.name === focusLocation })
-
-
-  const inputEl = useRef(null)
-
-  //ставит фокус при изменении значения inputFocus
   useEffect(() => {
     if(!inputEl)return
     if (inputEl.current.id === focusLocation) {
       inputEl.current.focus()
     }
   }, [focusLocation])
-
-  function handleKeyPress(e){
-
-    if(e.key==="Enter"){      
-      console.log('enter')
-      //inputEl.current.blur()
-      //inputsValidation()
-    }
-  }
-  
-
-
-  const mask = maskQualifier(data.name, data.inputValue, focusLocation, period)
-
-  useEffect(()=>{
-    
-  },[data.inputValue])
-
 
   return (
     <div className="input-wrapper">      
@@ -114,10 +70,10 @@ export default function Input(props){
         value={data.inputValue} 
         mask={mask}			  
         alwaysShowMask={true}	
-		    onChange={(e)=>onChange(e)}
+		    onChange={({target})=>changeInputValue(target.id, target.value)  }
 	      onKeyPress={handleKeyPress}		  
         placeholder={placeholder}
-        onFocus={myOnFocus}
+        onFocus={({target})=>changeFocusLocation(target.id)}
         onBlur={myOnBlur}
         autoComplete="off"        
         id={data.name}
@@ -125,7 +81,6 @@ export default function Input(props){
         className={clsx}
 	    />
      
-
     </div>
   )
 }

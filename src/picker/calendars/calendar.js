@@ -121,6 +121,7 @@ const Calendar = ({
     // const newDates = inputValueCreater(dates, inputFocus, {inputValue: value, year: year})
     // dispatch({type: UPDATE_DATES, dates: newDates})
     // dispatch({type: SET_INPUT_VALIDATION, needInputValidation: true})
+    console.log('click', value, year)
     changeInputValue(inputFocus, value)
   }
 

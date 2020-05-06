@@ -6,7 +6,7 @@ import Input, { ArrowIcon } from './input/input'
 import Calendar from './calendars/calendar'
 import PeriodSideBar from './period-side-bar/period-side-bar'
 import {pickerReducer} from './pickerReducer'
-import { inputValueCreater, inputValueValidation, maskQualifier } from '../utils/converters'
+import { inputValueCreater, inputValueValidation, maskQualifier, formatDate } from '../utils/converters'
 
 
 import {
@@ -70,18 +70,16 @@ export default function DatesPicker(props) {
 
   //input's functions
   const changeFocusLocation = (id) => {
-    // console.log(state.inputFocus)
-    // console.log(state.inputFocus)
 
     if(id) {
       dispatch({ type: SET_INPUT_FOCUS, inputFocus: id})  
       return
     }
 
-    if(!state.inputFocus){
-      console.log('!state.inputFocus')
-      return
-    }
+    // if(!state.inputFocus){
+    //   console.log('!state.inputFocus')
+    //   return
+    // }
 
     if(state.startDate.result && state.endDate.result){
       dispatch({ type: SET_INPUT_FOCUS, inputFocus: SUBMIT})
@@ -102,7 +100,7 @@ export default function DatesPicker(props) {
   }
 
   const changeInputValue = (id, value) => {
-    const resultValidation = inputValueValidation(id, value, state[id].year, state.period)
+    const resultValidation = inputValueValidation(id, value, state.year, state.period)
     const newField = Object.assign({}, state[id])
 
     newField.inputValue = (value==='__.__.____'||value==='_-ое полугодие') ? '' : value;
@@ -159,8 +157,10 @@ export default function DatesPicker(props) {
   
   const startDateIsOk = (state.startDate.inputValue===''||state.inputFocus===START_DATE||state.startDate.result)? true : false
   const endDateIsOk = (state.endDate.inputValue===''||state.inputFocus===END_DATE||state.endDate.result)? true : false
-  const showErrorMessage = !startDateIsOk||!endDateIsOk
+  const showErrorMessage = !startDateIsOk||!endDateIsOk||(!state.validFormData&&state.startDate.result&&state.endDate.result&&state.inputFocus!==START_DATE&&state.inputFocus!==END_DATE)
 
+
+  //const showErrorMessage = (state.inputFocus!==START_DATE&&state.inputFocus!==END_DATE)
   //test
 
   useEffect(()=>{
@@ -173,6 +173,9 @@ export default function DatesPicker(props) {
     console.log(state.inputFocus)
   },[state.inputFocus])
   const showCalendar = (state.inputFocus===START_DATE)||(state.inputFocus===END_DATE)
+
+
+
 
 
   return (
@@ -227,6 +230,7 @@ export default function DatesPicker(props) {
 
         {state.validFormData && (<div>Данные корректны</div>)}
         {showErrorMessage && (<div>Данные некорректны</div>)}
+        {(state.startDate.result && state.endDate.result) &&(<div>Выбран период с {formatDate(state.startDate.result)} по {formatDate(state.endDate.result)}</div>)}
         
         <input ref={submitEl} id={SUBMIT} type="submit" value="Отправить" disabled={!state.validFormData}></input>
 
