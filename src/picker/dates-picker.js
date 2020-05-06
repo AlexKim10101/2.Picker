@@ -30,7 +30,13 @@ export default function DatesPicker(props) {
     //console.log(state.step)
   }
 
+  const changePeriodInSideBar = (period) =>{
+    //console.log(period)
+    dispatch({ type: CHANGE_PERIOD, period: period })
+  }
 
+
+  
   let newProps = { 
     validFormData: false,
     inputFocus: null,
@@ -39,14 +45,12 @@ export default function DatesPicker(props) {
       inputValue: '',
       year: null,
       result: null,
-      status: false,
     },
     endDate:{
       name: END_DATE,
       inputValue: '',
       year: null,
       result: null,
-      status: false,
     }
   }
 
@@ -91,14 +95,11 @@ export default function DatesPicker(props) {
 
     newField.inputValue = (value==='__.__.____'||value==='_-ое полугодие') ? '' : value;
     newField.year = state.year
-
-    
     newField.result = resultValidation.newDate
-    
 
     dispatch({type: UPDATE_DATES, id: id, value: newField})
-    
   }
+
 
   const inputsValidation = () => {
     const newStartDate = Object.assign({}, state.startDate)
@@ -109,7 +110,7 @@ export default function DatesPicker(props) {
 
     newStartDate.result = validationResultStartDate.newDate
     newEndDate.result = validationResultEndDate.newDate
-  
+
     dispatch({type: UPDATE_DATES, id: START_DATE, value: newStartDate})
     dispatch({type: UPDATE_DATES, id: END_DATE, value: newEndDate})
 
@@ -130,8 +131,9 @@ export default function DatesPicker(props) {
   useEffect(()=>{
     console.log('изменился период')
     inputsValidation()
-
+    dispatch({ type: CHANGE_CALENDAR_TYPE, calendarType: state.period })
   },[state.period])
+
 
 //submitElem
   const submitEl = useRef(null)
@@ -142,6 +144,9 @@ export default function DatesPicker(props) {
     }
   }, [state.inputFocus, state.validFormData])
   
+  const startDateIsOk = (state.startDate.inputValue===''||state.inputFocus===START_DATE||state.startDate.result)? true : false
+  const endDateIsOk = (state.endDate.inputValue===''||state.inputFocus===END_DATE||state.endDate.result)? true : false
+  const showErrorMessage = !startDateIsOk||!endDateIsOk
 
   //test
 
@@ -149,7 +154,7 @@ export default function DatesPicker(props) {
     console.log(state.validFormData)
   },[state.validFormData])
 
-  //const showCalendar = (inputFocus===START_DATE)||(inputFocus===END_DATE)
+  const showCalendar = (state.inputFocus===START_DATE)||(state.inputFocus===END_DATE)
 
 
   return (
@@ -178,29 +183,21 @@ export default function DatesPicker(props) {
             inputsValidation={inputsValidation}
           />
 
-          {/* {showCalendar && (
+          {showCalendar && (
           <div aria-roledescription="datepicker" id="datepicker">
-						<Calendar />		
-						<PeriodSideBar />
-			    </div>)} */}
+						{/* <Calendar />		 */}
+						<PeriodSideBar period={state.period} step={state.step} changePeriod={changePeriodInSideBar}/>
+			    </div>)}
 
         </div>
 
       </div>
       <div className="submitElement">
-        
-        {/* {!validFormData && (<div>Некорректные данные</div>)} */}
-        {/* {showErrorMessageStartDate && (<div>{dates.startDate.errorMessage}</div>)}
-        {showErrorMessageEndDate && (<div>{dates.endDate.errorMessage}</div>)}
-        {showErrorMessageEndLessStart && (<div>Ошибка: первая дата больше второй</div>)} */}
+
         {state.validFormData && (<div>Данные корректны</div>)}
-        {(!state.validFormData&&(state.startDate.inputValue&&state.endDate.inputValue)) && (<div>Данные некорректны</div>)}
-        {/* {(startDate&&endDate) && (<div>Выбран период с {firstDate} по {secondDate}</div>)} */}
+        {showErrorMessage && (<div>Данные некорректны</div>)}
         
-        
-
         <input ref={submitEl} id={SUBMIT} type="submit" value="Отправить" disabled={!state.validFormData}></input>
-
 
       </div>
       
