@@ -3,6 +3,8 @@ import InputMask from 'react-input-mask';
 import classnames from 'classnames'
 import {  
   SET_INPUT_FOCUS,  
+  START_DATE,
+  END_DATE,
   SET_INPUT_VALIDATION,
   UPDATE_DATES,
   steps
@@ -47,7 +49,15 @@ export default function Input(props){
     }
     //if(e.target.value == '') return
     console.log('клик не по календарю')
-    console.log('e.relatedTarget', e.relatedTarget.id)
+    //console.log('e.relatedTarget', e.relatedTarget.id)
+    if((!e.relatedTarget)||((e.relatedTarget.id===START_DATE)||(e.relatedTarget.id===END_DATE))){
+      changeFocusLocation('Not on input')
+
+      return
+    }
+    // if((e.relatedTarget.id===START_DATE)||(e.relatedTarget.id===END_DATE)){
+    //   return
+    // }
 
   }
 

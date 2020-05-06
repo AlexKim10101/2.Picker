@@ -167,6 +167,11 @@ export default function DatesPicker(props) {
     console.log(state.validFormData)
   },[state.validFormData])
 
+
+
+  useEffect(()=>{
+    console.log(state.inputFocus)
+  },[state.inputFocus])
   const showCalendar = (state.inputFocus===START_DATE)||(state.inputFocus===END_DATE)
 
 
