@@ -16,27 +16,16 @@ import {
   CHANGE_STEP,
   CHANGE_PERIOD,
   CHANGE_CALENDAR_TYPE,
+  CHANGE_YEAR,
+  CHANGE_MONTH,
   SET_INPUT_FOCUS,
   UPDATE_DATES,
   VALID_FORM,
   steps
 } from '../utils/consts'
 export default function DatesPicker(props) {
-  const changePeriodInSelect = (target) =>{
-    dispatch({ type: CHANGE_STEP, step: target.value })
-    dispatch({ type: CHANGE_PERIOD, period: target.value })
-    dispatch({ type: CHANGE_CALENDAR_TYPE, calendarType: target.value })
-    dispatch({ type: SET_INPUT_FOCUS, inputFocus: START_DATE})  
-    //console.log(state.step)
-  }
-
-  const changePeriodInSideBar = (period) =>{
-    //console.log(period)
-    dispatch({ type: CHANGE_PERIOD, period: period })
-  }
-
-
   
+
   let newProps = { 
     validFormData: false,
     inputFocus: null,
@@ -59,6 +48,26 @@ export default function DatesPicker(props) {
   const [state, dispatch] = useReducer(pickerReducer, expProps)
 
 
+  const changePeriodInSelect = (target) => {
+    dispatch({ type: CHANGE_STEP, step: target.value })
+    dispatch({ type: CHANGE_PERIOD, period: target.value })
+    dispatch({ type: CHANGE_CALENDAR_TYPE, calendarType: target.value })
+    dispatch({ type: SET_INPUT_FOCUS, inputFocus: START_DATE})  
+  }
+
+  const changeYear = (year) => {
+    dispatch({ type: CHANGE_YEAR, year: year })
+  }
+
+  const changeMonth = (month) => {
+    dispatch({ type: CHANGE_MONTH, month: month })
+
+  }
+
+  const changeClendarType = (type) =>{
+    dispatch({ type: CHANGE_CALENDAR_TYPE, calendarType: type })
+  }
+
   //input's functions
   const changeFocusLocation = (id) => {
     // console.log(state.inputFocus)
@@ -73,20 +82,22 @@ export default function DatesPicker(props) {
       console.log('!state.inputFocus')
       return
     }
-    if(state.startDate.result && state.endDate.result){
-      dispatch({ type: SET_INPUT_FOCUS, inputFocus: SUBMIT})
-      console.log('state.startDate.result && state.endDate.result')
-      return
-    }
-    if((state.inputFocus===START_DATE && !state.startDate.result)||(state.inputFocus===END_DATE && state.endDate.result)){
-      dispatch({ type: SET_INPUT_FOCUS, inputFocus: START_DATE})
-      console.log('state.inputFocus===START_DATE && !state.startDate.result')
-      
-      return
-    }
-    console.log('на второй')
 
-    dispatch({ type: SET_INPUT_FOCUS, inputFocus: END_DATE})
+    // if(state.startDate.result && state.endDate.result){
+    //   dispatch({ type: SET_INPUT_FOCUS, inputFocus: SUBMIT})
+    //   console.log('state.startDate.result && state.endDate.result')
+    //   return
+    // }
+
+    // if((state.inputFocus===START_DATE && !state.startDate.result)||(state.inputFocus===END_DATE && state.endDate.result)){
+    //   dispatch({ type: SET_INPUT_FOCUS, inputFocus: START_DATE})
+    //   console.log('state.inputFocus===START_DATE && !state.startDate.result')
+      
+    //   return
+    // }
+    // console.log('на второй')
+
+    // dispatch({ type: SET_INPUT_FOCUS, inputFocus: END_DATE})
   }
 
   const changeInputValue = (id, value) => {
@@ -170,7 +181,6 @@ export default function DatesPicker(props) {
             placeholder="Начало" 
             changeFocusLocation={changeFocusLocation}
             changeInputValue={changeInputValue}
-            inputsValidation={inputsValidation}
           />
           <ArrowIcon />
           <Input 
@@ -180,13 +190,28 @@ export default function DatesPicker(props) {
             placeholder="Конец" 
             changeFocusLocation={changeFocusLocation}
             changeInputValue={changeInputValue}
-            inputsValidation={inputsValidation}
           />
 
           {showCalendar && (
           <div aria-roledescription="datepicker" id="datepicker">
-						{/* <Calendar />		 */}
-						<PeriodSideBar period={state.period} step={state.step} changePeriod={changePeriodInSideBar}/>
+
+{/* { calendarType, year, month, inputFocus, dates } */}
+            <Calendar 
+              step={state.step}
+              calendarType={state.calendarType}
+              year={state.year}
+              month={state.month}
+              inputFocus={state.inputFocus}
+              changeInputValue={changeInputValue}
+              changeClendarType={changeClendarType}
+              changeMonth={changeMonth}
+              changeYear={changeYear}
+            />		
+            <PeriodSideBar 
+              period={state.period} 
+              step={state.step} 
+              changePeriod={(p)=>dispatch({ type: CHANGE_PERIOD, period: p })}
+            />
 			    </div>)}
 
         </div>

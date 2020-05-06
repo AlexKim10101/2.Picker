@@ -20,7 +20,6 @@ export default function Input(props){
     placeholder, 
     changeFocusLocation, 
     changeInputValue,
-    inputsValidation
   } = props
 
   const myOnBlur = (e) =>{
@@ -81,9 +80,9 @@ export default function Input(props){
   function handleKeyPress(e){
 
     if(e.key==="Enter"){      
-      //console.log(inputEl)
+      console.log('enter')
       //inputEl.current.blur()
-      inputsValidation()
+      //inputsValidation()
     }
   }
   

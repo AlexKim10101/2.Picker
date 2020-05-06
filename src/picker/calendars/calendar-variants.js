@@ -1,12 +1,12 @@
 import React from 'react'
 import classnames from 'classnames'
 import { v4 as uuidv4 } from 'uuid'
-import { usePickerState } from '../dates-picker-context'
+//import { usePickerState } from '../dates-picker-context'
 import { steps, dayStatus} from '../../utils/consts'
 
 
-export const DaysWeeksRows = ({ data, onClick }) => {
-  const { calendarType } = usePickerState()
+export const DaysWeeksRows = ({ data, onClick, calendarType }) => {
+  //const { calendarType } = usePickerState()
  
   const [DAY, WEEK] = steps
   const { curr, out } = dayStatus
@@ -37,8 +37,8 @@ export const DaysWeeksRows = ({ data, onClick }) => {
 }
 
 
-export const MonthsYearsRows = ({ data, onClick }) => {
-  const { calendarType } = usePickerState()
+export const MonthsYearsRows = ({ data, onClick, calendarType}) => {
+  //const { calendarType } = usePickerState()
   //const dispatch = usePickerDispatch()
 
   const [

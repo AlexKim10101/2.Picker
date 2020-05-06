@@ -1,6 +1,6 @@
 import React from 'react'
 import classnames from 'classnames'
-import { usePickerState, usePickerDispatch } from '../../dates-picker-context'
+//import { usePickerState, usePickerDispatch } from '../../dates-picker-context'
 import {
   steps,
   calendarTypes,
@@ -14,14 +14,16 @@ import {
 import './heading-markers.css'
 
 
-export default function HeadingMarkers({ withDaysAWeek }) {
-  const {
-    year,
-    month,
-    step,
-    calendarType,
-    inputFocus,
-  } = usePickerState()
+export default function HeadingMarkers({ 
+  year, 
+  month, 
+  step, 
+  calendarType, 
+  withDaysAWeek,
+  changeClendarType,
+  changeMonth,
+  changeYear }) {
+  
 
   const [
     DAY,
@@ -35,49 +37,67 @@ export default function HeadingMarkers({ withDaysAWeek }) {
   const monthFullName = monthsFull[month]
   const allowedCalendarTypes = calendarTypes.slice(0, calendarTypes.indexOf(step) + 1)
   
-  const dispatch = usePickerDispatch()
+  //const dispatch = usePickerDispatch()
 
   const intervalChanges = (onNext, onPrev) => ({ onNext, onPrev })
 
   const calendarTypeChanges = (type) => {
     const isLast = calendarType === allowedCalendarTypes[allowedCalendarTypes.length - 1]
-    if (!isLast) dispatch({ type: CHANGE_CALENDAR_TYPE, calendarType: type })
+    if (!isLast) {
+      changeClendarType(type)
+    }
   }
 
   const onMonthChanges = intervalChanges(
     () => {
       if (month === 11) {
-        dispatch({ type: CHANGE_YEAR, year: year + 1 })
-        dispatch({ type: CHANGE_MONTH, month: 0 })
+        //dispatch({ type: CHANGE_YEAR, year: year + 1 })
+        changeYear(year + 1 )
+        //dispatch({ type: CHANGE_MONTH, month: 0 })
+        changeMonth(0)
       } else {
-        dispatch({ type: CHANGE_MONTH, month: month + 1 })
+        //dispatch({ type: CHANGE_MONTH, month: month + 1 })
+        changeMonth(month + 1)
       }
     },
     () => {
       if (month === 0) {
-        dispatch({ type: CHANGE_YEAR, year: year - 1 })
-        dispatch({ type: CHANGE_MONTH, month: 11 })
+        //dispatch({ type: CHANGE_YEAR, year: year - 1 })
+        changeYear(year - 1 )
+
+        //dispatch({ type: CHANGE_MONTH, month: 11 })
+        changeMonth(11)
+
       } else {
-        dispatch({ type: CHANGE_MONTH, month: month - 1 })
+        //dispatch({ type: CHANGE_MONTH, month: month - 1 })
+        changeMonth(month - 1)
       }
     }
   )
 
   const onYearChanges = intervalChanges(
     () => {
-      dispatch({ type: CHANGE_YEAR, year: year + 1 })
+      //dispatch({ type: CHANGE_YEAR, year: year + 1 })
+      changeYear(year + 1 )
+
     },
     () => {
-      dispatch({ type: CHANGE_YEAR, year: year - 1 })
+      //dispatch({ type: CHANGE_YEAR, year: year - 1 })
+      changeYear(year - 1 )
+
     }  
   )
 
   const onDecadeChanges = intervalChanges(
     () => {
-      dispatch({ type: CHANGE_YEAR, year: year + 11 })
+      //dispatch({ type: CHANGE_YEAR, year: year + 11 })
+      changeYear(year + 11)
+
     },
     () => {
-      dispatch({ type: CHANGE_YEAR, year: year - 11 })
+      //dispatch({ type: CHANGE_YEAR, year: year - 11 })
+      changeYear(year - 11 )
+
     }
   )
 

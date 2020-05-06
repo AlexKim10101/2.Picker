@@ -1,5 +1,5 @@
 import React from 'react'
-import { usePickerState, usePickerDispatch} from '../dates-picker-context'
+//import { usePickerState, usePickerDispatch} from '../dates-picker-context'
 import HeadingMarkers from './heading-markers/heading-markers'
 import { DaysWeeksRows, MonthsYearsRows } from './calendar-variants'
 import {
@@ -21,7 +21,17 @@ import {
 import './calendar.css'
 import { inputValueCreater } from '../../utils/converters'
 
-const Calendar = () => {
+const Calendar = ({ 
+  calendarType, 
+  year, 
+  month, 
+  inputFocus, 
+  step, 
+  changeInputValue,
+  changeClendarType,
+  changeMonth,
+  changeYear
+} ) => {
   const [
     DAY,
     WEEK,
@@ -31,7 +41,9 @@ const Calendar = () => {
     YEAR
   ] = steps
 
-  const { calendarType, year, month, inputFocus, dates } = usePickerState()
+
+  
+  //const { calendarType, year, month, inputFocus, dates } = usePickerState()
 
   const d = (...args) => new Date(...args)
   const firstDay = d(year, month).getUTCDay()
@@ -56,7 +68,7 @@ const Calendar = () => {
   
   const height = withDaysAWeek ? weeks.length * 37 + 82 : (calendarType === MONTH || calendarType === YEAR) ? 256 : 194
   
-  const dispatch = usePickerDispatch()
+  //const dispatch = usePickerDispatch()
 
   function handleClick(x){
     console.log('______handleClick',inputFocus)
@@ -106,29 +118,35 @@ const Calendar = () => {
     // const newValue = Object.assign({}, dates[inputFocus], {inputValue: value, year: year})
     // const result = Object.assign({}, dates, {[inputFocus]:newValue})
 
-    const newDates = inputValueCreater(dates, inputFocus, {inputValue: value, year: year})
-    dispatch({type: UPDATE_DATES, dates: newDates})
-    dispatch({type: SET_INPUT_VALIDATION, needInputValidation: true})
+    // const newDates = inputValueCreater(dates, inputFocus, {inputValue: value, year: year})
+    // dispatch({type: UPDATE_DATES, dates: newDates})
+    // dispatch({type: SET_INPUT_VALIDATION, needInputValidation: true})
+    changeInputValue(inputFocus, value)
   }
 
   const renderCalendar = (type) => {
     switch (type) {
       case DAY:
       case WEEK:
-        return <DaysWeeksRows data={weeks} onClick={handleClick}/>
+        return <DaysWeeksRows data={weeks} onClick={handleClick} calendarType={calendarType}/>
       case MONTH:
-        return <MonthsYearsRows data={months} onClick={handleClick}/>
+        return <MonthsYearsRows data={months} onClick={handleClick} calendarType={calendarType}/>
       case QUARTER:
-        return <MonthsYearsRows data={quarters} onClick={handleClick}/>
+        return <MonthsYearsRows data={quarters} onClick={handleClick} calendarType={calendarType}/>
       case HALFYEAR:
-        return <MonthsYearsRows data={halfyears} onClick={handleClick}/>
+        return <MonthsYearsRows data={halfyears} onClick={handleClick} calendarType={calendarType}/>
       case YEAR:
-        return <MonthsYearsRows data={years} onClick={handleClick}/>
+        return <MonthsYearsRows data={years} onClick={handleClick} calendarType={calendarType}/>
       default:
         break
     }
   }
-
+// const {
+  //   year,
+  //   month,
+  //   step,
+  //   calendarType,
+  // } = usePickerState()
    
   return (
     <div className="calendar" id="calendar">
@@ -139,9 +157,18 @@ const Calendar = () => {
         borderRight: '1px solid rgb(228, 231, 231)',
         transition: 'all 0.2s ease-in-out',
       }}>
-        <HeadingMarkers withDaysAWeek={withDaysAWeek} />
+        <HeadingMarkers
+          year={year}
+          month={month}
+          step={step}
+          calendarType={calendarType}
+          withDaysAWeek={withDaysAWeek} 
+          changeClendarType={changeClendarType}
+          changeMonth={changeMonth}
+          changeYear={changeYear}
+        />
 
-
+      
         <div>
           {withDaysAWeek && (
             <div className="calendar__days-a-week" >
