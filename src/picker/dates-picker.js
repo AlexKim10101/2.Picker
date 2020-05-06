@@ -144,6 +144,8 @@ export default function DatesPicker(props) {
       <div className="dates-picker-wrapper">
         <Select changePeriod={changePeriodInSelect} step={state.step}/>
         
+
+        
         <div>
           <Input 
             data={state[START_DATE]} 
