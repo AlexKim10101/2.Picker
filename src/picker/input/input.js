@@ -45,9 +45,10 @@ export default function Input(props){
       console.log('клик по календарю')  
       return
     }
-    if(e.target.value == '') return
-    //что происходит при потере фокуса
-    //dispatch({type: SET_INPUT_VALIDATION, needInputValidation: true})
+    //if(e.target.value == '') return
+    console.log('клик не по календарю')
+    console.log('e.relatedTarget', e.relatedTarget.id)
+
   }
 
   const onChange = ({ target }) => {

@@ -51,7 +51,7 @@ export default function DatesPicker(props) {
   const changePeriodInSelect = (target) => {
     dispatch({ type: CHANGE_STEP, step: target.value })
     dispatch({ type: CHANGE_PERIOD, period: target.value })
-    dispatch({ type: CHANGE_CALENDAR_TYPE, calendarType: target.value })
+    //dispatch({ type: CHANGE_CALENDAR_TYPE, calendarType: target.value })
     dispatch({ type: SET_INPUT_FOCUS, inputFocus: START_DATE})  
   }
 
@@ -83,21 +83,22 @@ export default function DatesPicker(props) {
       return
     }
 
-    // if(state.startDate.result && state.endDate.result){
-    //   dispatch({ type: SET_INPUT_FOCUS, inputFocus: SUBMIT})
-    //   console.log('state.startDate.result && state.endDate.result')
-    //   return
-    // }
+    if(state.startDate.result && state.endDate.result){
+      dispatch({ type: SET_INPUT_FOCUS, inputFocus: SUBMIT})
+      console.log('state.startDate.result && state.endDate.result')
+      return
+    }
 
-    // if((state.inputFocus===START_DATE && !state.startDate.result)||(state.inputFocus===END_DATE && state.endDate.result)){
-    //   dispatch({ type: SET_INPUT_FOCUS, inputFocus: START_DATE})
-    //   console.log('state.inputFocus===START_DATE && !state.startDate.result')
-      
-    //   return
-    // }
-    // console.log('на второй')
+    if(state.inputFocus===START_DATE && state.startDate.result){
+      dispatch({ type: SET_INPUT_FOCUS, inputFocus: END_DATE})
+      return
+    }
 
-    // dispatch({ type: SET_INPUT_FOCUS, inputFocus: END_DATE})
+    if(state.inputFocus===END_DATE && state.endDate.result){
+      dispatch({ type: SET_INPUT_FOCUS, inputFocus: START_DATE})
+      return
+    }
+    
   }
 
   const changeInputValue = (id, value) => {
@@ -109,6 +110,7 @@ export default function DatesPicker(props) {
     newField.result = resultValidation.newDate
 
     dispatch({type: UPDATE_DATES, id: id, value: newField})
+    
   }
 
 
@@ -195,7 +197,6 @@ export default function DatesPicker(props) {
           {showCalendar && (
           <div aria-roledescription="datepicker" id="datepicker">
 
-{/* { calendarType, year, month, inputFocus, dates } */}
             <Calendar 
               step={state.step}
               calendarType={state.calendarType}
