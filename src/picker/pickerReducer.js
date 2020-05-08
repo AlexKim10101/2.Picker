@@ -7,7 +7,8 @@ import {
     CHANGE_CALENDAR_TYPE,
     VALID_FORM,
     SET_INPUT_FOCUS,
-    UPDATE_DATES
+    UPDATE_DATES,
+    START_DATE
 } from '../utils/consts'
 
 export function pickerReducer(state, action) {
@@ -17,13 +18,13 @@ export function pickerReducer(state, action) {
         case CHANGE_MONTH:
             return { ...state, month: action.month }
         case CHANGE_STEP:
-            return { ...state, step: action.step }
+            return { ...state, step: action.step, period: action.step, focusLocation: START_DATE}
         case CHANGE_PERIOD:
             return { ...state, period: action.period }
         case CHANGE_CALENDAR_TYPE:
             return { ...state, calendarType: action.calendarType }            
         case VALID_FORM:
-            return { ...state, validFormData: action.validFormData}       
+            return { ...state, validFormData: action.validFormData }       
         case SET_INPUT_FOCUS:
             return { ...state, focusLocation: action.focusLocation}         
         case UPDATE_DATES:

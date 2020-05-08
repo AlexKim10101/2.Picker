@@ -38,8 +38,7 @@ export const DaysWeeksRows = ({ data, onClick, calendarType }) => {
 
 
 export const MonthsYearsRows = ({ data, onClick, calendarType}) => {
-  //const { calendarType } = usePickerState()
-  //const dispatch = usePickerDispatch()
+  
 
   const [
     DAY,
@@ -50,31 +49,6 @@ export const MonthsYearsRows = ({ data, onClick, calendarType}) => {
     YEAR
   ] = steps
 
-  // const onDrill = (x) => {
-  //   const idxInSteps = (x) => steps.indexOf(x)
-  //   const drillDirection = () => {
-  //     switch (calendarType) {
-  //       case MONTH:
-  //         return steps[idxInSteps(period)]
-  //       case YEAR:
-  //         return (period === HALFYEAR || period === QUARTER) ? period : MONTH
-  //       default:
-  //         return steps[idxInSteps(calendarType) - 1]
-  //     }
-  //   }
-
-  //   if (period !== calendarType) {
-  //     console.log('true onDrill')
-  //     dispatch({
-  //       type: CHANGE_CALENDAR_TYPE,
-  //       calendarType: drillDirection(),
-  //     })
-
-  //   } else {          
-  //     (inputFocus == 'startDate') && dispatch({type: CHANGE_START_DATE, startDate: {value: x, year: year}});
-  //     (inputFocus == 'endDate') && dispatch({type: CHANGE_END_DATE, endDate: {value: x, year: year}});   
-  //   }
-  // }
 
   const tdClsx = classnames('calendar__table_td', {
     'td-30': (calendarType === WEEK || calendarType === DAY),
@@ -86,7 +60,7 @@ export const MonthsYearsRows = ({ data, onClick, calendarType}) => {
   return data.map((item) => (
     <tr key={uuidv4()}>
       {item.map((x) => (
-        <td key={uuidv4()} tabIndex={0} className={tdClsx} onClick={()=>onClick(x)}>
+        <td key={uuidv4()} tabIndex={0} className={tdClsx} onClick={()=>onClick(x)} >
           {x}
         </td>
       ))}

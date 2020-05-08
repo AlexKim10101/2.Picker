@@ -4,6 +4,7 @@ import classnames from 'classnames'
 import {  
   START_DATE,
   END_DATE,
+  steps
 } from '../../utils/consts'
 import { maskQualifier } from '../../utils/converters'
 
@@ -17,6 +18,15 @@ export default function Input({
   changeFocusLocation, 
   changeInputValue,
 }){
+
+  const [
+    DAY,
+    WEEK,
+    MONTH,
+    QUARTER,
+    HALFYEAR,
+    YEAR
+  ] = steps
   
 
   const rejected = (focusLocation !== data.name && !data.result && data.inputValue)  
@@ -41,6 +51,7 @@ export default function Input({
       return
     }
     //console.log('клик не по календарю')    
+    //сделать красиво
     if((!e.relatedTarget)||(e.relatedTarget.id===START_DATE)||(e.relatedTarget.id===END_DATE)){
       changeFocusLocation('Not on input')
       return
@@ -62,6 +73,8 @@ export default function Input({
     }
   }, [focusLocation])
 
+
+  placeholder = (period === DAY||period === WEEK) ? 'дд.мм.гггг' : placeholder
   return (
     <div className="input-wrapper">      
       

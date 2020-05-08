@@ -16,7 +16,7 @@ export default function Select(props) {
         name="steps" 
         id="step-select" 
         value={props.step} 
-        onChange={({target})=>props.changePeriod(target)}
+        onChange={({target})=>props.changePeriod(target.value)}
       >
         {stepsLabels.map((step, idx) => (
           <option key={step} value={steps[idx]}>

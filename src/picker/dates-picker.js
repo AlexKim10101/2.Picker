@@ -24,7 +24,7 @@ import {
 export default function DatesPicker(props) {
   
 
-  let newProps = { 
+  let newProps = {
     validFormData: false,
     focusLocation: null,
     startDate:{
@@ -46,14 +46,6 @@ export default function DatesPicker(props) {
   const [state, dispatch] = useReducer(pickerReducer, expProps)
 
 
-  const changePeriodInSelect = (target) => {
-    dispatch({ type: CHANGE_STEP, step: target.value })
-    dispatch({ type: CHANGE_PERIOD, period: target.value })
-    dispatch({ type: SET_INPUT_FOCUS, focusLocation: START_DATE})  
-  }
-
-  
-  //input's functions
   const changeFocusLocation = (id) => {
 
     if(id) {
@@ -90,16 +82,15 @@ export default function DatesPicker(props) {
     
   }
 
-
-  const inputsValidation = () => {
+  const dropInputsValues = () => {
     const newStartDate = Object.assign({}, state.startDate)
     const newEndDate = Object.assign({}, state.endDate)
 
-    const validationResultStartDate = inputValueValidation(START_DATE, state.startDate.inputValue, state.startDate.year, state.period)
-    const validationResultEndDate = inputValueValidation(END_DATE, state.endDate.inputValue, state.endDate.year, state.period)
+    newStartDate.inputValue=''
+    newEndDate.inputValue=''
 
-    newStartDate.result = validationResultStartDate.newDate
-    newEndDate.result = validationResultEndDate.newDate
+    newStartDate.result = null
+    newEndDate.result = null
 
     dispatch({type: UPDATE_DATES, id: START_DATE, value: newStartDate})
     dispatch({type: UPDATE_DATES, id: END_DATE, value: newEndDate})
@@ -107,8 +98,6 @@ export default function DatesPicker(props) {
   }
 
   useEffect(()=>{
-    console.log('state.startDate.result ', state.startDate.result)
-    console.log('state.endDate.result ', state.endDate.result)
     changeFocusLocation()
     if(state.startDate.result && state.endDate.result){
       dispatch({type:VALID_FORM, validFormData: state.startDate.result<state.endDate.result})
@@ -119,8 +108,8 @@ export default function DatesPicker(props) {
   },[state.startDate.result, state.endDate.result])
 
   useEffect(()=>{
-    console.log('изменился период')
-    inputsValidation()
+    //console.log('изменился период')
+    dropInputsValues()
     dispatch({ type: CHANGE_CALENDAR_TYPE, calendarType: state.period })
   },[state.period])
 
@@ -142,8 +131,7 @@ export default function DatesPicker(props) {
   return (
     <>
       <div className="dates-picker-wrapper">
-        <Select changePeriod={changePeriodInSelect} step={state.step}/>
-        
+        <Select changePeriod={(value)=>dispatch({ type: CHANGE_STEP, step: value })} step={state.step}/>      
 
         
         <div>
