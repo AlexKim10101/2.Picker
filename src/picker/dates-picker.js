@@ -71,6 +71,18 @@ export default function DatesPicker(props) {
   }
 
   const changeInputValue = (id, value) => {
+    //const resultValidation = inputValueValidation(id, value, state.year, state.period)
+    const newField = Object.assign({}, state[id])
+
+    newField.inputValue = (value==='__.__.____'||value==='_-ое полугодие') ? '' : value;
+    //newField.year = state.year
+    //newField.result = resultValidation.newDate
+
+    dispatch({type: UPDATE_DATES, id: id, value: newField})
+    
+  }
+
+  const setInputResult = (id, value) => {
     const resultValidation = inputValueValidation(id, value, state.year, state.period)
     const newField = Object.assign({}, state[id])
 
@@ -86,8 +98,8 @@ export default function DatesPicker(props) {
     const newStartDate = Object.assign({}, state.startDate)
     const newEndDate = Object.assign({}, state.endDate)
 
-    newStartDate.inputValue=''
-    newEndDate.inputValue=''
+    newStartDate.inputValue = ''
+    newEndDate.inputValue = ''
 
     newStartDate.result = null
     newEndDate.result = null
@@ -141,7 +153,8 @@ export default function DatesPicker(props) {
             period={state.period} 
             placeholder="Начало" 
             changeFocusLocation={changeFocusLocation}
-            changeInputValue={changeInputValue}
+            //changeInputValue={changeInputValue}
+            setInputResult={setInputResult}
           />
           <ArrowIcon />
           <Input 
@@ -150,7 +163,9 @@ export default function DatesPicker(props) {
             period={state.period} 
             placeholder="Конец" 
             changeFocusLocation={changeFocusLocation}
-            changeInputValue={changeInputValue}
+            // changeInputValue={changeInputValue}
+            setInputResult={setInputResult}
+
           />
 
           {showCalendar && (
@@ -163,6 +178,7 @@ export default function DatesPicker(props) {
               month={state.month}
               focusLocation={state.focusLocation}
               changeInputValue={changeInputValue}
+              setInputResult={setInputResult}
               changeClendarType={(type)=>dispatch({ type: CHANGE_CALENDAR_TYPE, calendarType: type })}
               changeMonth={(month)=>dispatch({ type: CHANGE_MONTH, month: month })}
               changeYear={(year)=>dispatch({ type: CHANGE_YEAR, year: year })}

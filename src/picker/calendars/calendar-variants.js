@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { steps, dayStatus} from '../../utils/consts'
 
 
-export const DaysWeeksRows = ({ data, onClick, calendarType }) => {
+export const DaysWeeksRows = ({ data, onClick, calendarType, handleHover }) => {
   //const { calendarType } = usePickerState()
  
   const [DAY, WEEK] = steps
@@ -27,7 +27,7 @@ export const DaysWeeksRows = ({ data, onClick, calendarType }) => {
       {item.map((x) => {
         const arg = calendarType === WEEK ? item : x;
         return(
-          <td key={uuidv4()} tabIndex={0} className={tdClsx(x.status)} onClick={()=>onClick(arg)}>
+          <td key={uuidv4()} tabIndex={0} className={tdClsx(x.status)} onClick={()=>onClick(arg) } onMouseEnter={()=>handleHover(arg)}>
             {x.date}
           </td>
         )}
@@ -37,9 +37,8 @@ export const DaysWeeksRows = ({ data, onClick, calendarType }) => {
 }
 
 
-export const MonthsYearsRows = ({ data, onClick, calendarType}) => {
+export const MonthsYearsRows = ({ data, onClick, calendarType, handleHover}) => {
   
-
   const [
     DAY,
     WEEK,
@@ -60,7 +59,7 @@ export const MonthsYearsRows = ({ data, onClick, calendarType}) => {
   return data.map((item) => (
     <tr key={uuidv4()}>
       {item.map((x) => (
-        <td key={uuidv4()} tabIndex={0} className={tdClsx} onClick={()=>onClick(x)} >
+        <td key={uuidv4()} tabIndex={0} className={tdClsx} onClick={()=>onClick(x)} onMouseEnter={()=>handleHover(x)}>
           {x}
         </td>
       ))}

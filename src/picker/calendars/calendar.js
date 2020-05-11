@@ -18,6 +18,8 @@ import {
   UPDATE_DATES,
   SET_INPUT_VALIDATION,  
 } from '../../utils/consts'
+import { createInputValue } from '../../utils/converters'
+
 import './calendar.css'
 
 const Calendar = ({ 
@@ -27,6 +29,7 @@ const Calendar = ({
   focusLocation, 
   step, 
   changeInputValue,
+  setInputResult,
   changeClendarType,
   changeMonth,
   changeYear
@@ -64,48 +67,13 @@ const Calendar = ({
 
   function handleClick(x){
    
-    let indexDayOfWeek
-    let value
-    if(focusLocation == START_DATE){      
-      indexDayOfWeek = 0;
-    }
-    if(focusLocation == END_DATE){      
-      indexDayOfWeek = 6;
-    }  
+    const value = createInputValue(x, focusLocation, calendarType, year, month)
+    setInputResult(focusLocation, value)
+  }
 
-    switch (calendarType){
-      case DAY:{
-        let correctMonth = month;
-        if(x.status === 'out'){
-          correctMonth = x.date > 7 ? correctMonth-1 : correctMonth+1;
-        }
-        const monthString = correctMonth > 8 ? String(correctMonth + 1) : ('0' + String(correctMonth+1))
-        const dayString = x.date > 9 ? String(x.date) : ('0' + String(x.date))
-        value = dayString + '.' + monthString + '.' + year        
-        break; 
-      }
 
-      case WEEK:{
-        const correctDay = x[indexDayOfWeek];
-        let correctMonth = month;
-        if(correctDay.status === 'out'){
-          correctMonth = correctDay.date > 7 ? correctMonth-1 : correctMonth+1;
-        }
-        const monthString = correctMonth > 8 ? String(correctMonth + 1) : ('0' + String(correctMonth+1))
-        const dayString = correctDay.date > 9 ? String(correctDay.date) : ('0' + String(correctDay.date))
-        value = dayString + '.' + monthString + '.' + year        
-        break; 
-      }
-
-      case MONTH:
-      case QUARTER:
-      case HALFYEAR:
-      case YEAR: {
-        value = x
-        break; 
-      }
-    }
-
+  function handleHover(x){
+    const value = createInputValue(x, focusLocation, calendarType, year, month)
     changeInputValue(focusLocation, value)
   }
 
@@ -113,15 +81,15 @@ const Calendar = ({
     switch (type) {
       case DAY:
       case WEEK:
-        return <DaysWeeksRows data={weeks} onClick={handleClick} calendarType={calendarType}/>
+        return <DaysWeeksRows data={weeks} onClick={handleClick} calendarType={calendarType} handleHover={handleHover}/>
       case MONTH:
-        return <MonthsYearsRows data={months} onClick={handleClick} calendarType={calendarType}/>
+        return <MonthsYearsRows data={months} onClick={handleClick} calendarType={calendarType} handleHover={handleHover}/>
       case QUARTER:
-        return <MonthsYearsRows data={quarters} onClick={handleClick} calendarType={calendarType}/>
+        return <MonthsYearsRows data={quarters} onClick={handleClick} calendarType={calendarType} handleHover={handleHover}/>
       case HALFYEAR:
-        return <MonthsYearsRows data={halfyears} onClick={handleClick} calendarType={calendarType}/>
+        return <MonthsYearsRows data={halfyears} onClick={handleClick} calendarType={calendarType} handleHover={handleHover}/>
       case YEAR:
-        return <MonthsYearsRows data={years} onClick={handleClick} calendarType={calendarType}/>
+        return <MonthsYearsRows data={years} onClick={handleClick} calendarType={calendarType} handleHover={handleHover}/>
       default:
         break
     }

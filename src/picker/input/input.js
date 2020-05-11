@@ -17,6 +17,7 @@ export default function Input({
   placeholder, 
   changeFocusLocation, 
   changeInputValue,
+  setInputResult
 }){
 
   const [
@@ -73,8 +74,8 @@ export default function Input({
     }
   }, [focusLocation])
 
-
   placeholder = (period === DAY||period === WEEK) ? 'дд.мм.гггг' : placeholder
+
   return (
     <div className="input-wrapper">      
       
@@ -83,7 +84,7 @@ export default function Input({
         value={data.inputValue} 
         mask={mask}			  
         alwaysShowMask={true}	
-		    onChange={({target})=>changeInputValue(target.id, target.value)  }
+		    onChange={({target})=>setInputResult(target.id, target.value)  }
 	      onKeyPress={handleKeyPress}		  
         placeholder={placeholder}
         onFocus={({target})=>changeFocusLocation(target.id)}
