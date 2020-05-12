@@ -27,7 +27,14 @@ export const DaysWeeksRows = ({ data, onClick, calendarType, handleHover }) => {
       {item.map((x) => {
         const arg = calendarType === WEEK ? item : x;
         return(
-          <td key={uuidv4()} tabIndex={0} className={tdClsx(x.status)} onClick={()=>onClick(arg) } onMouseEnter={()=>handleHover(arg)}>
+          <td 
+            key={uuidv4()} 
+            tabIndex={0} 
+            className={tdClsx(x.status)} 
+            onClick={()=>onClick(arg) } 
+            onMouseEnter={()=>handleHover(arg) } 
+            onMouseLeave={()=>handleHover()}
+          >
             {x.date}
           </td>
         )}
@@ -59,7 +66,14 @@ export const MonthsYearsRows = ({ data, onClick, calendarType, handleHover}) => 
   return data.map((item) => (
     <tr key={uuidv4()}>
       {item.map((x) => (
-        <td key={uuidv4()} tabIndex={0} className={tdClsx} onClick={()=>onClick(x)} onMouseEnter={()=>handleHover(x)}>
+        <td 
+          key={uuidv4()} 
+          tabIndex={0} 
+          className={tdClsx} 
+          onClick={()=>onClick(x)} 
+          onMouseEnter={()=>handleHover(x)} 
+          onMouseLeave={()=>handleHover()}
+        >
           {x}
         </td>
       ))}

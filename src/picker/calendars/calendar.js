@@ -28,7 +28,7 @@ const Calendar = ({
   month, 
   focusLocation, 
   step, 
-  changeInputValue,
+  changeInputHoverValue,
   setInputResult,
   changeClendarType,
   changeMonth,
@@ -73,9 +73,13 @@ const Calendar = ({
 
 
   function handleHover(x){
-    const value = createInputValue(x, focusLocation, calendarType, year, month)
-    changeInputValue(focusLocation, value)
+    const value = x ? createInputValue(x, focusLocation, calendarType, year, month) : null
+    changeInputHoverValue(focusLocation, value)
   }
+
+  // function myMouseOut(){
+  //   changeInputValue(focusLocation, '')
+  // }
 
   const renderCalendar = (type) => {
     switch (type) {

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef} from 'react'
+import React, { useState, useEffect, useRef} from 'react'
 import InputMask from 'react-input-mask';
 import classnames from 'classnames'
 import {  
@@ -16,7 +16,6 @@ export default function Input({
   period, 
   placeholder, 
   changeFocusLocation, 
-  changeInputValue,
   setInputResult
 }){
 
@@ -29,6 +28,8 @@ export default function Input({
     YEAR
   ] = steps
   
+  //const [value, setValue] = useState(data.inputValue)
+
 
   const rejected = (focusLocation !== data.name && !data.result && data.inputValue)  
   const clsx = classnames('input-field', { active: data.name === focusLocation, rejected: rejected})
@@ -81,7 +82,7 @@ export default function Input({
       
       <InputMask  
         inputRef={(node)=>inputEl.current=node}
-        value={data.inputValue} 
+        value={data.inputHoverValue} 
         mask={mask}			  
         alwaysShowMask={true}	
 		    onChange={({target})=>setInputResult(target.id, target.value)  }

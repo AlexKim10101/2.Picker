@@ -30,12 +30,14 @@ export default function DatesPicker(props) {
     startDate:{
       name: START_DATE,
       inputValue: '',
+      inputHoverValue: '',
       year: null,
       result: null,
     },
     endDate:{
       name: END_DATE,
       inputValue: '',
+      inputHoverValue: '',
       year: null,
       result: null,
     }
@@ -70,17 +72,22 @@ export default function DatesPicker(props) {
     
   }
 
-  const changeInputValue = (id, value) => {
+  const changeInputHoverValue = (id, value) => {
     //const resultValidation = inputValueValidation(id, value, state.year, state.period)
     const newField = Object.assign({}, state[id])
 
-    newField.inputValue = (value==='__.__.____'||value==='_-ое полугодие') ? '' : value;
-    //newField.year = state.year
-    //newField.result = resultValidation.newDate
+    if(!value){
+      newField.inputHoverValue = newField.inputValue
+      dispatch({type: UPDATE_DATES, id: id, value: newField})
+      return
+    }
 
+    newField.inputHoverValue = (value==='__.__.____'||value==='_-ое полугодие') ? '' : value;
     dispatch({type: UPDATE_DATES, id: id, value: newField})
     
   }
+
+  
 
   const setInputResult = (id, value) => {
     const resultValidation = inputValueValidation(id, value, state.year, state.period)
@@ -177,7 +184,7 @@ export default function DatesPicker(props) {
               year={state.year}
               month={state.month}
               focusLocation={state.focusLocation}
-              changeInputValue={changeInputValue}
+              changeInputHoverValue={changeInputHoverValue}
               setInputResult={setInputResult}
               changeClendarType={(type)=>dispatch({ type: CHANGE_CALENDAR_TYPE, calendarType: type })}
               changeMonth={(month)=>dispatch({ type: CHANGE_MONTH, month: month })}
