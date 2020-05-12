@@ -174,3 +174,50 @@ export function formatDate(date) {
   return dd + '.' + mm + '.' + yy;
 }
 
+
+export function createInputValue(x, location, calendarType, year, month){
+  let indexDayOfWeek = location===START_DATE? 0 : 6
+  let value
+  // if(focusLocation == START_DATE){      
+  //   indexDayOfWeek = 0;
+  // }
+  // if(focusLocation == END_DATE){      
+  //   indexDayOfWeek = 6;
+  // }  
+
+  switch (calendarType){
+    case DAY:{
+      let correctMonth = month;
+      if(x.status === 'out'){
+        correctMonth = x.date > 7 ? correctMonth-1 : correctMonth+1;
+      }
+      const monthString = correctMonth > 8 ? String(correctMonth + 1) : ('0' + String(correctMonth+1))
+      const dayString = x.date > 9 ? String(x.date) : ('0' + String(x.date))
+      value = dayString + '.' + monthString + '.' + year        
+      break; 
+    }
+
+    case WEEK:{
+      const correctDay = x[indexDayOfWeek];
+      let correctMonth = month;
+      if(correctDay.status === 'out'){
+        correctMonth = correctDay.date > 7 ? correctMonth-1 : correctMonth+1;
+      }
+      const monthString = correctMonth > 8 ? String(correctMonth + 1) : ('0' + String(correctMonth+1))
+      const dayString = correctDay.date > 9 ? String(correctDay.date) : ('0' + String(correctDay.date))
+      value = dayString + '.' + monthString + '.' + year        
+      break; 
+    }
+
+    case MONTH:
+    case QUARTER:
+    case HALFYEAR:
+    case YEAR: {
+      value = x
+      break; 
+    }
+  }
+
+  return value
+}
+

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef} from 'react'
+import React, { useState, useEffect, useRef} from 'react'
 import InputMask from 'react-input-mask';
 import classnames from 'classnames'
 import {  
@@ -16,7 +16,7 @@ export default function Input({
   period, 
   placeholder, 
   changeFocusLocation, 
-  changeInputValue,
+  setInputResult
 }){
 
   const [
@@ -28,6 +28,8 @@ export default function Input({
     YEAR
   ] = steps
   
+  //const [value, setValue] = useState(data.inputValue)
+
 
   const rejected = (focusLocation !== data.name && !data.result && data.inputValue)  
   const clsx = classnames('input-field', { active: data.name === focusLocation, rejected: rejected})
@@ -73,17 +75,17 @@ export default function Input({
     }
   }, [focusLocation])
 
-
   placeholder = (period === DAY||period === WEEK) ? 'дд.мм.гггг' : placeholder
+
   return (
     <div className="input-wrapper">      
       
       <InputMask  
         inputRef={(node)=>inputEl.current=node}
-        value={data.inputValue} 
+        value={data.inputHoverValue} 
         mask={mask}			  
         alwaysShowMask={true}	
-		    onChange={({target})=>changeInputValue(target.id, target.value)  }
+		    onChange={({target})=>setInputResult(target.id, target.value)  }
 	      onKeyPress={handleKeyPress}		  
         placeholder={placeholder}
         onFocus={({target})=>changeFocusLocation(target.id)}

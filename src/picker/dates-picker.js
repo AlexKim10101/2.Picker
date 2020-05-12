@@ -30,12 +30,14 @@ export default function DatesPicker(props) {
     startDate:{
       name: START_DATE,
       inputValue: '',
+      inputHoverValue: '',
       year: null,
       result: null,
     },
     endDate:{
       name: END_DATE,
       inputValue: '',
+      inputHoverValue: '',
       year: null,
       result: null,
     }
@@ -70,7 +72,24 @@ export default function DatesPicker(props) {
     
   }
 
-  const changeInputValue = (id, value) => {
+  const changeInputHoverValue = (id, value) => {
+    //const resultValidation = inputValueValidation(id, value, state.year, state.period)
+    const newField = Object.assign({}, state[id])
+
+    if(!value){
+      newField.inputHoverValue = newField.inputValue
+      dispatch({type: UPDATE_DATES, id: id, value: newField})
+      return
+    }
+
+    newField.inputHoverValue = (value==='__.__.____'||value==='_-ое полугодие') ? '' : value;
+    dispatch({type: UPDATE_DATES, id: id, value: newField})
+    
+  }
+
+  
+
+  const setInputResult = (id, value) => {
     const resultValidation = inputValueValidation(id, value, state.year, state.period)
     const newField = Object.assign({}, state[id])
 
@@ -86,8 +105,8 @@ export default function DatesPicker(props) {
     const newStartDate = Object.assign({}, state.startDate)
     const newEndDate = Object.assign({}, state.endDate)
 
-    newStartDate.inputValue=''
-    newEndDate.inputValue=''
+    newStartDate.inputValue = ''
+    newEndDate.inputValue = ''
 
     newStartDate.result = null
     newEndDate.result = null
@@ -141,7 +160,8 @@ export default function DatesPicker(props) {
             period={state.period} 
             placeholder="Начало" 
             changeFocusLocation={changeFocusLocation}
-            changeInputValue={changeInputValue}
+            //changeInputValue={changeInputValue}
+            setInputResult={setInputResult}
           />
           <ArrowIcon />
           <Input 
@@ -150,7 +170,9 @@ export default function DatesPicker(props) {
             period={state.period} 
             placeholder="Конец" 
             changeFocusLocation={changeFocusLocation}
-            changeInputValue={changeInputValue}
+            // changeInputValue={changeInputValue}
+            setInputResult={setInputResult}
+
           />
 
           {showCalendar && (
@@ -162,7 +184,8 @@ export default function DatesPicker(props) {
               year={state.year}
               month={state.month}
               focusLocation={state.focusLocation}
-              changeInputValue={changeInputValue}
+              changeInputHoverValue={changeInputHoverValue}
+              setInputResult={setInputResult}
               changeClendarType={(type)=>dispatch({ type: CHANGE_CALENDAR_TYPE, calendarType: type })}
               changeMonth={(month)=>dispatch({ type: CHANGE_MONTH, month: month })}
               changeYear={(year)=>dispatch({ type: CHANGE_YEAR, year: year })}
