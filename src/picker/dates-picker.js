@@ -105,6 +105,9 @@ export default function DatesPicker(props) {
     const newStartDate = Object.assign({}, state.startDate)
     const newEndDate = Object.assign({}, state.endDate)
 
+    newStartDate.inputHoverValue = ''
+    newEndDate.inputHoverValue = ''
+
     newStartDate.inputValue = ''
     newEndDate.inputValue = ''
 
