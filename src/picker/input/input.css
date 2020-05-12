@@ -31,8 +31,10 @@
 }
 
 .arrow-icon {
-  display: inline-block;
-  vertical-align: middle;
+  display: flex;
+  /* //vertical-align: middle; */
+  justify-content: center;
+  align-items: center;
 }
 
 .arrow-icon svg {

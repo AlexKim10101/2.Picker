@@ -16,7 +16,8 @@ export default function Input({
   period, 
   placeholder, 
   changeFocusLocation, 
-  setInputResult
+  setInputResult,
+  needIpnutsReverse
 }){
 
   const [
@@ -33,6 +34,7 @@ export default function Input({
 
   const rejected = (focusLocation !== data.name && !data.result && data.inputValue)  
   const clsx = classnames('input-field', { active: data.name === focusLocation, rejected: rejected})
+  const clswrp = classnames('input-wrapper', {reverse: needIpnutsReverse})
   const inputEl = useRef(null)
   const mask = maskQualifier(data.name, data.inputValue, focusLocation, period)
 
@@ -78,7 +80,7 @@ export default function Input({
   placeholder = (period === DAY||period === WEEK) ? 'дд.мм.гггг' : placeholder
 
   return (
-    <div className="input-wrapper">      
+    <div className={clswrp}>      
       
       <InputMask  
         inputRef={(node)=>inputEl.current=node}

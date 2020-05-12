@@ -8,7 +8,8 @@ import {
     VALID_FORM,
     SET_INPUT_FOCUS,
     UPDATE_DATES,
-    START_DATE
+    START_DATE,
+    NEED_INPUTS_REVERSE
 } from '../utils/consts'
 
 export function pickerReducer(state, action) {
@@ -28,7 +29,10 @@ export function pickerReducer(state, action) {
         case SET_INPUT_FOCUS:
             return { ...state, focusLocation: action.focusLocation}         
         case UPDATE_DATES:
-            return {...state, [action.id]: action.value}      
+            return {...state, [action.id]: action.value}  
+        case NEED_INPUTS_REVERSE:{
+            return {...state, needIpnutsReverse: action.needIpnutsReverse}  
+        }    
         default: {
             throw new Error(`Unhandled action type: ${action.type}`)
         }

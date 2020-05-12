@@ -3,6 +3,18 @@
   align-items: center;
 }
 
+.input-container{
+  display: flex;
+}
+
+.reverse:first-child{
+  order:2;
+}
+
+.reverse:last-child{
+  order:-2;
+}
+
 div[aria-roledescription="datepicker"] {
   position: absolute;
   top: 56px;

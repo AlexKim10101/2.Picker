@@ -20,6 +20,7 @@ export const SET_FOCUS_TRANSFER = 'SET_FOCUS_TRANSFER'
 export const UPDATE_DATES = 'UPDATE_DATES'
 export const SET_INPUT_VALIDATION = 'SET_INPUT_VALIDATION'
 export const SET_FORM_VALIDATION = 'SET_FORM_VALIDATION'
+export const NEED_INPUTS_REVERSE = 'NEED_INPUTS_REVERSE'
 
 export const START_DATE = 'startDate'
 export const END_DATE = 'endDate'

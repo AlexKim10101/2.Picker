@@ -20,6 +20,7 @@ import {
   SET_INPUT_FOCUS,
   UPDATE_DATES,
   VALID_FORM,
+  NEED_INPUTS_REVERSE
 } from '../utils/consts'
 export default function DatesPicker(props) {
   
@@ -27,6 +28,7 @@ export default function DatesPicker(props) {
   let newProps = {
     validFormData: false,
     focusLocation: null,
+    needIpnutsReverse: false,
     startDate:{
       name: START_DATE,
       inputValue: '',
@@ -44,9 +46,7 @@ export default function DatesPicker(props) {
   }
 
   let expProps = Object.assign({}, props, newProps)
-
   const [state, dispatch] = useReducer(pickerReducer, expProps)
-
 
   const changeFocusLocation = (id) => {
 
@@ -72,6 +72,15 @@ export default function DatesPicker(props) {
     
   }
 
+  function anotherInput(id){
+    if(id===START_DATE){
+      return END_DATE
+    }
+    if(id===END_DATE){
+      return START_DATE
+    }
+  }
+
   const changeInputHoverValue = (id, value) => {
     //const resultValidation = inputValueValidation(id, value, state.year, state.period)
     const newField = Object.assign({}, state[id])
@@ -85,6 +94,24 @@ export default function DatesPicker(props) {
     newField.inputHoverValue = (value==='__.__.____'||value==='_-ое полугодие') ? '' : value;
     dispatch({type: UPDATE_DATES, id: id, value: newField})
     
+
+    //console.log(state[anotherInput(id)])
+    if(!state[anotherInput(id)].result){
+      console.log('второго нет')
+      return
+    }
+
+
+    const resultValidation = inputValueValidation(id, value, state.year, state.period)
+    //console.log(resultValidation.newDate)
+    
+
+    if((id===START_DATE&&resultValidation.newDate>state[anotherInput(id)].result)||(id===END_DATE&&resultValidation.newDate<state[anotherInput(id)].result)){
+      dispatch({type: NEED_INPUTS_REVERSE, needIpnutsReverse: true})
+    } else{
+      dispatch({type: NEED_INPUTS_REVERSE, needIpnutsReverse: false})
+    }
+
   }
 
   
@@ -105,12 +132,12 @@ export default function DatesPicker(props) {
     const newStartDate = Object.assign({}, state.startDate)
     const newEndDate = Object.assign({}, state.endDate)
 
-    newStartDate.inputHoverValue = ''
-    newEndDate.inputHoverValue = ''
-
     newStartDate.inputValue = ''
     newEndDate.inputValue = ''
 
+    newStartDate.inputHoverValue = ''
+    newEndDate.inputHoverValue = ''
+    
     newStartDate.result = null
     newEndDate.result = null
 
@@ -121,11 +148,19 @@ export default function DatesPicker(props) {
 
   useEffect(()=>{
     changeFocusLocation()
-    if(state.startDate.result && state.endDate.result){
-      dispatch({type:VALID_FORM, validFormData: state.startDate.result<state.endDate.result})
+    if(!state.startDate.result || !state.endDate.result){
       return
     }
-    dispatch({type:VALID_FORM, validFormData: false})
+
+    if(state.startDate.result>state.endDate.result){
+      const bufer = Object.assign({}, state.startDate)
+      state.startDate = Object.assign({}, state.endDate)
+      state.endDate = Object.assign({}, bufer)
+
+    }
+    dispatch({type:VALID_FORM, validFormData: true})
+    dispatch({type: NEED_INPUTS_REVERSE, needIpnutsReverse: false})
+
 
   },[state.startDate.result, state.endDate.result])
 
@@ -157,26 +192,29 @@ export default function DatesPicker(props) {
 
         
         <div>
-          <Input 
-            data={state[START_DATE]} 
-            focusLocation={state.focusLocation} 
-            period={state.period} 
-            placeholder="Начало" 
-            changeFocusLocation={changeFocusLocation}
-            //changeInputValue={changeInputValue}
-            setInputResult={setInputResult}
-          />
-          <ArrowIcon />
-          <Input 
-            data={state[END_DATE]} 
-            focusLocation={state.focusLocation} 
-            period={state.period} 
-            placeholder="Конец" 
-            changeFocusLocation={changeFocusLocation}
-            // changeInputValue={changeInputValue}
-            setInputResult={setInputResult}
-
-          />
+          <div className="input-container">
+            <Input 
+              data={state[START_DATE]} 
+              focusLocation={state.focusLocation} 
+              period={state.period} 
+              placeholder="Начало" 
+              changeFocusLocation={changeFocusLocation}
+              //changeInputValue={changeInputValue}
+              setInputResult={setInputResult}
+              needIpnutsReverse={state.needIpnutsReverse}
+            />
+            <ArrowIcon />
+            <Input 
+              data={state[END_DATE]} 
+              focusLocation={state.focusLocation} 
+              period={state.period} 
+              placeholder="Конец" 
+              changeFocusLocation={changeFocusLocation}
+              // changeInputValue={changeInputValue}
+              setInputResult={setInputResult}
+              needIpnutsReverse={state.needIpnutsReverse}
+            />
+          </div>
 
           {showCalendar && (
           <div aria-roledescription="datepicker" id="datepicker">
