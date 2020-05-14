@@ -6,18 +6,18 @@ import {
   END_DATE,
   steps
 } from '../../utils/consts'
-import { maskQualifier } from '../../utils/converters'
+//import { maskQualifier } from '../../utils/converters'
 
 import './input.css'
 
 export default function Input({
-  data, 
-  focusLocation, 
-  period, 
+  id,
+  value, 
+  mask,
   placeholder, 
+  focusLocation, 
   changeFocusLocation, 
-  setInputResult,
-  needIpnutsReverse
+  setRealInputValue
 }){
 
   const [
@@ -32,11 +32,13 @@ export default function Input({
   //const [value, setValue] = useState(data.inputValue)
 
 
-  const rejected = (focusLocation !== data.name && !data.result && data.inputValue)  
-  const clsx = classnames('input-field', { active: data.name === focusLocation, rejected: rejected})
-  const clswrp = classnames('input-wrapper', {reverse: needIpnutsReverse})
+  //const rejected = (focusLocation !== data.name && !data.result && data.inputValue)  
+ // const clsx = classnames('input-field', { active: data.name === focusLocation, rejected: rejected})
+  
+  const clsx = classnames('input-field', { active: id === focusLocation})
+  //const clswrp = classnames('input-wrapper', {reverse: needIpnutsReverse})
   const inputEl = useRef(null)
-  const mask = maskQualifier(data.name, data.inputValue, focusLocation, period)
+  //const mask = maskQualifier(data.name, data.inputValue, focusLocation, period)
 
   const myOnBlur = (e) =>{
     //console.log('onBlur')
@@ -77,24 +79,27 @@ export default function Input({
     }
   }, [focusLocation])
 
-  placeholder = (period === DAY||period === WEEK) ? 'дд.мм.гггг' : placeholder
+  //placeholder = (period === DAY||period === WEEK) ? 'дд.мм.гггг' : placeholder
 
   return (
-    <div className={clswrp}>      
+    <div>      
       
       <InputMask  
         inputRef={(node)=>inputEl.current=node}
-        value={data.inputHoverValue} 
+        //value={data.inputHoverValue} 
+        id={id}
+        name={id}
+        value={value}
         mask={mask}			  
         alwaysShowMask={true}	
-		    onChange={({target})=>setInputResult(target.id, target.value)  }
+		    onChange={({target})=>setRealInputValue( target.value)  }
 	      onKeyPress={handleKeyPress}		  
         placeholder={placeholder}
         onFocus={({target})=>changeFocusLocation(target.id)}
         onBlur={myOnBlur}
         autoComplete="off"        
-        id={data.name}
-        name={data.name}
+        //id={data.name}
+        //name={data.name}
         className={clsx}
 	    />
      

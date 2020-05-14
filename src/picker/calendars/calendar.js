@@ -25,11 +25,10 @@ import './calendar.css'
 const Calendar = ({ 
   calendarType, 
   year, 
-  month, 
-  focusLocation, 
+  month,  
   step, 
-  changeInputHoverValue,
-  setInputResult,
+  setRealInputValue,
+  setVisibleValue,
   changeClendarType,
   changeMonth,
   changeYear
@@ -67,14 +66,13 @@ const Calendar = ({
 
   function handleClick(x){
    
-    const value = createInputValue(x, focusLocation, calendarType, year, month)
-    setInputResult(focusLocation, value)
+    setRealInputValue(x, 'calendar')
   }
 
-
+/// переписать
   function handleHover(x){
-    const value = x ? createInputValue(x, focusLocation, calendarType, year, month) : null
-    changeInputHoverValue(focusLocation, value)
+    const value = x ? x : null
+    setVisibleValue(value)
   }
 
   // function myMouseOut(){

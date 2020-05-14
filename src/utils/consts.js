@@ -1,5 +1,14 @@
 export const steps = ['day', 'week', 'month', 'quarter', 'halfyear', 'year']
 export const stepsLabels = ['День', 'Неделя', 'Месяц', 'Квартал', 'Полугодие', 'Год']
+const [
+  DAY,
+  WEEK,
+  MONTH,
+  QUARTER,
+  HALFYEAR,
+  YEAR
+] = steps
+
 
 export const calendarTypes = ['day', 'month', 'quarter', 'halfyear', 'year']
 
@@ -25,6 +34,24 @@ export const NEED_INPUTS_REVERSE = 'NEED_INPUTS_REVERSE'
 export const START_DATE = 'startDate'
 export const END_DATE = 'endDate'
 export const SUBMIT = 'submit'
+
+export const MASKS = {
+  [DAY]:"99.99.9999",
+  [WEEK]:"99.99.9999",
+  [MONTH]:"",
+  [QUARTER]:"",
+  [HALFYEAR]:"9-ое полугодие",
+  [YEAR]: "9999"
+}
+
+export const INPUTS_PLACEHOLDERS = {
+  [DAY]:"дд.мм.гггг",
+  [WEEK]:"дд.мм.гггг",
+  [MONTH]:"мес",
+  [QUARTER]:"№кв.",
+  [HALFYEAR]:"№полугодия",
+  [YEAR]: "год"
+}
 
 export const days = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
 export const months = ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек']
