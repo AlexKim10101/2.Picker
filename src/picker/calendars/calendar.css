@@ -52,3 +52,7 @@
 .selected{
   background-color: lightblue;
 }
+.selected-border{
+  background-color: lightskyblue;
+
+}

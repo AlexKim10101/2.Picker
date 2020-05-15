@@ -53,31 +53,7 @@ export default function DatesPicker(props) {
   const [state, dispatch] = useReducer(pickerReducer, expProps)
 
 
-  //foo смена фокуса
-  const changeFocusLocation = (id) => {
-
-    if(id) {
-      dispatch({ type: SET_INPUT_FOCUS, focusLocation: id})  
-      return
-    }
-
-    if(state.startDate.selectedValuesDateFormat.startDate && state.endDate.selectedValuesDateFormat.endDate){
-      dispatch({ type: SET_INPUT_FOCUS, focusLocation: null})
-      return
-    }
-
-    if(state.focusLocation===START_DATE && state.startDate.selectedValuesDateFormat.startDate){
-      dispatch({ type: SET_INPUT_FOCUS, focusLocation: END_DATE})
-      return
-    }
-
-    if(state.focusLocation===END_DATE && state.endDate.selectedValuesDateFormat.endDate){
-      dispatch({ type: SET_INPUT_FOCUS, focusLocation: START_DATE})
-      return
-    }
-    
-  }
-
+  
   //возвращает id другого интпута
   function anotherInput(id){
     if(id===START_DATE){
@@ -149,11 +125,13 @@ export default function DatesPicker(props) {
 
     if(dateIsCorrect){
       if(!state[anotherInput(id)].selectedValuesDateFormat[anotherInput(id)]){
-        console.log('changeFocusLocation')
-        changeFocusLocation(anotherInput(id))
+        //console.log('changeFocusLocation')
+        //changeFocusLocation(anotherInput(id))
+        dispatch({ type: SET_INPUT_FOCUS, focusLocation: anotherInput(id)})  
       }else{
-        changeFocusLocation('null')
-        console.log('changeFocusLocation else')
+        dispatch({ type: SET_INPUT_FOCUS, focusLocation: 'null'})  
+        //changeFocusLocation('null')
+        //console.log('changeFocusLocation else')
       }
     }
     
@@ -184,9 +162,13 @@ export default function DatesPicker(props) {
     if(firstDate > secondDate){
       const newStartDate = deepCopyDate(state.endDate)
       const newEndDate = deepCopyDate(state.startDate)
-      dispatch({type: UPDATE_DATES, id: START_DATE, value: newStartDate})
-      dispatch({type: UPDATE_DATES, id: END_DATE, value: newEndDate})
-      changeFocusLocation(anotherInput(state.focusLocation))
+      dispatch({type: UPDATE_DATES, id: START_DATE, value: state.endDate})
+      dispatch({type: UPDATE_DATES, id: END_DATE, value: state.startDate})
+      // dispatch({type: UPDATE_DATES, id: START_DATE, value: newStartDate})
+      // dispatch({type: UPDATE_DATES, id: END_DATE, value: newEndDate})
+      //changeFocusLocation(anotherInput(state.focusLocation))
+      dispatch({ type: SET_INPUT_FOCUS, focusLocation: anotherInput(state.focusLocation)})  
+
     }
     dispatch({type:VALID_FORM, validFormData: true})
 
@@ -264,7 +246,7 @@ export default function DatesPicker(props) {
               mask={mask1}
               placeholder={INPUTS_PLACEHOLDERS[state.period]} 
               focusLocation={state.focusLocation} 
-              changeFocusLocation={changeFocusLocation}
+              changeFocusLocation={(x)=>dispatch({ type: SET_INPUT_FOCUS, focusLocation:x})}
               setRealInputValue={setRealInputValue}
             />
             <ArrowIcon />
@@ -274,7 +256,7 @@ export default function DatesPicker(props) {
               mask={mask2}
               placeholder={INPUTS_PLACEHOLDERS[state.period]} 
               focusLocation={state.focusLocation} 
-              changeFocusLocation={changeFocusLocation}
+              changeFocusLocation={(x)=>dispatch({ type: SET_INPUT_FOCUS, focusLocation:x})}
               setRealInputValue={setRealInputValue}
             />
           </div>

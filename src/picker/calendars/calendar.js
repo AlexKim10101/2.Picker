@@ -91,10 +91,13 @@ const Calendar = ({
   }
 
   function colorMaker(date){
-    if(date===leftBorder||date===rightBorder){
+    if((leftBorder&&date.toString()===leftBorder.toString())||(rightBorder&&date.toString()===rightBorder.toString())){
       return 'blue'
     }
     if(date<leftBorder||date>rightBorder){
+      return null
+    }
+    if(leftBorder===null||rightBorder==null){
       return null
     }
     

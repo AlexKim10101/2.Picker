@@ -19,7 +19,8 @@ export const DaysWeeksRows = ({ data, onClick, calendarType, handleHover }) => {
   const tdClsx = (status, color) => classnames('calendar__table_td', 'td-30', {
     'td-curr': status === curr,
     'td-out': status === out,
-    'selected': color === 'light-blue'
+    'selected': color === 'light-blue',
+    'selected-border': color==='blue'
   })
 
 
