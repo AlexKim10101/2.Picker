@@ -16,9 +16,10 @@ export const DaysWeeksRows = ({ data, onClick, calendarType, handleHover }) => {
     'tr-weeks': calendarType === WEEK,
   })
 
-  const tdClsx = (status) => classnames('calendar__table_td', 'td-30', {
+  const tdClsx = (status, color) => classnames('calendar__table_td', 'td-30', {
     'td-curr': status === curr,
     'td-out': status === out,
+    'selected': color === 'light-blue'
   })
 
 
@@ -30,7 +31,7 @@ export const DaysWeeksRows = ({ data, onClick, calendarType, handleHover }) => {
           <td 
             key={uuidv4()} 
             tabIndex={0} 
-            className={tdClsx(x.status)} 
+            className={tdClsx(x.status, x.color)} 
             onClick={()=>onClick(arg) } 
             onMouseEnter={()=>handleHover(arg) } 
             onMouseLeave={()=>handleHover()}

@@ -13,6 +13,7 @@ import { createSequence } from '../../utils/create-sequence'
 import { 
   steps, 
   days,
+  dayStatus,
   START_DATE,
   END_DATE,  
   UPDATE_DATES,
@@ -27,6 +28,8 @@ const Calendar = ({
   year, 
   month,  
   step, 
+  leftBorder,
+  rightBorder,
   setRealInputValue,
   setVisibleValue,
   changeClendarType,
@@ -41,10 +44,10 @@ const Calendar = ({
     HALFYEAR,
     YEAR
   ] = steps
-
+  const { curr, out } = dayStatus
   const d = (...args) => new Date(...args)
   const firstDay = d(year, month).getUTCDay()
-  
+  //console.log('firstDay', firstDay)
   const daysInMonth = (x) => 32 - d(year, month + x, 32).getDate()
   const daysInCurrMonth = daysInMonth(0)
   const daysInPrevMonth = daysInMonth(-1)
@@ -53,7 +56,7 @@ const Calendar = ({
   const forepart = createSequence(daysInPrevMonth - firstDay + 1, daysInPrevMonth, 1)
   const yearStack = createSequence(year - 11, year, 1)
 
-  const weeks = generateDays(firstDay, weeksAmount, daysInCurrMonth, forepart)
+  let weeks = generateDays(firstDay, weeksAmount, daysInCurrMonth, forepart)
   const months = generateMonths
   const quarters = generateQuarters
   const halfyears = generateHalfYears
@@ -63,6 +66,64 @@ const Calendar = ({
   
   const height = withDaysAWeek ? weeks.length * 37 + 82 : (calendarType === MONTH || calendarType === YEAR) ? 256 : 194
   
+
+  function generateDate(item){
+    let date
+    if(item.status === curr){
+      date = new Date(year, month, item.date)
+    }
+    if(item.status === out){
+      if(item.date>20){
+        if(month == 11){
+          date = new Date(year+1, 0, item.date)
+        }else{
+          date = new Date(year, month+1, item.date)
+        }
+      }else{
+        if(month == 0){
+          date = new Date(year-1, 11, item.date)          
+        }else{
+          date = new Date(year, month-1, item.date)
+        }
+      }
+    }
+    return date
+  }
+
+  function colorMaker(date){
+    if(date===leftBorder||date===rightBorder){
+      return 'blue'
+    }
+    if(date<leftBorder||date>rightBorder){
+      return null
+    }
+    
+    // console.log('date',date)
+    // console.log('leftBorder',leftBorder)
+    return 'light-blue'
+  }
+  //добавим поле к каждому элементу в календаре
+  switch(calendarType){
+    case DAY:
+    case WEEK:{
+      weeks.forEach(function(week){
+        week.forEach(function(item){
+          
+          let date = generateDate(item)
+          item.color = colorMaker(date)
+          return item
+        })
+        return week
+      })
+      break
+    }
+    default:{
+      break
+    }
+
+  }
+
+  console.log(weeks)
 
   function handleClick(x){
    
@@ -96,7 +157,8 @@ const Calendar = ({
         break
     }
   }
-   
+  
+  
   return (
     <div className="calendar" id="calendar">
       <div style={{

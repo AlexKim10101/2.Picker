@@ -8,7 +8,11 @@ import {
 const { curr, out } = dayStatus
 
 
+
+
+
 export const generateDays = (firstDay, weeksAmount, daysInMonth, forepart) => {
+  //console.log(firstDay, weeksAmount, daysInMonth, forepart)
   let date = 1
   const data = []
   for (let i = 0; i < weeksAmount; i += 1) {

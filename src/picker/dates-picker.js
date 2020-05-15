@@ -286,7 +286,9 @@ export default function DatesPicker(props) {
               step={state.step}
               calendarType={state.calendarType}
               year={state.year}
-              month={state.month}              
+              month={state.month}
+              leftBorder={state.startDate.visibleValuesDateFormat.startDate}
+              rightBorder={state.endDate.visibleValuesDateFormat.endDate}            
               setRealInputValue={setRealInputValue}
               setVisibleValue={setVisibleValue}
               changeClendarType={(type)=>dispatch({ type: CHANGE_CALENDAR_TYPE, calendarType: type })}

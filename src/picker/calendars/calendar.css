@@ -49,3 +49,6 @@
   width: 292px;
   height: 69px;
 }
+.selected{
+  background-color: lightblue;
+}
