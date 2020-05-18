@@ -41,8 +41,6 @@ export default function DatesPicker(props) {
   let expProps = Object.assign({}, props, newProps)
   const [state, dispatch] = useReducer(pickerReducer, expProps)
   
-  
-
   //cb для onMouseEnter и onMouseLeave элем-ов календаря
   const setVisibleValue = (value) =>{
     const id = state.focusLocation
@@ -71,7 +69,7 @@ export default function DatesPicker(props) {
   
   }
 
-
+  //cb для onClick(Calendar) и onChanged(Input)
   const setRealInputValue = ( value, wherefrom) =>{
     const id = state.focusLocation
     let startDateValue, endDateValue
@@ -133,31 +131,19 @@ export default function DatesPicker(props) {
     if(state[id].visibleValuesDateFormat[id]){
       return formatDate(state[id].visibleValuesDateFormat[id])
     }
-
     if((state.focusLocation === id)||(state[id].visibleValuesStr[id]==='')){
       return '...'
     }
     return 'внесены некорректные данные'
   }
 
-  
-  //const startDateIsOk = (state.startDate.inputValue===''||state.focusLocation===START_DATE||state.startDate.result)? true : false
-  //const endDateIsOk = (state.endDate.inputValue===''||state.focusLocation===END_DATE||state.endDate.result)? true : false
-  //const showErrorMessage = !startDateIsOk||!endDateIsOk||(!state.validFormData&&state.startDate.result&&state.endDate.result&&state.focusLocation!==START_DATE&&state.focusLocation!==END_DATE)
-  
-  const showCalendar = (state.focusLocation===START_DATE)||(state.focusLocation===END_DATE)
-  const value1 = state.startDate.visibleValuesStr.startDate
-  const mask1 = (state.focusLocation === START_DATE )? MASKS[state.period] : ''
-  const value2 = state.endDate.visibleValuesStr.endDate
-  const mask2 = (state.focusLocation === END_DATE )? MASKS[state.period] : ''
-  const message1 = `Начало: ${messageCreator(START_DATE)}`
-  const message2 = `Конец: ${messageCreator(END_DATE)}`
-
-
   function changeStepAndPeriod(value){
     dispatch({type:CHANGE_STEP, step: value })
     dispatch({ type: CHANGE_PERIOD, period: value })
   }
+
+  const showCalendar = (state.focusLocation===START_DATE)||(state.focusLocation===END_DATE)
+
 
   return (
     <>
@@ -168,7 +154,7 @@ export default function DatesPicker(props) {
           <div className="input-container">
             <Input
               id={START_DATE} 
-              value={value1}
+              value={state.startDate.visibleValuesStr.startDate}
               mask={(state.focusLocation === START_DATE )? MASKS[state.period] : ''}
               placeholder={INPUTS_PLACEHOLDERS[state.period]} 
               focusLocation={state.focusLocation} 
@@ -178,8 +164,8 @@ export default function DatesPicker(props) {
             <ArrowIcon />
             <Input 
               id={END_DATE}
-              value={value2}
-              mask={mask2}
+              value={state.endDate.visibleValuesStr.endDate}
+              mask={(state.focusLocation === END_DATE )? MASKS[state.period] : ''}
               placeholder={INPUTS_PLACEHOLDERS[state.period]} 
               focusLocation={state.focusLocation} 
               changeFocusLocation={(x)=>dispatch({ type: SET_INPUT_FOCUS, focusLocation:x})}
@@ -214,8 +200,8 @@ export default function DatesPicker(props) {
 
       </div>
       <div className="submitElement">
-          <div>{message1}</div>
-          <div>{message2}</div>
+          <div>{`Начало: ${messageCreator(START_DATE)}`}</div>
+          <div>{`Конец: ${messageCreator(END_DATE)}`}</div>
         {state.validFormData && (<div>Данные корректны</div>)}
         
         <input id={SUBMIT} type="submit" value="Отправить" disabled={!state.validFormData}></input>
