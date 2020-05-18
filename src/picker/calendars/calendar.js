@@ -14,13 +14,7 @@ import {
   steps, 
   days,
   dayStatus,
-  START_DATE,
-  END_DATE,  
-  UPDATE_DATES,
-  SET_INPUT_VALIDATION,  
 } from '../../utils/consts'
-import { createInputValue } from '../../utils/converters'
-
 import './calendar.css'
 
 const Calendar = ({ 
@@ -73,7 +67,7 @@ const Calendar = ({
       date = new Date(year, month, item.date)
     }
     if(item.status === out){
-      if(item.date>20){
+      if(item.date<20){
         if(month == 11){
           date = new Date(year+1, 0, item.date)
         }else{
@@ -91,6 +85,7 @@ const Calendar = ({
   }
 
   function colorMaker(date){
+    console.log('colorMaker ',date)
     if((leftBorder&&date.toString()===leftBorder.toString())||(rightBorder&&date.toString()===rightBorder.toString())){
       return 'blue'
     }
@@ -100,9 +95,6 @@ const Calendar = ({
     if(leftBorder===null||rightBorder==null){
       return null
     }
-    
-    // console.log('date',date)
-    // console.log('leftBorder',leftBorder)
     return 'light-blue'
   }
   //добавим поле к каждому элементу в календаре
@@ -126,7 +118,7 @@ const Calendar = ({
 
   }
 
-  console.log(weeks)
+  // console.log(weeks)
 
   function handleClick(x){
    

@@ -221,3 +221,21 @@ export function createInputValue(x, location, calendarType, year, month){
   return value
 }
 
+//возвращает id другого интпута
+export function anotherInput(id){
+  if(id===START_DATE){
+    return END_DATE
+  }
+  if(id===END_DATE){
+    return START_DATE
+  }
+}
+// function deepCopyDate(date){
+  //   return{
+  //     name: date.name,
+  //     selectedValuesStr: Object.assign({}, date.selectedValuesStr),
+  //     visibleValuesStr: Object.assign({}, date.visibleValuesStr),
+  //     selectedValuesDateFormat: Object.assign({}, date.selectedValuesDateFormat),
+  //     visibleValuesDateFormat: Object.assign({}, date.visibleValuesDateFormat)
+  //   }
+  // }

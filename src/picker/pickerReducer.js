@@ -9,7 +9,9 @@ import {
     SET_INPUT_FOCUS,
     UPDATE_DATES,
     START_DATE,
-    NEED_INPUTS_REVERSE
+    END_DATE,
+    PURE_START_DATE,
+    PURE_END_DATE,
 } from '../utils/consts'
 
 export function pickerReducer(state, action) {
@@ -19,9 +21,15 @@ export function pickerReducer(state, action) {
         case CHANGE_MONTH:
             return { ...state, month: action.month }
         case CHANGE_STEP:
-            return { ...state, step: action.step, period: action.step, focusLocation: START_DATE}
+            return { ...state, step: action.step, focusLocation: START_DATE}
         case CHANGE_PERIOD:
-            return { ...state, period: action.period }
+            return { 
+                ...state, 
+                period: action.period, 
+                [START_DATE]: PURE_START_DATE, 
+                [END_DATE]: PURE_END_DATE,
+                calendarType: action.period
+            }
         case CHANGE_CALENDAR_TYPE:
             return { ...state, calendarType: action.calendarType }            
         case VALID_FORM:
@@ -30,9 +38,7 @@ export function pickerReducer(state, action) {
             return { ...state, focusLocation: action.focusLocation}         
         case UPDATE_DATES:
             return {...state, [action.id]: action.value}  
-        case NEED_INPUTS_REVERSE:{
-            return {...state, needIpnutsReverse: action.needIpnutsReverse}  
-        }    
+          
         default: {
             throw new Error(`Unhandled action type: ${action.type}`)
         }

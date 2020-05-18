@@ -74,3 +74,17 @@ export const HALF_YEAR_VALUES_FOR_START = ['01.01.', '01.07.'];
 export const HALF_YEAR_VALUES_FOR_END = ['30.06.','31.12.'];
 export const YEAR_VALUE_FOR_START = '01.01.';
 export const YEAR_VALUE_FOR_END = '31.12.';
+
+class PureDate{
+  constructor(name) {
+    this.name = name;
+    this.selectedValuesStr = {startDate: '', endDate: ''};
+    this.visibleValuesStr = {startDate: '', endDate: ''};
+    this.selectedValuesDateFormat = {startDate: null, endDate: null};
+    this.visibleValuesDateFormat = {startDate: null, endDate: null};
+  }
+  
+}
+
+export const PURE_END_DATE = new PureDate(END_DATE)
+export const PURE_START_DATE = new PureDate(START_DATE)
