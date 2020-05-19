@@ -14,8 +14,19 @@ import {
   steps, 
   days,
   dayStatus,
+  months,
+  quarters,
+  halfYear,
+  DATE_MONTH_MODIFICATOR_FOR_END,
+  QUART_VALUES_FOR_START,
+  QUART_VALUES_FOR_END,
+  HALF_YEAR_VALUES_FOR_START,
+  HALF_YEAR_VALUES_FOR_END,
+  YEAR_VALUE_FOR_START,
+  YEAR_VALUE_FOR_END
 } from '../../utils/consts'
 import './calendar.css'
+import { dateCreater } from '../../utils/converters'
 
 const Calendar = ({ 
   calendarType, 
@@ -51,10 +62,10 @@ const Calendar = ({
   const yearStack = createSequence(year - 11, year, 1)
 
   let weeks = generateDays(firstDay, weeksAmount, daysInCurrMonth, forepart)
-  const months = generateMonths
-  const quarters = generateQuarters
-  const halfyears = generateHalfYears
-  const years = generateYears(yearStack)
+  let months = generateMonths
+  let quarters = generateQuarters
+  let halfyears = generateHalfYears
+  let years = generateYears(yearStack)
 
   const withDaysAWeek = (calendarType === WEEK || calendarType === DAY)
   
@@ -63,47 +74,139 @@ const Calendar = ({
 
   function generateDate(item){
     let date
-    if(item.status === curr){
-      date = new Date(year, month, item.date)
-    }
-    if(item.status === out){
-      if(item.date<20){
-        if(month == 11){
-          date = new Date(year+1, 0, item.date)
-        }else{
-          date = new Date(year, month+1, item.date)
+
+    switch(calendarType){
+      case DAY:        
+      case WEEK:{
+        if(item.status === curr){
+          date = new Date(year, month, item.date)
         }
-      }else{
-        if(month == 0){
-          date = new Date(year-1, 11, item.date)          
-        }else{
-          date = new Date(year, month-1, item.date)
+        if(item.status === out){
+          if(item.date<20){
+            if(month == 11){
+              date = new Date(year+1, 0, item.date)
+            }else{
+              date = new Date(year, month+1, item.date)
+            }
+          }else{
+            if(month == 0){
+              date = new Date(year-1, 11, item.date)          
+            }else{
+              date = new Date(year, month-1, item.date)
+            }
+          }
         }
+        break
       }
-    }
+      case MONTH:{
+        let startDate
+        let endDate        
+        
+        let monthIndex = ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'].indexOf(item)
+        //console.log(months)
+
+        console.log(monthIndex)
+        if(monthIndex === 11){
+          endDate = new Date(year, monthIndex, 31)
+        }else{
+          endDate = new Date(new Date(year, monthIndex+1, 1)-DATE_MONTH_MODIFICATOR_FOR_END)
+        }
+        startDate = new Date(year, monthIndex, 1)
+        date = {
+          date: item,
+          startDate: startDate,
+          endDate: endDate,
+          color: null
+        }
+
+        break
+      }
+      case QUARTER:{
+        //console.log(quarters)
+        let quarterIndex = ['I кв.', 'II кв.', 'III кв.', 'IV кв.'].indexOf(item)
+        console.log(quarterIndex)
+
+        date = {
+          date: item,
+          startDate: dateCreater(QUART_VALUES_FOR_START[quarterIndex]+year),
+          endDate: dateCreater(QUART_VALUES_FOR_END[quarterIndex]+year),
+          color: null
+        }
+        break
+      }
+      case HALFYEAR:{
+      
+        let halfYearIndex = ['1-ое полугодие', '2-ое полугодие'].indexOf(item)
+        date = {
+          date: item,
+          startDate: dateCreater(HALF_YEAR_VALUES_FOR_START[halfYearIndex]+year),
+          endDate: dateCreater(HALF_YEAR_VALUES_FOR_END[halfYearIndex]+year),
+          color: null
+        }
+        break
+      }
+      case YEAR:{
+        console.log('ghbdtn')
+        date = {
+          date: item,
+          startDate: dateCreater(YEAR_VALUE_FOR_START+item),
+          endDate: dateCreater(YEAR_VALUE_FOR_END+item),
+          color: null
+        }
+        break
+      }
+      default:{
+        console.log('что-то пошло не так')
+        break
+      }
+    }    
     return date
   }
 
   function colorMaker(date){
-    console.log('colorMaker ',date)
-    if((leftBorder&&date.toString()===leftBorder.toString())||(rightBorder&&date.toString()===rightBorder.toString())){
-      return 'blue'
+    //console.log('colorMaker ',date)
+    switch(calendarType){
+      case DAY:
+      case WEEK:{
+        //console.log('test')
+        if((leftBorder&&date.toString()===leftBorder.toString())||(rightBorder&&date.toString()===rightBorder.toString())){
+          return 'blue'
+        }
+        if(date<leftBorder||date>rightBorder){
+          return null
+        }
+        if(leftBorder===null||rightBorder==null){
+          return null
+        }
+        return 'light-blue'
+      }
+      case MONTH:
+      case QUARTER:
+      case HALFYEAR:
+      case YEAR:{
+        if((leftBorder&&date.startDate.toString()===leftBorder.toString())||(rightBorder&&date.endDate.toString()===rightBorder.toString())){
+          return 'blue'
+        }
+        if(date.startDate<leftBorder||date.endDate>rightBorder){
+          return null
+        }
+        if(leftBorder===null||rightBorder==null){
+          return null
+        }
+        return 'light-blue'
+      }
+      default:{
+        console.log('что-то пошло не так')
+        break
+      }
     }
-    if(date<leftBorder||date>rightBorder){
-      return null
-    }
-    if(leftBorder===null||rightBorder==null){
-      return null
-    }
-    return 'light-blue'
   }
   //добавим поле к каждому элементу в календаре
   switch(calendarType){
     case DAY:
     case WEEK:{
       weeks.forEach(function(week){
-        week.forEach(function(item){
-          
+        week.forEach(function(item){          
           let date = generateDate(item)
           item.color = colorMaker(date)
           return item
@@ -112,42 +215,96 @@ const Calendar = ({
       })
       break
     }
+    case MONTH:{
+      let newMonths=[]
+      let newMonthSlice=[]
+      months.forEach(function(month_slice){
+        month_slice.forEach(function(month){
+          month = generateDate(month)    
+          month.color = colorMaker(month)  
+          newMonthSlice.push(month)
+          return month
+        })
+        newMonths.push(newMonthSlice)
+        newMonthSlice = []
+        return month_slice
+      })
+      months = newMonths
+      break     
+
+    }
+    
+    case QUARTER:{
+      let newQuqrters=[]
+      let newQuqrterSlice=[]
+      quarters.forEach(function(quarter_slice){
+        quarter_slice.forEach(function(quarter){
+          quarter = generateDate(quarter)    
+          quarter.color = colorMaker(quarter)  
+          newQuqrterSlice.push(quarter)
+          return quarter
+        })
+        newQuqrters.push(newQuqrterSlice)
+        newQuqrterSlice = []
+        return quarter_slice
+      })
+      quarters = newQuqrters
+      break
+    }
+    case HALFYEAR:{
+      let newHalfYear=[]
+      let newHalfYearSlice=[]
+      halfyears.forEach(function(halfyear_slice){
+        halfyear_slice.forEach(function(halfyear){
+          halfyear = generateDate(halfyear)    
+          halfyear.color = colorMaker(halfyear)  
+          newHalfYearSlice.push(halfyear)
+          return halfyear
+        })
+        newHalfYear.push(newHalfYearSlice)
+        newHalfYearSlice = []
+        return halfyear_slice
+      })
+      halfyears = newHalfYear
+      break    
+    }
+    case YEAR:{
+      let newYears=[]
+      let newYearSlice=[]
+      years.forEach(function(year_slice){
+        year_slice.forEach(function(year){
+          year = generateDate(year)    
+          year.color = colorMaker(year)  
+          newYearSlice.push(year)
+          return year
+        })
+        newYears.push(newYearSlice)
+        newYearSlice = []
+        return year_slice
+      })
+      years = newYears
+      break    
+    }
     default:{
       break
     }
 
   }
-
-  // console.log(weeks)
-
-  function handleClick(x){
-   
-    setRealInputValue(x, 'calendar')
-  }
-
-/// переписать
-  function handleHover(x){
-    const value = x ? x : null
-    setVisibleValue(value)
-  }
-
-  // function myMouseOut(){
-  //   changeInputValue(focusLocation, '')
-  // }
+  
 
   const renderCalendar = (type) => {
     switch (type) {
       case DAY:
       case WEEK:
-        return <DaysWeeksRows data={weeks} onClick={handleClick} calendarType={calendarType} handleHover={handleHover}/>
+        return <DaysWeeksRows data={weeks} onClick={(x)=>setRealInputValue(x, 'calendar')} calendarType={calendarType} handleHover={setVisibleValue}/>
       case MONTH:
-        return <MonthsYearsRows data={months} onClick={handleClick} calendarType={calendarType} handleHover={handleHover}/>
+        return <MonthsYearsRows data={months} onClick={(x)=>setRealInputValue(x, 'calendar')} calendarType={calendarType} handleHover={setVisibleValue}/>
       case QUARTER:
-        return <MonthsYearsRows data={quarters} onClick={handleClick} calendarType={calendarType} handleHover={handleHover}/>
+        return <MonthsYearsRows data={quarters} onClick={(x)=>setRealInputValue(x, 'calendar')} calendarType={calendarType} handleHover={setVisibleValue}/>
       case HALFYEAR:
-        return <MonthsYearsRows data={halfyears} onClick={handleClick} calendarType={calendarType} handleHover={handleHover}/>
+        return <MonthsYearsRows data={halfyears} onClick={(x)=>setRealInputValue(x, 'calendar')} calendarType={calendarType} handleHover={setVisibleValue}/>
       case YEAR:
-        return <MonthsYearsRows data={years} onClick={handleClick} calendarType={calendarType} handleHover={handleHover}/>
+        return <MonthsYearsRows data={years} onClick={(x)=>setRealInputValue(x, 'calendar')} calendarType={calendarType} handleHover={setVisibleValue}/>
       default:
         break
     }

@@ -56,13 +56,15 @@ export const MonthsYearsRows = ({ data, onClick, calendarType, handleHover}) => 
     HALFYEAR,
     YEAR
   ] = steps
+  console.log('data',data)
 
-
-  const tdClsx = classnames('calendar__table_td', {
+  const tdClsx = (color)=> classnames('calendar__table_td', {
     'td-30': (calendarType === WEEK || calendarType === DAY),
     'td-12': (calendarType === MONTH || calendarType === YEAR),
     'td-4': calendarType === QUARTER,
     'td-2': calendarType === HALFYEAR,
+    'selected': color === 'light-blue',
+    'selected-border': color==='blue'
   })
   
   return data.map((item) => (
@@ -71,12 +73,12 @@ export const MonthsYearsRows = ({ data, onClick, calendarType, handleHover}) => 
         <td 
           key={uuidv4()} 
           tabIndex={0} 
-          className={tdClsx} 
-          onClick={()=>onClick(x)} 
-          onMouseEnter={()=>handleHover(x)} 
+          className={tdClsx(x.color)} 
+          onClick={()=>onClick(x.date)} 
+          onMouseEnter={()=>handleHover(x.date)} 
           onMouseLeave={()=>handleHover()}
         >
-          {x}
+          {x.date}
         </td>
       ))}
     </tr>

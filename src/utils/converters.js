@@ -230,12 +230,3 @@ export function anotherInput(id){
     return START_DATE
   }
 }
-// function deepCopyDate(date){
-  //   return{
-  //     name: date.name,
-  //     selectedValuesStr: Object.assign({}, date.selectedValuesStr),
-  //     visibleValuesStr: Object.assign({}, date.visibleValuesStr),
-  //     selectedValuesDateFormat: Object.assign({}, date.selectedValuesDateFormat),
-  //     visibleValuesDateFormat: Object.assign({}, date.visibleValuesDateFormat)
-  //   }
-  // }

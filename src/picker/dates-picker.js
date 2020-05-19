@@ -144,7 +144,6 @@ export default function DatesPicker(props) {
 
   const showCalendar = (state.focusLocation===START_DATE)||(state.focusLocation===END_DATE)
 
-
   return (
     <>
       <div className="dates-picker-wrapper">
